@@ -25,7 +25,7 @@ void Load_DB(istream &is, bahn_netz &netz)
 
         if(datentyp == "RailwayLine")           //Benger
         {
-            //Test hallo dgzetdzuedtuzset
+
             i=0;
             string daten;
             RailwayLine tempLine;

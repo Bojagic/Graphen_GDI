@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
 		gdi_stream.close();
 	}
 
+	cout << "Hier ist Bryan's test fuer git";
 	return 0;
 }
 

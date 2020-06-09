@@ -1,0 +1,91 @@
+# depslib dependency file v1.0
+1591095480 source:c:\users\rufus.000\desktop\gdi-projekt\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1590766699 c:\users\rufus.000\desktop\gdi-projekt\graph.h
+	"knoten.h"
+	<ostream>
+
+1589963293 c:\users\rufus.000\desktop\gdi-projekt\knoten.h
+	<climits>
+	<string>
+
+1589395293 c:\users\rufus.000\desktop\gdi-projekt\queue.h
+
+1591542264 source:c:\users\rufus.000\desktop\gdi-projekt\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"load_db.h"
+	<fstream>
+	<string>
+	<iostream>
+
+1591542685 c:\users\rufus.000\desktop\gdi-projekt\load_db.h
+	<ostream>
+	<iostream>
+	"liste.h"
+
+1589807011 source:c:\users\rufus.000\desktop\gdi-projekt\queue.cpp
+	"queue.h"
+	<iostream>
+
+1591542184 source:c:\users\rufus.000\desktop\gdi-projekt\load_db.cpp
+	<iostream>
+	<fstream>
+	"load_db.h"
+
+1591542279 c:\users\rufus.000\desktop\gdi-projekt\liste.h
+
+1591095480 source:c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1590766699 c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\graph.h
+	"knoten.h"
+	<ostream>
+
+1589963293 c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\knoten.h
+	<climits>
+	<string>
+
+1589395293 c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\queue.h
+
+1591633289 source:c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"load_db.h"
+	<fstream>
+	<string>
+	<iostream>
+
+1591626712 c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\load_db.h
+	<ostream>
+	<iostream>
+	"liste.h"
+
+1591542279 c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\liste.h
+
+1589807011 source:c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\queue.cpp
+	"queue.h"
+	<iostream>
+
+1591633831 source:c:\users\haris\sciebo\studium\gdi\sose20\graphen_gdi_v3 07.06.2020\load_db.cpp
+	<iostream>
+	<fstream>
+	"load_db.h"
+

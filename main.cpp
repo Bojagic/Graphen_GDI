@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
     bahn_netz bn;
     string sFileName0="wichtige zeilen.json";
     string sFileName="db_streckennetz.json";
+    string saveFile="Test.gdi";
 	{
 		ifstream gdi_stream;
 		gdi_stream.open(sFileName,ifstream::in);
@@ -58,7 +59,16 @@ int main(int argc, char *argv[])
 		{
 			Load_DB(gdi_stream, bn);
 
-			bn.node.ausgabe();
+			//bn.link.ausgabe();
+		}
+		gdi_stream.close();
+	}
+	{
+		ofstream gdi_stream;
+		gdi_stream.open(saveFile,ofstream::out);
+		if (gdi_stream.is_open())
+		{
+			Save_DB(gdi_stream, bn);
 		}
 		gdi_stream.close();
 	}

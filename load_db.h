@@ -34,13 +34,13 @@ public:
 
 class RailwayLine{
 public:
-    int linkNummer[100];
+    int nummer;
+    int linkNummer[420];
     string text;
     int code;
 
     friend ostream &operator<< (ostream &ostr, const RailwayLine line);     //für Liste::ausgabe Testausgabe RailwayLine
 };
-
 
 
 class bahn_netz{
@@ -52,13 +52,9 @@ public:
  };
 
 
- /**
- * @brief Load_DB
- * @param is geöffneter input stream
- * @param G Graph, in den eingelesen wird
- * @return Error Number
- */
 void Load_DB(istream &is, bahn_netz &netz);
+
+void Save_DB(ostream &os, bahn_netz &netz);
 
 
 #endif // LOAD_DB_H

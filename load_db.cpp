@@ -3,15 +3,9 @@
 
 #include "load_db.h"
 
-//Test bei Benger
-
-
-
 using namespace std;
 
-//noch ein kleiner Test
-
-void Load_DB(istream &is,  bahn_netz &netz)
+void Load_DB(istream &is, bahn_netz &netz)
 {
     string tempstring;      //Zeile
     string datentyp;        //Datenart
@@ -19,19 +13,51 @@ void Load_DB(istream &is,  bahn_netz &netz)
 
     size_t wordStart;
     size_t wordEnd;
+    size_t i;
 
     size_t zaehler[4];
     zaehler[0] = zaehler[1] = zaehler[2] = zaehler[3] = 0;
 
     while(getline(is, tempstring))
     {
-        wordEnd = tempstring.find("\x9", 0);     //Erstes Wort bis Tabulator einlesen
+        wordEnd = tempstring.find("\t", 0);     //Erstes Wort bis Tabulator einlesen
         datentyp = tempstring.substr(0,wordEnd);
 
         if(datentyp == "RailwayLine")           //Benger
         {
-            //zaehler[0]++;
-            //kleiner Test an dieser Stelle
+            i=0;
+            string daten;
+            RailwayLine tempLine;
+
+            //------Line-------------------------------------------------------------
+            daten=tempstring.substr(tempstring.find("Line-")+5,6);
+            tempLine.nummer=stoi(daten);
+
+            //------Text-------------------------------------------------------------------
+
+            wordStart=tempstring.find(":\"")+2;
+            wordEnd=tempstring.find("\",\"r")-wordStart;
+            tempLine.text=tempstring.substr(wordStart,wordEnd);
+
+            //------Railwaycode------------------------------------------------------------
+
+            wordStart=tempstring.find("Code\":\"")+7;
+            wordEnd=tempstring.find("\"}");
+            wordEnd=wordEnd-wordStart;
+            tempLine.code=stoi(tempstring.substr(wordStart,wordEnd));
+            //------Link-code--------------------------------------------------------------
+            wordEnd=tempstring.find("]");
+            do
+            {
+                //cout<<tempstring.substr(tempstring.find("Link-")+5,6)<<endl;
+                tempstring=tempstring.substr(tempstring.find("Link-")+5,wordEnd);
+                tempLine.linkNummer[i]=stoi(tempstring);
+                i++;
+            }while(tempstring.find("]")!=7);
+            tempLine.linkNummer[i] = -1;
+
+            netz.line.add_last(tempLine);
+            zaehler[0]++;
         }
 
         if(datentyp == "RailwayLink")           //Bojagic
@@ -58,17 +84,9 @@ void Load_DB(istream &is,  bahn_netz &netz)
                 wort = tempstring.substr(wordStart, wordEnd-wordStart);
                 //cout << "Wort----->" << wort << endl;
                 tempLink.startNodeNummer = stoi(wort);
-
-                wordStart = tempstring.find("startNode\":\"Node-", wordEnd);
-                wordStart+=17;
-                wordEnd = tempstring.find("\"", wordStart);
-                wort = tempstring.substr(wordStart, wordEnd-wordStart);
-                tempLink.endNodeNummer = stoi(wort);
-
-                cout << tempLink << endl;
             }
-
             netz.link.add_last(tempLink);
+            zaehler[1]++;
         }
 
         if(datentyp == "RailwayNode")           //Horten
@@ -142,8 +160,67 @@ void Load_DB(istream &is,  bahn_netz &netz)
 
         if(datentyp == "RailwayStationNode")    //Lewicki
         {
-            //zaehler[3]++;
+            RailwayNode snode;
+            double gmlpos1, gmlpos2;
+            string stadt, typ;
+            int snodeID;
+            int spokeEnd[2];
+            int spokeStart[2];
+
+            if(tempstring.find("SNode") != string::npos)
+            {
+                wordEnd = tempstring.find("SNode");
+                snodeID = stoi(tempstring.substr(wordEnd+6,tempstring.substr(wordEnd+6).find("\t")));
+            }
+            if(tempstring.find("gml:pos") != string::npos)
+            {
+                wordEnd = tempstring.find("gml:pos");
+                gmlpos1 = stod(tempstring.substr(wordEnd+10, tempstring.substr(wordEnd+10).find(" ")));
+                gmlpos2 = stod(tempstring.substr(tempstring.find(" ")+1, tempstring.substr(tempstring.find(" ")+1).find(",")-1));
+            }
+            if(tempstring.find("gn:text") != string::npos)
+            {
+                wordEnd = tempstring.find("gn:text");
+                stadt = tempstring.substr(wordEnd+10, tempstring.substr(wordEnd+10).find(",")-1);
+            }
+            if(tempstring.find("formOfNode") != string::npos)
+            {
+                wordEnd = tempstring.find("formOfNode");
+                typ = tempstring.substr(wordEnd+13, tempstring.substr(wordEnd+13).find("\""));
+            }
+            if(tempstring.find("net:spokeEnd") != string::npos)
+            {
+                wordEnd = tempstring.find("net:spokeEnd");
+                spokeEnd[0] = stoi(tempstring.substr(wordEnd+21, tempstring.substr(wordEnd+21).find("\"")));
+                if(tempstring.substr(wordEnd+21).find("Link-") != string::npos)
+                    spokeEnd[1] = stoi(tempstring.substr(tempstring.find(",\"Link-")+7, tempstring.substr(tempstring.find(",\"Link-")+1).find("\"]")-6));
+                else
+                    spokeEnd[1] = -1;
+            }
+            if(tempstring.find("net:spokeStart") != string::npos)
+            {
+                wordEnd = tempstring.find("net:spokeStart");
+                spokeStart[0] = stoi(tempstring.substr(wordEnd+23, tempstring.substr(wordEnd+23).find("\"")));
+                if(tempstring.substr(wordEnd+23).find("Link-") != string::npos)
+                    spokeStart[1] = stoi(tempstring.substr(tempstring.find(",\"Link-")+7, tempstring.substr(tempstring.find(",\"Link-")+1).find("\"]")-6));
+                else
+                    spokeStart[1] = -1;
+            }
+
+            snode.spokeStart[0] = spokeStart[0];
+            snode.spokeStart[1] = spokeStart[1];
+            snode.spokeEnd[0] = spokeEnd[0];
+            snode.spokeEnd[1] = spokeEnd[1];
+            snode.nummer = snodeID;
+            snode.xKoordinate = gmlpos1;
+            snode.yKoordinate = gmlpos2;
+            snode.typ = typ;
+            snode.text = stadt;
+            netz.stationNode.add_last(snode);
+
+            zaehler[3]++;
         }
+
     }
     cout << zaehler[0] <<" RailwayLine gelesen" << endl;
     cout << zaehler[1] <<" RailwayLink gelesen" << endl;
@@ -151,18 +228,24 @@ void Load_DB(istream &is,  bahn_netz &netz)
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
 }
 
+void Save_DB(ostream &os, bahn_netz &netz)
+{
+    os << "G";
+}
+
+
 ostream &operator<<(ostream &ostr, const RailwayNode node)
 {
     ostr << "Nummer    : " << node.nummer      << endl;
     ostr << "X Koord   : " << node.xKoordinate << endl;
     ostr << "Y Koord   : " << node.yKoordinate << endl;
     ostr << "spokeEnd  : " << node.spokeEnd[0];
-    if(node.spokeEnd[0] != -1)
-        ostr << ", " << node.spokeEnd[0];
+    if(node.spokeEnd[1] != -1)
+        ostr << ", " << node.spokeEnd[1];
     ostr << endl;
     ostr << "spokeStart: " << node.spokeStart[0];
-    if(node.spokeStart[0] != -1)
-        ostr << ", " << node.spokeStart[0];
+    if(node.spokeStart[1] != -1)
+        ostr << ", " << node.spokeStart[1];
     ostr << endl;
     ostr << "text      : " << node.text         << endl;
     ostr << "formOfNode: " << node.typ          << endl;

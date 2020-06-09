@@ -5,6 +5,8 @@
 
 using namespace std;
 
+//noch ein kleiner Test
+
 void Load_DB(istream &is,  bahn_netz &netz)
 {
     string tempstring;      //Zeile

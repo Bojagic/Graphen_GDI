@@ -1,4 +1,3 @@
-//Haris schwul
 /**
 a) Nutzen der Header-Dateien ohne Nutzung einer Entwicklungsumgebung mit Projektverwaltung
 b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph

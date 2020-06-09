@@ -25,6 +25,7 @@ void Load_DB(istream &is,  bahn_netz &netz)
         if(datentyp == "RailwayLine")           //Benger
         {
             //zaehler[0]++;
+            //kleiner Test an dieser Stelle
         }
 
         if(datentyp == "RailwayLink")           //Bojagic

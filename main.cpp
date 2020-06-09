@@ -1,4 +1,4 @@
-/**
+/** Tim ist Schwul
 a) Nutzen der Header-Dateien ohne Nutzung einer Entwicklungsumgebung mit Projektverwaltung
 b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 */
@@ -74,6 +74,9 @@ int main(int argc, char *argv[])
 	}
 	return 0;
 }
+
+//Noch ein Git test
+
 
 void testGraphenbearbeitung()
 {

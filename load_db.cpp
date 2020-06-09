@@ -3,6 +3,10 @@
 
 #include "load_db.h"
 
+//Test bei Benger
+
+
+
 using namespace std;
 
 void Load_DB(istream &is,  bahn_netz &netz)

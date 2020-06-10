@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "load_db.h"
+#include "bahn_netz.h"
 
 using namespace std;
 

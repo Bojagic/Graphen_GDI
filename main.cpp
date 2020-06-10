@@ -6,7 +6,7 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include "queue.h"
 #include "knoten.h"
 #include "graph.h"
-#include "load_db.h"
+#include "bahn_netz.h"
 #include <fstream>
 #include <string>
 #include <iostream>

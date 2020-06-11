@@ -69,16 +69,20 @@ void Load_DB(istream &is, bahn_netz &netz)
             wort = tempstring.substr(wordStart+1,wordEnd-wordStart);
             tempLink.nummer = stoi(wort);
 
-            if(tempstring.find("endNode\":\"Node-", wordEnd) == string::npos)
+            if(tempstring.find("endNode\":\"Node-", wordEnd) != string::npos)   //Links ohne Start und Ende werden nicht gespeichert
             {
-                tempLink.startNodeNummer = -1;
-                tempLink.endNodeNummer = -1;
-            }
-            else
-            {
-                wordStart = tempstring.find("endNode\":\"Node-", wordEnd);
+                wordStart = tempstring.find("endNode\":\"Node-", wordEnd);      //endNodeNummer Speichern
                 //cout << "wordStart----->" << wordStart << endl;
                 wordStart+=15;
+                wordEnd = tempstring.find("\"", wordStart);
+                //cout << "wordEnd----->" << wordEnd << endl;
+                wort = tempstring.substr(wordStart, wordEnd-wordStart);
+                //cout << "Wort----->" << wort << endl;
+                tempLink.endNodeNummer = stoi(wort);
+
+                wordStart = tempstring.find("startNode\":\"Node-", wordEnd);    //startNodeNummer Speichern
+                //cout << "wordStart----->" << wordStart << endl;
+                wordStart+=17;
                 wordEnd = tempstring.find("\"", wordStart);
                 //cout << "wordEnd----->" << wordEnd << endl;
                 wort = tempstring.substr(wordStart, wordEnd-wordStart);

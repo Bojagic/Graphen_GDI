@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			Save_DB(gdi_stream, bn);
+			Save_DB(gdi_stream, bn, 1000);
 		}
 		gdi_stream.close();
 	}

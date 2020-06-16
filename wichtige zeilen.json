@@ -1,5 +1,5 @@
 RailwayLine	Line-954542	{"net:link":["Link-850899","Link-850903","Link-850907"],"gn:text":"Koblenz, Moselbr\u00fccke - Koblenz","railwayLineCode":"3012"}
-RailwayLink	Link-798698	{"net:endNode":"Node-506276","net:startNode":"Node-506276"}
+RailwayLink	Link-894299	{"gml:posList":"48.493398722967 10.354784583382 48.492331541711 10.354407297115 48.490575292953 10.353781462951 48.489844782052 10.353523767600","net:endNode":"Node-514608","net:startNode":"Node-514608"}
 
 RailwayNode	Node-483031	{"gml:pos":"54.328179686815 8.790789880191","net:spokeEnd":["Link-803230"],"net:spokeStart":["Link-803234"],"formOfNode":"pseudoNode"}
 RailwayNode	Node-516165	{"gml:pos":"49.268609324747 11.462938122161","net:spokeEnd":["Link-909283","Link-909427"],"net:spokeStart":["Link-909287","Link-909431"],"gn:text":"B\u00fc 63.778 Regensburg - N\u00fcrnberg","formOfNode":"levelCrossing"}

@@ -36,6 +36,8 @@ class Liste{
     T get(size_t index);      // Element an der Stelle index zurückgeben
 
     T operator[](size_t index);   //Alternative Weise get zu benutzen
+
+    size_t number_Elements();     //Gibt die Anzahl der Elemente zurück
 };
 
 
@@ -186,6 +188,17 @@ T Liste<T>::get(size_t index){      // Element an der Stelle index zurückgeben
 template <class T>
 T Liste<T>::operator[](size_t index){    //Alternative Weise get zu benutzen
   return get(index);
+}
+
+template <class T>
+size_t Liste<T>::number_Elements(){
+  struct element<T> *temp = head;
+  size_t i=0;
+  while(temp->next != nullptr){
+    temp = temp->next;
+    i++;
+  }
+  return i;
 }
 
 

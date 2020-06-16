@@ -232,9 +232,53 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
 }
 
-void Save_DB(ostream &os, bahn_netz &netz)
+void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
 {
-    os << "G";
+    os << "G " << anzNode << endl;
+    int nodeNummern[anzNode];
+    int start[anzNode][2], ende[anzNode][2];
+
+    for(size_t i=0; i<anzNode; i++)                                     //anzNode viele Konten speichern
+    {
+        nodeNummern[i] = netz.node[i].nummer;
+        start[i][0] = netz.node[i].spokeStart[0];
+        start[i][1] = netz.node[i].spokeStart[1];
+        ende[i][0] = netz.node[i].spokeEnd[0];
+        ende[i][1] = netz.node[i].spokeEnd[1];
+
+        os << "V " << i+1 << " \"" << nodeNummern[i] << "\"" << endl;
+    }
+
+    for(size_t i=0; i<anzNode; i++)
+    {
+        for(size_t j=0; j<anzNode; j++)
+        {
+            if(i!=j)
+            {
+                if( (start[i][0] != -1 && (start[i][0] == ende[j][0])) || (ende[i][0] != -1 && (ende[i][0] == start[j][0])) )
+                {
+                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
+                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
+                }
+                else if( (start[i][0] != -1 && (start[i][0] == ende[j][1])) || (ende[i][1] != -1 && (ende[i][1] == start[j][0])) )
+                {
+                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
+                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
+                }
+                else if( (start[i][1] != -1 && (start[i][1] == ende[j][0])) || (ende[i][0] != -1 && (ende[i][0] == start[j][1])) )
+                {
+                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
+                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
+                }
+                else if( (start[i][1] != -1 && (start[i][1] == ende[j][1])) || (ende[i][1] != -1 && (ende[i][1] == start[j][1])) )
+                {
+                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
+                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
+                }
+            }
+        }
+    }
+
 }
 
 

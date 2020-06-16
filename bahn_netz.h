@@ -54,7 +54,7 @@ public:
 
 void Load_DB(istream &is, bahn_netz &netz);
 
-void Save_DB(ostream &os, bahn_netz &netz);
+void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
 
 
 #endif // LOAD_DB_H

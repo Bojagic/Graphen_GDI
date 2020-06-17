@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class RailwayNode
+class RailwayNode       //StationNodes einlesen verbessern  Horten
 {
 public:
     int nummer;
@@ -16,10 +16,17 @@ public:
     double yKoordinate;
     int spokeEnd[2];      //link
     int spokeStart[2];    //link
-    string text;
-    string typ;                 //formOfNode
+    string text;          //Nur nei StationNodes
+    string typ;           //Nur bei Nodes
 
     friend ostream &operator<< (ostream &ostr, const RailwayNode node);     //für Liste::ausgabe Testausgabe RailwayNode
+};
+
+class RailwayStationCode{        //Benger;
+public:
+    int nummer;
+    int SNodeNummerM
+    string code;
 };
 
 class RailwayLink{
@@ -32,7 +39,7 @@ public:
     friend ostream &operator<< (ostream &ostr, const RailwayLink link);     //für Liste::ausgabe Testausgabe RailwayLink
 };
 
-class RailwayLine{
+class RailwayLine{  //Nicht notwendig?
 public:
     int nummer;
     int linkNummer[420];
@@ -47,6 +54,7 @@ class bahn_netz{
 public:
     Liste<RailwayNode> node;
     Liste<RailwayNode> stationNode;
+    Liste<RailwayCode> stationCode;
     Liste<RailwayLink> link;
     Liste<RailwayLine> line;
  };
@@ -55,6 +63,8 @@ public:
 void Load_DB(istream &is, bahn_netz &netz);
 
 void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
+
+void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t entfernung);    //Bojagic und Horten
 
 
 #endif // LOAD_DB_H

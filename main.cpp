@@ -6,7 +6,7 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include "queue.h"
 #include "knoten.h"
 #include "graph.h"
-#include "load_db.h"
+#include "bahn_netz.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			Save_DB(gdi_stream, bn);
+			Save_DB(gdi_stream, bn, 1000);
 		}
 		gdi_stream.close();
 	}

@@ -197,7 +197,11 @@ void Load_DB(istream &is, bahn_netz &netz)
                 wordEnd = tempstring.find("net:spokeEnd");
                 spokeEnd[0] = stoi(tempstring.substr(wordEnd+21, tempstring.substr(wordEnd+21).find("\"")));
                 if(tempstring.substr(wordEnd+21).find("Link-") != string::npos)
-                    spokeEnd[1] = stoi(tempstring.substr(tempstring.find(",\"Link-")+7, tempstring.substr(tempstring.find(",\"Link-")+1).find("\"]")-6));
+                {
+                    spokeEnd[1] = stoi(tempstring.substr(wordEnd+35, tempstring.substr(wordEnd+35).find("\"")));
+                    if(spokeEnd[0] == spokeEnd[1])      //Wenn erster und zweiter Link gleich sind
+                        spokeEnd[1] = -1;               //Wird der zweite nicht gespeichert
+                }
                 else
                     spokeEnd[1] = -1;
             }
@@ -206,7 +210,11 @@ void Load_DB(istream &is, bahn_netz &netz)
                 wordEnd = tempstring.find("net:spokeStart");
                 spokeStart[0] = stoi(tempstring.substr(wordEnd+23, tempstring.substr(wordEnd+23).find("\"")));
                 if(tempstring.substr(wordEnd+23).find("Link-") != string::npos)
-                    spokeStart[1] = stoi(tempstring.substr(tempstring.find(",\"Link-")+7, tempstring.substr(tempstring.find(",\"Link-")+1).find("\"]")-6));
+                {
+                    spokeStart[1] = stoi(tempstring.substr(wordEnd+37, tempstring.substr(wordEnd+37).find("\"")));
+                    if(spokeStart[0] == spokeStart[1])      //Wenn erster und zweiter Link gleich sind
+                        spokeStart[1] = -1;                 //Wird der zweite nicht gespeichert
+                }
                 else
                     spokeStart[1] = -1;
             }

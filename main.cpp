@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
 			if (LoadGraph(gdi_stream,G)==0)
 			{
 				Graph_Debug(G);
+				BFS(G, 12);
+                PRINT_PATH(G, 12, 11);
+                //Insert_Random_Edges(G, 55);
+                //Graph_Debug(G);
 			}
 		}
 		gdi_stream.close();

@@ -25,7 +25,7 @@ public:
 class RailwayStationCode{        //Benger;
 public:
     int nummer;
-    int SNodeNummerM
+    int SNodeNummer;
     string code;
 };
 
@@ -54,7 +54,7 @@ class bahn_netz{
 public:
     Liste<RailwayNode> node;
     Liste<RailwayNode> stationNode;
-    Liste<RailwayCode> stationCode;
+    Liste<RailwayStationCode> stationCode;
     Liste<RailwayLink> link;
     Liste<RailwayLine> line;
  };

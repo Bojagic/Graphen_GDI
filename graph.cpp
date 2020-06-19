@@ -149,17 +149,17 @@ void Flip_Edge(Graph &G,int u, int v)
 void Graph_Debug(Graph &G)
 {
     cout << "   |";
-    for(int i=1;i<G.knotenzahl;i++)
+    for(int i=1;i<=G.knotenzahl;i++)
         cout << setw(3) << i;
     cout << endl;
     cout << "---|";
-    for(int i=1;i<G.knotenzahl;i++)
+    for(int i=1;i<=G.knotenzahl;i++)
         cout << "---";
     cout << endl;
-    for(int i=1;i<G.knotenzahl;i++)
+    for(int i=1;i<=G.knotenzahl;i++)
     {
         cout << setw(3) << i << "|";
-        for(int j=1;j<G.knotenzahl;j++)
+        for(int j=1;j<=G.knotenzahl;j++)
             cout << setw(3) << G.Adj[i][j];
         cout << endl;
     }
@@ -171,8 +171,8 @@ void Insert_Random_Edge(Graph &G)
 
     int counter = 0;            //Anzahl fehlender Kanten zählen
     int u, v;
-    for(u=1; u<G.knotenzahl-1; u++)
-        for(v= u+1; v<G.knotenzahl; v++)
+    for(u=1; u<=G.knotenzahl-1; u++)
+        for(v= u+1; v<=G.knotenzahl; v++)
             if(G.Adj[u][v] == 0)
                 counter++;
 
@@ -186,7 +186,7 @@ void Insert_Random_Edge(Graph &G)
         while(i<edge)
         {
                 v++;
-                if(v == G.knotenzahl)
+                if(v == G.knotenzahl+1)
                 {
                     u++;
                     v=u+1;

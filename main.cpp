@@ -12,9 +12,9 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include <iostream>
 
 // Eventuelle ausgelagerte Implementationen einbinden
-//#include "queue.cpp"
-//#include "graph.cpp"
-//#include "graph1.cpp"
+#include "queue.cpp"
+#include "graph.cpp"
+#include "bahn_netz.cpp"
 
 void testGraphenbearbeitung();      //Für Lern/Lehreinheit
 

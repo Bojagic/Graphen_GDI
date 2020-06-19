@@ -221,8 +221,8 @@ void Load_DB(istream &is, bahn_netz &netz)
             }
 
             snode.spokeStart[0] = spokeStart[0];
-            snode.spokeStart[1] = spokeStart[1];
-            snode.spokeEnd[0] = spokeEnd[0];
+            snode.spokeStart[1] = spokeStart[1];    //Wenn spokeStart[0] == spokeStart[1] dann spokeStart[1] = -1
+            snode.spokeEnd[0] = spokeEnd[0];        //selbes hier mit spokeEnd
             snode.spokeEnd[1] = spokeEnd[1];
             snode.nummer = snodeID;
             snode.xKoordinate = gmlpos1;

@@ -1,6 +1,7 @@
 #include "graph.h"
 #include "knoten.h"
 #include "queue.h"
+#include "queue.cpp"
 
 #include <iostream>
 #include <fstream>

@@ -94,6 +94,8 @@ void Load_DB(istream &is, bahn_netz &netz)
             zaehler[1]++;
         }
 
+        //testkommentar
+
         if(datentyp == "RailwayNode")           //Horten
         {
             RailwayNode tempNode;

@@ -1,0 +1,211 @@
+# depslib dependency file v1.0
+1589810611 source:c:\users\rufus.000\desktop\graphen_gdi\queue.cpp
+	"queue.h"
+	<iostream>
+
+1589398893 c:\users\rufus.000\desktop\graphen_gdi\queue.h
+
+1589802786 source:c:\users\rufus.000\desktop\graphen_gdi\main.cpp
+	"queue.h"
+	<iostream>
+
+1589810705 source:c:\users\rufus.000\desktop\graphen_gdi\graph.cpp
+
+1589802993 source:c:\users\rufus.000\desktop\graphen_gdi\knoten.cpp
+	"knoten.h"
+
+1589380800 c:\users\rufus.000\desktop\graphen_gdi\knoten.h
+	<climits>
+
+1589810705 source:c:\users\rufus.000\desktop\implementierung_warteschlange\graph.cpp
+
+1589802993 source:c:\users\rufus.000\desktop\implementierung_warteschlange\knoten.cpp
+	"knoten.h"
+
+1589380800 c:\users\rufus.000\desktop\implementierung_warteschlange\knoten.h
+	<climits>
+
+1589810788 source:c:\users\rufus.000\desktop\implementierung_warteschlange\main.cpp
+	"queue.h"
+	<iostream>
+
+1589398893 c:\users\rufus.000\desktop\implementierung_warteschlange\queue.h
+
+1589810611 source:c:\users\rufus.000\desktop\implementierung_warteschlange\queue.cpp
+	"queue.h"
+	<iostream>
+
+1591111320 source:c:\users\rufus.000\desktop\graphen_gdi_v3\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"load_db.h"
+	<fstream>
+	<string>
+	<iostream>
+
+1589398893 c:\users\rufus.000\desktop\graphen_gdi_v3\queue.h
+
+1589810611 source:c:\users\rufus.000\desktop\graphen_gdi_v3\queue.cpp
+	"queue.h"
+	<iostream>
+
+1590770299 c:\users\rufus.000\desktop\graphen_gdi_v3\graph.h
+	"knoten.h"
+	<ostream>
+
+1589966893 c:\users\rufus.000\desktop\graphen_gdi_v3\knoten.h
+	<climits>
+	<string>
+
+1591099080 source:c:\users\rufus.000\desktop\graphen_gdi_v3\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1591111747 source:c:\users\rufus.000\desktop\graphen_gdi_v3\load_db.cpp
+	<iostream>
+	<fstream>
+	"load_db.h"
+
+1591112043 c:\users\rufus.000\desktop\graphen_gdi_v3\load_db.h
+	<ostream>
+	<iostream>
+
+1591095480 source:c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1590766699 c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\graph.h
+	"knoten.h"
+	<ostream>
+
+1589963293 c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\knoten.h
+	<climits>
+	<string>
+
+1589395293 c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\queue.h
+
+1591199777 source:c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\load_db.cpp
+	<iostream>
+	<fstream>
+	"load_db.h"
+
+1591202713 c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\load_db.h
+	<ostream>
+	<iostream>
+
+1591107720 source:c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"load_db.h"
+	<fstream>
+	<string>
+	<iostream>
+
+1589807011 source:c:\users\rufus.000\desktop\graphen_gdi_v3 03.06.2020\queue.cpp
+	"queue.h"
+	<iostream>
+
+1591095480 source:c:\users\rufus.000\desktop\gdi-projekt\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1590766699 c:\users\rufus.000\desktop\gdi-projekt\graph.h
+	"knoten.h"
+	<ostream>
+
+1589963293 c:\users\rufus.000\desktop\gdi-projekt\knoten.h
+	<climits>
+	<string>
+
+1589395293 c:\users\rufus.000\desktop\gdi-projekt\queue.h
+
+1591634887 source:c:\users\rufus.000\desktop\gdi-projekt\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"load_db.h"
+	<fstream>
+	<string>
+	<iostream>
+
+1591636479 c:\users\rufus.000\desktop\gdi-projekt\load_db.h
+	<ostream>
+	<iostream>
+	"liste.h"
+
+1591542279 c:\users\rufus.000\desktop\gdi-projekt\liste.h
+
+1589807011 source:c:\users\rufus.000\desktop\gdi-projekt\queue.cpp
+	"queue.h"
+	<iostream>
+
+1591636613 source:c:\users\rufus.000\desktop\gdi-projekt\load_db.cpp
+	<iostream>
+	<fstream>
+	"load_db.h"
+
+1592559440 source:c:\users\bryan\documents\github\graphen_gdi\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1591704272 c:\users\bryan\documents\github\graphen_gdi\graph.h
+	"knoten.h"
+	<ostream>
+
+1591704272 c:\users\bryan\documents\github\graphen_gdi\knoten.h
+	<climits>
+	<string>
+
+1591704272 c:\users\bryan\documents\github\graphen_gdi\queue.h
+
+1592559440 source:c:\users\bryan\documents\github\graphen_gdi\load_db.cpp
+	<iostream>
+	<fstream>
+	"load_db.h"
+
+1592559440 c:\users\bryan\documents\github\graphen_gdi\load_db.h
+	<ostream>
+	<iostream>
+	"liste.h"
+
+1592559440 c:\users\bryan\documents\github\graphen_gdi\liste.h
+
+1591704272 source:c:\users\bryan\documents\github\graphen_gdi\queue.cpp
+	"queue.h"
+	<iostream>
+
+1592559440 source:c:\users\bryan\documents\github\graphen_gdi\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"load_db.h"
+	<fstream>
+	<string>
+	<iostream>
+

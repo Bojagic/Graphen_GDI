@@ -56,9 +56,10 @@ int main(int argc, char *argv[])
     string sFileName0="wichtige zeilen.json";
     string sFileName="db_streckennetz.json";
     string saveFile="Test.gdi";
+    string kurzdatei="Iserlohn-Holzwickede.json";
 	{
 		ifstream gdi_stream;
-		gdi_stream.open(sFileName,ifstream::in);
+		gdi_stream.open(kurzdatei,ifstream::in);
 		if (gdi_stream.is_open())
 		{
 			Load_DB(gdi_stream, bn);

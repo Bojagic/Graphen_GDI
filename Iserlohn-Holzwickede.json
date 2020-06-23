@@ -29,6 +29,18 @@ RailwayStationNode	SNode-500391	{"gml:pos":"51.424970260819 7.672437284663","net
 RailwayStationNode	SNode-500392	{"gml:pos":"51.437116773352 7.647370130737","net:spokeEnd":["Link-842819","Link-842819"],"net:spokeStart":["Link-842823","Link-842823"],"gn:text":"Hennen","formOfNode":"railwayStop"}
 RailwayStationNode	SNode-500393	{"gml:pos":"51.424737178332 7.577536178292","net:spokeEnd":["Link-842827","Link-842827"],"net:spokeStart":["Link-842831","Link-842831"],"gn:text":"Ergste","formOfNode":"railwayStop"}
 
+<<<<<<< HEAD
+=======
+RailwayStationCode	Spd-1062119	{"net:element":"SNode-497529","net:atPosition":"0","stationCode":"ESRT"}
+RailwayStationCode	Spd-1063776	{"net:element":"SNode-500387","net:atPosition":"0","stationCode":"ESRT"}
+RailwayStationCode	Spd-1063777	{"net:element":"SNode-500388","net:atPosition":"0","stationCode":"EHZW"}
+RailwayStationCode	Spd-1063778	{"net:element":"SNode-500389","net:atPosition":"0","stationCode":"EIL"}
+RailwayStationCode	Spd-1063779	{"net:element":"SNode-500390","net:atPosition":"0","stationCode":"EILH"}
+RailwayStationCode	Spd-1063780	{"net:element":"SNode-500391","net:atPosition":"0","stationCode":"EKAL"}
+RailwayStationCode	Spd-1063781	{"net:element":"SNode-500392","net:atPosition":"0","stationCode":"EHNE"}
+RailwayStationCode	Spd-1063782	{"net:element":"SNode-500393","net:atPosition":"0","stationCode":"EERG"}
+
+>>>>>>> Branch_Horten
 RailwayLink	Link-840466	{"net:endNode":"Node-486628","net:startNode":"Node-486628"}
 RailwayLink	Link-842747	{"net:endNode":"Node-486928","net:startNode":"Node-486928"}
 RailwayLink	Link-842751	{"net:endNode":"Node-486929","net:startNode":"Node-486929"}

@@ -1,0 +1,70 @@
+RailwayNode	Node-486628	{"gml:pos":"51.506404526131 7.624879118596","net:spokeEnd":["Link-842775"],"net:spokeStart":["Link-840466"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486928	{"gml:pos":"51.438765033869 7.556956889282","net:spokeEnd":["Link-832782"],"net:spokeStart":["Link-832786","Link-842747"],"formOfNode":"junction"}
+RailwayNode	Node-486929	{"gml:pos":"51.439079078384 7.557171563653","net:spokeEnd":["Link-842747"],"net:spokeStart":["Link-842751"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486930	{"gml:pos":"51.444778183103 7.560851672832","net:spokeEnd":["Link-842755"],"net:spokeStart":["Link-842759"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486931	{"gml:pos":"51.451830648043 7.572072387850","net:spokeEnd":["Link-842759"],"net:spokeStart":["Link-842763"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486932	{"gml:pos":"51.483168338007 7.577674029244","net:spokeEnd":["Link-842763"],"net:spokeStart":["Link-842767"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486933	{"gml:pos":"51.491580671131 7.587514158717","net:spokeEnd":["Link-842767"],"net:spokeStart":["Link-842771"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486934	{"gml:pos":"51.506408897260 7.624891580374","net:spokeEnd":["Link-840466"],"net:spokeStart":["Link-842779"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486935	{"gml:pos":"51.507532045297 7.628108956008","net:spokeEnd":["Link-842779"],"net:spokeStart":["Link-842783"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486936	{"gml:pos":"51.373063251578 7.692086031293","net:spokeStart":["Link-842787"],"formOfNode":"railwayEnd"}
+RailwayNode	Node-486937	{"gml:pos":"51.376726233897 7.676625497539","net:spokeEnd":["Link-842791"],"net:spokeStart":["Link-842795"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486938	{"gml:pos":"51.389095251123 7.679394606211","net:spokeEnd":["Link-842795"],"net:spokeStart":["Link-842799"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486939	{"gml:pos":"51.412903571193 7.687751180983","net:spokeEnd":["Link-842803"],"net:spokeStart":["Link-842807"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486940	{"gml:pos":"51.435922072726 7.651977792666","net:spokeEnd":["Link-842815"],"net:spokeStart":["Link-842819"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486941	{"gml:pos":"51.437122972390 7.646723087149","net:spokeEnd":["Link-842823"],"net:spokeStart":["Link-842827"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486942	{"gml:pos":"51.424805413162 7.550102972176","net:spokeEnd":["Link-842831"],"net:spokeStart":["Link-842835"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486943	{"gml:pos":"51.431713075945 7.548276721320","net:spokeEnd":["Link-842835"],"net:spokeStart":["Link-842839"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486944	{"gml:pos":"51.434742779845 7.552937955558","net:spokeEnd":["Link-842839"],"net:spokeStart":["Link-842843"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-486945	{"gml:pos":"51.439193443768 7.557114458563","net:spokeEnd":["Link-842843"],"net:spokeStart":["Link-842847"],"formOfNode":"pseudoNode"}
+RailwayNode	Node-497767	{"gml:pos":"51.508107519556 7.629752275073","net:spokeEnd":["Link-822294","Link-842783"],"net:spokeStart":["Link-822298"],"formOfNode":"junction"}
+RailwayNode	Node-510300	{"gml:pos":"51.424931532736 7.672486436560","net:spokeEnd":["Link-842807"],"net:spokeStart":["Link-842811"],"gn:text":"B\u00fc 7.708 Iserlohn - Schwerte","formOfNode":"levelCrossing"}
+
+RailwayStationNode	SNode-497529	{"gml:pos":"51.442326783414 7.558838400476","net:spokeEnd":["Link-822654","Link-842847","Link-822654","Link-842847"],"gn:text":"Schwerte (Ruhr)","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500387	{"gml:pos":"51.442274377088 7.559087411948","net:spokeEnd":["Link-842751","Link-842751"],"net:spokeStart":["Link-842755","Link-842755"],"gn:text":"Schwerte (Ruhr)","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500388	{"gml:pos":"51.504614328565 7.619671325044","net:spokeEnd":["Link-842771","Link-842771"],"net:spokeStart":["Link-842775","Link-842775"],"gn:text":"Holzwickede","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500389	{"gml:pos":"51.373127432050 7.691900236777","net:spokeEnd":["Link-842787","Link-842787"],"net:spokeStart":["Link-842791","Link-842791"],"gn:text":"Iserlohn","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500390	{"gml:pos":"51.399712207212 7.692176405284","net:spokeEnd":["Link-842799","Link-842799"],"net:spokeStart":["Link-842803","Link-842803"],"gn:text":"Iserlohnerheide","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500391	{"gml:pos":"51.424970260819 7.672437284663","net:spokeEnd":["Link-842811","Link-842811"],"net:spokeStart":["Link-842815","Link-842815"],"gn:text":"Kalthof (Kr Iserlohn)","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500392	{"gml:pos":"51.437116773352 7.647370130737","net:spokeEnd":["Link-842819","Link-842819"],"net:spokeStart":["Link-842823","Link-842823"],"gn:text":"Hennen","formOfNode":"railwayStop"}
+RailwayStationNode	SNode-500393	{"gml:pos":"51.424737178332 7.577536178292","net:spokeEnd":["Link-842827","Link-842827"],"net:spokeStart":["Link-842831","Link-842831"],"gn:text":"Ergste","formOfNode":"railwayStop"}
+
+RailwayStationCode	Spd-1062119	{"net:element":"SNode-497529","net:atPosition":"0","stationCode":"ESRT"}
+RailwayStationCode	Spd-1063776	{"net:element":"SNode-500387","net:atPosition":"0","stationCode":"ESRT"}
+RailwayStationCode	Spd-1063777	{"net:element":"SNode-500388","net:atPosition":"0","stationCode":"EHZW"}
+RailwayStationCode	Spd-1063778	{"net:element":"SNode-500389","net:atPosition":"0","stationCode":"EIL"}
+RailwayStationCode	Spd-1063779	{"net:element":"SNode-500390","net:atPosition":"0","stationCode":"EILH"}
+RailwayStationCode	Spd-1063780	{"net:element":"SNode-500391","net:atPosition":"0","stationCode":"EKAL"}
+RailwayStationCode	Spd-1063781	{"net:element":"SNode-500392","net:atPosition":"0","stationCode":"EHNE"}
+RailwayStationCode	Spd-1063782	{"net:element":"SNode-500393","net:atPosition":"0","stationCode":"EERG"}
+
+RailwayLink	Link-840466	{"net:endNode":"Node-486628","net:startNode":"Node-486628"}
+RailwayLink	Link-842747	{"net:endNode":"Node-486928","net:startNode":"Node-486928"}
+RailwayLink	Link-842751	{"net:endNode":"Node-486929","net:startNode":"Node-486929"}
+RailwayLink	Link-842755	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842759	{"net:endNode":"Node-486930","net:startNode":"Node-486930"}
+RailwayLink	Link-842763	{"net:endNode":"Node-486931","net:startNode":"Node-486931"}
+RailwayLink	Link-842767	{"net:endNode":"Node-486932","net:startNode":"Node-486932"}
+RailwayLink	Link-842771	{"net:endNode":"Node-486933","net:startNode":"Node-486933"}
+RailwayLink	Link-842775	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842779	{"net:endNode":"Node-486934","net:startNode":"Node-486934"}
+RailwayLink	Link-842783	{"net:endNode":"Node-486935","net:startNode":"Node-486935"}
+RailwayLink	Link-842787	{"net:endNode":"Node-486936","net:startNode":"Node-486936"}
+RailwayLink	Link-842791	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842795	{"net:endNode":"Node-486937","net:startNode":"Node-486937"}
+RailwayLink	Link-842799	{"net:endNode":"Node-486938","net:startNode":"Node-486938"}
+RailwayLink	Link-842803	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842807	{"net:endNode":"Node-486939","net:startNode":"Node-486939"}
+RailwayLink	Link-842811	{"net:endNode":"Node-510300","net:startNode":"Node-510300"}
+RailwayLink	Link-842815	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842819	{"net:endNode":"Node-486940","net:startNode":"Node-486940"}
+RailwayLink	Link-842823	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842827	{"net:endNode":"Node-486941","net:startNode":"Node-486941"}
+RailwayLink	Link-842831	{"net:endNode":"","net:startNode":""}
+RailwayLink	Link-842835	{"net:endNode":"Node-486942","net:startNode":"Node-486942"}
+RailwayLink	Link-842839	{"net:endNode":"Node-486943","net:startNode":"Node-486943"}
+RailwayLink	Link-842843	{"net:endNode":"Node-486944","net:startNode":"Node-486944"}
+RailwayLink	Link-842847	{"net:endNode":"Node-486945","net:startNode":"Node-486945"}
+
+RailwayLine	Line-953369	{"net:link":["Link-842787","Link-842791","Link-842795","Link-842799","Link-842803","Link-842807","Link-842811","Link-842815","Link-842819","Link-842823","Link-842827","Link-842831","Link-842835","Link-842839","Link-842843","Link-842847"],"gn:text":"Iserlohn - Schwerte","railwayLineCode":"2841"}
+RailwayLine	Line-954549	{"net:link":["Link-840466","Link-842747","Link-842751","Link-842755","Link-842759","Link-842763","Link-842767","Link-842771","Link-842775","Link-842779","Link-842783"],"gn:text":"Schwerte - Holzwickede","railwayLineCode":"2840"}

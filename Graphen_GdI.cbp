@@ -32,7 +32,15 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="bahn_netz.cpp" />
+		<Unit filename="bahn_netz.h" />
+		<Unit filename="graph.cpp" />
+		<Unit filename="graph.h" />
+		<Unit filename="knoten.h" />
+		<Unit filename="liste.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="queue.cpp" />
+		<Unit filename="queue.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

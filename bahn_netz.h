@@ -27,6 +27,8 @@ public:
     int nummer;
     int SNodeNummer;
     string code;
+
+    friend ostream &operator<< (ostream &ostr, const RailwayStationCode code);   //für Liste::ausgabe Testausgabe RailwayStationCode
 };
 
 class RailwayLink{

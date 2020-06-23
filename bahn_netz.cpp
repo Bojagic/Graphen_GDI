@@ -15,8 +15,8 @@ void Load_DB(istream &is, bahn_netz &netz)
     size_t wordEnd;
     size_t i;
 
-    size_t zaehler[4];
-    zaehler[0] = zaehler[1] = zaehler[2] = zaehler[3] = 0;
+    size_t zaehler[5];
+    zaehler[0] = zaehler[1] = zaehler[2] = zaehler[3] = zaehler[4] = 0;
 
     while(getline(is, tempstring))
     {
@@ -219,24 +219,6 @@ void Load_DB(istream &is, bahn_netz &netz)
                 else
                     spokeStart[1] = -1;
             }
-            if(datentyp=="RailwayStationCode")
-            {
-                RailwayStationCode code;
-
-                wordStart=tempstring.find("SPD-")+4;
-                code.nummer=stoi(tempstring.substr(wordStart,7));
-
-                cout<<code.nummer<<endl;
-                wordStart=tempstring.find("-")+1;
-                code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
-                cout<<code.SNodeNummer<<endl;
-
-                wordStart=99;
-                wordEnd=tempstring.find("\"}")-1-wordStart;
-                code.code=tempstring.substr(wordStart,wordEnd);
-                cout<<code.code<<endl;
-
-            }
 
             snode.spokeStart[0] = spokeStart[0];
             snode.spokeStart[1] = spokeStart[1];    //Wenn spokeStart[0] == spokeStart[1] dann spokeStart[1] = -1
@@ -252,11 +234,30 @@ void Load_DB(istream &is, bahn_netz &netz)
             zaehler[3]++;
         }
 
+        if(datentyp == "RailwayStationCode")
+        {
+            RailwayStationCode code;
+
+            wordStart=tempstring.find("Spd-")+4;
+            code.nummer=stoi(tempstring.substr(wordStart,7));
+
+            cout<<code.nummer<<endl;
+            wordStart=tempstring.find("SNode-")+6;
+            code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
+            cout<<code.SNodeNummer<<endl;
+
+            wordStart=99;
+            wordEnd=tempstring.find("\"}")-1-wordStart;
+            code.code=tempstring.substr(wordStart-2,wordEnd+3);
+            cout<<code.code<<endl;
+            zaehler[4]++;
+        }
     }
     cout << zaehler[0] <<" RailwayLine gelesen" << endl;
     cout << zaehler[1] <<" RailwayLink gelesen" << endl;
     cout << zaehler[2] <<" RailwayNode gelesen" << endl;
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
+    cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
 }
 
 void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
@@ -348,4 +349,11 @@ ostream &operator<<(ostream &ostr, const RailwayLine line)
 
 
     return ostr;
+}
+
+ostream &operator<< (ostream &ostr, const RailwayStationCode code)
+{
+    ostr << "Nummer        :" << code.nummer      << endl;
+    ostr << "StationNummer :" << code.SNodeNummer << endl;
+    ostr << "Code          :" << code.code        << endl;
 }

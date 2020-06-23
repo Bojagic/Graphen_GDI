@@ -12,9 +12,9 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include <iostream>
 
 // Eventuelle ausgelagerte Implementationen einbinden
-#include "queue.cpp"
-#include "graph.cpp"
-#include "bahn_netz.cpp"
+//#include "queue.cpp"
+//#include "graph.cpp"
+//#include "bahn_netz.cpp"
 
 void testGraphenbearbeitung();      //Für Lern/Lehreinheit
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		{
 			Load_DB(gdi_stream, bn);
 
-			//bn.link.ausgabe();
+			bn.stationCode.ausgabe();
 		}
 		gdi_stream.close();
 	}
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			Save_DB(gdi_stream, bn, 1000);
+			//Save_DB(gdi_stream, bn, 1000);
 		}
 		gdi_stream.close();
 	}

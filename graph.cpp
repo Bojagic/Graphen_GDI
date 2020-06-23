@@ -12,7 +12,7 @@
 void BFS(Graph &G, int s)
 {
     int u, v;
-    for(u=1; u<G.knotenzahl; u++)    //Für alle Knoten
+    for(u=1; u<=G.knotenzahl; u++)    //Für alle Knoten
     {
         G.V[u].farbe = WEISS;
         G.V[u].d = UNENDLICH;
@@ -26,7 +26,7 @@ void BFS(Graph &G, int s)
     while(Queue_NotEmpty(Q))
     {
         u = DEQUEUE(Q);
-        for(v=1; v<G.knotenzahl; v++)
+        for(v=1; v<=G.knotenzahl; v++)
             if(G.Adj[v][u] == 1)
                 if(G.V[v].farbe == WEISS)
                 {
@@ -53,7 +53,14 @@ void PRINT_PATH(Graph &G, int s, int v)
 
 void SaveGraph(ostream &os, Graph &G)
 {
-
+    os << "G " << G.knotenzahl << endl;
+    for(int i=1; i<=G.knotenzahl; i++)
+    {
+        os << "V " << i << " \"" << G.V[i].name << "\"" << endl;
+        for(int v=1; v<=G.knotenzahl; v++)
+            if(G.Adj[i][v] == 1)
+                os << "E " << i << " " << v << " 1" << endl;
+    }
 }
 
 int LoadGraph(istream &is, Graph &G)
@@ -149,17 +156,17 @@ void Flip_Edge(Graph &G,int u, int v)
 void Graph_Debug(Graph &G)
 {
     cout << "   |";
-    for(int i=1;i<G.knotenzahl;i++)
+    for(int i=1;i<=G.knotenzahl;i++)
         cout << setw(3) << i;
     cout << endl;
     cout << "---|";
-    for(int i=1;i<G.knotenzahl;i++)
+    for(int i=1;i<=G.knotenzahl;i++)
         cout << "---";
     cout << endl;
-    for(int i=1;i<G.knotenzahl;i++)
+    for(int i=1;i<=G.knotenzahl;i++)
     {
         cout << setw(3) << i << "|";
-        for(int j=1;j<G.knotenzahl;j++)
+        for(int j=1;j<=G.knotenzahl;j++)
             cout << setw(3) << G.Adj[i][j];
         cout << endl;
     }
@@ -171,8 +178,8 @@ void Insert_Random_Edge(Graph &G)
 
     int counter = 0;            //Anzahl fehlender Kanten zählen
     int u, v;
-    for(u=1; u<G.knotenzahl-1; u++)
-        for(v= u+1; v<G.knotenzahl; v++)
+    for(u=1; u<=G.knotenzahl-1; u++)
+        for(v= u+1; v<=G.knotenzahl; v++)
             if(G.Adj[u][v] == 0)
                 counter++;
 
@@ -186,7 +193,7 @@ void Insert_Random_Edge(Graph &G)
         while(i<edge)
         {
                 v++;
-                if(v == G.knotenzahl)
+                if(v == G.knotenzahl+1)
                 {
                     u++;
                     v=u+1;

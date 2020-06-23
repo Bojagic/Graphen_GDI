@@ -16,7 +16,7 @@ public:
     double yKoordinate;
     int spokeEnd[2];      //link
     int spokeStart[2];    //link
-    string text;          //Nur nei StationNodes
+    string text;          //Nur bei StationNodes
     string typ;           //Nur bei Nodes
 
     friend ostream &operator<< (ostream &ostr, const RailwayNode node);     //für Liste::ausgabe Testausgabe RailwayNode
@@ -25,7 +25,7 @@ public:
 class RailwayStationCode{        //Benger;
 public:
     int nummer;
-    int SNodeNummerM
+    int SNodeNummer;
     string code;
 };
 
@@ -54,7 +54,7 @@ class bahn_netz{
 public:
     Liste<RailwayNode> node;
     Liste<RailwayNode> stationNode;
-    Liste<RailwayCode> stationCode;
+    Liste<RailwayStationCode> stationCode;
     Liste<RailwayLink> link;
     Liste<RailwayLine> line;
  };

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "bahn_netz.h"
+#include "load_db.h"
 
 using namespace std;
 
@@ -70,20 +70,16 @@ void Load_DB(istream &is, bahn_netz &netz)
             wort = tempstring.substr(wordStart+1,wordEnd-wordStart);
             tempLink.nummer = stoi(wort);
 
-            if(tempstring.find("endNode\":\"Node-", wordEnd) != string::npos)   //Links ohne Start und Ende werden nicht gespeichert
+            if(tempstring.find("endNode\":\"Node-", wordEnd) == string::npos)
             {
-                wordStart = tempstring.find("endNode\":\"Node-", wordEnd);      //endNodeNummer Speichern
+                tempLink.startNodeNummer = -1;
+                tempLink.endNodeNummer = -1;
+            }
+            else
+            {
+                wordStart = tempstring.find("endNode\":\"Node-", wordEnd);
                 //cout << "wordStart----->" << wordStart << endl;
                 wordStart+=15;
-                wordEnd = tempstring.find("\"", wordStart);
-                //cout << "wordEnd----->" << wordEnd << endl;
-                wort = tempstring.substr(wordStart, wordEnd-wordStart);
-                //cout << "Wort----->" << wort << endl;
-                tempLink.endNodeNummer = stoi(wort);
-
-                wordStart = tempstring.find("startNode\":\"Node-", wordEnd);    //startNodeNummer Speichern
-                //cout << "wordStart----->" << wordStart << endl;
-                wordStart+=17;
                 wordEnd = tempstring.find("\"", wordStart);
                 //cout << "wordEnd----->" << wordEnd << endl;
                 wort = tempstring.substr(wordStart, wordEnd-wordStart);
@@ -198,11 +194,7 @@ void Load_DB(istream &is, bahn_netz &netz)
                 wordEnd = tempstring.find("net:spokeEnd");
                 spokeEnd[0] = stoi(tempstring.substr(wordEnd+21, tempstring.substr(wordEnd+21).find("\"")));
                 if(tempstring.substr(wordEnd+21).find("Link-") != string::npos)
-                {
-                    spokeEnd[1] = stoi(tempstring.substr(wordEnd+35, tempstring.substr(wordEnd+35).find("\"")));
-                    if(spokeEnd[0] == spokeEnd[1])      //Wenn erster und zweiter Link gleich sind
-                        spokeEnd[1] = -1;               //Wird der zweite nicht gespeichert
-                }
+                    spokeEnd[1] = stoi(tempstring.substr(tempstring.find(",\"Link-")+7, tempstring.substr(tempstring.find(",\"Link-")+1).find("\"]")-6));
                 else
                     spokeEnd[1] = -1;
             }
@@ -211,36 +203,14 @@ void Load_DB(istream &is, bahn_netz &netz)
                 wordEnd = tempstring.find("net:spokeStart");
                 spokeStart[0] = stoi(tempstring.substr(wordEnd+23, tempstring.substr(wordEnd+23).find("\"")));
                 if(tempstring.substr(wordEnd+23).find("Link-") != string::npos)
-                {
-                    spokeStart[1] = stoi(tempstring.substr(wordEnd+37, tempstring.substr(wordEnd+37).find("\"")));
-                    if(spokeStart[0] == spokeStart[1])      //Wenn erster und zweiter Link gleich sind
-                        spokeStart[1] = -1;                 //Wird der zweite nicht gespeichert
-                }
+                    spokeStart[1] = stoi(tempstring.substr(tempstring.find(",\"Link-")+7, tempstring.substr(tempstring.find(",\"Link-")+1).find("\"]")-6));
                 else
                     spokeStart[1] = -1;
             }
-            if(datentyp=="RailwayStationCode")
-            {
-                RailwayStationCode code;
-
-                wordStart=tempstring.find("SPD-")+4;
-                code.nummer=stoi(tempstring.substr(wordStart,7));
-
-                cout<<code.nummer<<endl;
-                wordStart=tempstring.find("-")+1;
-                code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
-                cout<<code.SNodeNummer<<endl;
-
-                wordStart=99;
-                wordEnd=tempstring.find("\"}")-1-wordStart;
-                code.code=tempstring.substr(wordStart,wordEnd);
-                cout<<code.code<<endl;
-
-            }
 
             snode.spokeStart[0] = spokeStart[0];
-            snode.spokeStart[1] = spokeStart[1];    //Wenn spokeStart[0] == spokeStart[1] dann spokeStart[1] = -1
-            snode.spokeEnd[0] = spokeEnd[0];        //selbes hier mit spokeEnd
+            snode.spokeStart[1] = spokeStart[1];
+            snode.spokeEnd[0] = spokeEnd[0];
             snode.spokeEnd[1] = spokeEnd[1];
             snode.nummer = snodeID;
             snode.xKoordinate = gmlpos1;
@@ -259,53 +229,9 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
 }
 
-void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
+void Save_DB(ostream &os, bahn_netz &netz)
 {
-    os << "G " << anzNode << endl;
-    int nodeNummern[anzNode];
-    int start[anzNode][2], ende[anzNode][2];
-
-    for(size_t i=0; i<anzNode; i++)                                     //anzNode viele Konten speichern
-    {
-        nodeNummern[i] = netz.node[i].nummer;
-        start[i][0] = netz.node[i].spokeStart[0];
-        start[i][1] = netz.node[i].spokeStart[1];
-        ende[i][0] = netz.node[i].spokeEnd[0];
-        ende[i][1] = netz.node[i].spokeEnd[1];
-
-        os << "V " << i+1 << " \"" << nodeNummern[i] << "\"" << endl;
-    }
-
-    for(size_t i=0; i<anzNode; i++)
-    {
-        for(size_t j=0; j<anzNode; j++)
-        {
-            if(i!=j)
-            {
-                if( (start[i][0] != -1 && (start[i][0] == ende[j][0])) || (ende[i][0] != -1 && (ende[i][0] == start[j][0])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-                else if( (start[i][0] != -1 && (start[i][0] == ende[j][1])) || (ende[i][1] != -1 && (ende[i][1] == start[j][0])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-                else if( (start[i][1] != -1 && (start[i][1] == ende[j][0])) || (ende[i][0] != -1 && (ende[i][0] == start[j][1])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-                else if( (start[i][1] != -1 && (start[i][1] == ende[j][1])) || (ende[i][1] != -1 && (ende[i][1] == start[j][1])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-            }
-        }
-    }
-
+    os << "G";
 }
 
 

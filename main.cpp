@@ -6,7 +6,7 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include "queue.h"
 #include "knoten.h"
 #include "graph.h"
-#include "load_db.h"
+#include "bahn_netz.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -14,7 +14,7 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 // Eventuelle ausgelagerte Implementationen einbinden
 //#include "queue.cpp"
 //#include "graph.cpp"
-//#include "graph1.cpp"
+//#include "bahn_netz.cpp"
 
 void testGraphenbearbeitung();      //Für Lern/Lehreinheit
 
@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
 			if (LoadGraph(gdi_stream,G)==0)
 			{
 				Graph_Debug(G);
+				BFS(G, 12);
+                PRINT_PATH(G, 12, 11);
+                //Insert_Random_Edges(G, 55);
+                //Graph_Debug(G);
 			}
 		}
 		gdi_stream.close();
@@ -60,7 +64,7 @@ int main(int argc, char *argv[])
 		{
 			Load_DB(gdi_stream, bn);
 
-			//bn.link.ausgabe();
+			//bn.stationCode.ausgabe();
 		}
 		gdi_stream.close();
 	}
@@ -69,7 +73,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			Save_DB(gdi_stream, bn);
+			//Save_DB(gdi_stream, bn, 1000);
 		}
 		gdi_stream.close();
 	}

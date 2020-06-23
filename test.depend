@@ -1,0 +1,97 @@
+# depslib dependency file v1.0
+1592557652 source:c:\users\haris\desktop\test\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"graph.cpp"
+	"bahn_netz.h"
+	"bahn_netz.cpp"
+	<fstream>
+	<string>
+	<iostream>
+
+1589395293 c:\users\haris\desktop\test\queue.h
+
+1589963293 c:\users\haris\desktop\test\knoten.h
+	<climits>
+	<string>
+
+1590766699 c:\users\haris\desktop\test\graph.h
+	"knoten.h"
+	<ostream>
+
+1592556269 c:\users\haris\desktop\test\bahn_netz.h
+	<ostream>
+	<iostream>
+	"liste.h"
+
+1592474534 c:\users\haris\desktop\test\liste.h
+
+1592557667 c:\users\haris\desktop\test\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	"queue.cpp"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1589807011 c:\users\haris\desktop\test\queue.cpp
+	"queue.h"
+	<iostream>
+
+1592556269 c:\users\haris\desktop\test\bahn_netz.cpp
+	<iostream>
+	<fstream>
+	"bahn_netz.h"
+
+1592557652 source:c:\users\haris\documents\github\graphen_gdi\main.cpp
+	"queue.h"
+	"knoten.h"
+	"graph.h"
+	"graph.cpp"
+	"bahn_netz.h"
+	"bahn_netz.cpp"
+	<fstream>
+	<string>
+	<iostream>
+
+1589395293 c:\users\haris\documents\github\graphen_gdi\queue.h
+
+1589963293 c:\users\haris\documents\github\graphen_gdi\knoten.h
+	<climits>
+	<string>
+
+1590766699 c:\users\haris\documents\github\graphen_gdi\graph.h
+	"knoten.h"
+	<ostream>
+
+1592557667 c:\users\haris\documents\github\graphen_gdi\graph.cpp
+	"graph.h"
+	"knoten.h"
+	"queue.h"
+	"queue.cpp"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<time.h>
+	<iomanip>
+
+1589807011 c:\users\haris\documents\github\graphen_gdi\queue.cpp
+	"queue.h"
+	<iostream>
+
+1592556269 c:\users\haris\documents\github\graphen_gdi\bahn_netz.h
+	<ostream>
+	<iostream>
+	"liste.h"
+
+1592474534 c:\users\haris\documents\github\graphen_gdi\liste.h
+
+1592556269 c:\users\haris\documents\github\graphen_gdi\bahn_netz.cpp
+	<iostream>
+	<fstream>
+	"bahn_netz.h"
+

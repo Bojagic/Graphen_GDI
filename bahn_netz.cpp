@@ -219,6 +219,24 @@ void Load_DB(istream &is, bahn_netz &netz)
                 else
                     spokeStart[1] = -1;
             }
+            if(datentyp=="RailwayStationCode")
+            {
+                RailwayStationCode code;
+
+                wordStart=tempstring.find("SPD-")+4;
+                code.nummer=stoi(tempstring.substr(wordStart,7));
+
+                cout<<code.nummer<<endl;
+                wordStart=tempstring.find("-")+1;
+                code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
+                cout<<code.SNodeNummer<<endl;
+
+                wordStart=99;
+                wordEnd=tempstring.find("\"}")-1-wordStart;
+                code.code=tempstring.substr(wordStart,wordEnd);
+                cout<<code.code<<endl;
+
+            }
 
             snode.spokeStart[0] = spokeStart[0];
             snode.spokeStart[1] = spokeStart[1];    //Wenn spokeStart[0] == spokeStart[1] dann spokeStart[1] = -1

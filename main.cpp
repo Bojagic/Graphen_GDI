@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		{
 			Load_DB(gdi_stream, bn);
 
-			bn.stationCode.ausgabe();
+			//bn.stationCode.ausgabe();
 		}
 		gdi_stream.close();
 	}

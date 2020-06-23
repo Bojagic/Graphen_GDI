@@ -241,15 +241,13 @@ void Load_DB(istream &is, bahn_netz &netz)
             wordStart=tempstring.find("Spd-")+4;
             code.nummer=stoi(tempstring.substr(wordStart,7));
 
-            cout<<code.nummer<<endl;
             wordStart=tempstring.find("SNode-")+6;
             code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
-            cout<<code.SNodeNummer<<endl;
 
             wordStart=99;
             wordEnd=tempstring.find("\"}")-1-wordStart;
             code.code=tempstring.substr(wordStart-2,wordEnd+3);
-            cout<<code.code<<endl;
+
             zaehler[4]++;
         }
     }

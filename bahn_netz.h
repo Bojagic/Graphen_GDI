@@ -16,7 +16,7 @@ public:
     double yKoordinate;
     int spokeEnd[2];      //link
     int spokeStart[2];    //link
-    string text;          //Nur nei StationNodes
+    string text;          //Nur bei StationNodes
     string typ;           //Nur bei Nodes
 
     friend ostream &operator<< (ostream &ostr, const RailwayNode node);     //für Liste::ausgabe Testausgabe RailwayNode

@@ -481,6 +481,8 @@ void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t maxEntfernun
                 }
             }
 
+
+            // das hier ist nicht fertig!!!
             for(size_t j=0; j<maxEntfernung; j++)
             {
                 for(size_t k=0; k<anzNodes; k++)

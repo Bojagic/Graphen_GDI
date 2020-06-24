@@ -2,3 +2,7 @@
 *.o
 bin/Debug/test.exe
 *.layout
+*.layout
+*.depend
+*.exe
+*.exe

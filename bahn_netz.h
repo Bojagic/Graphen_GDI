@@ -16,8 +16,8 @@ public:
     double yKoordinate;
     int spokeEnd[2];      //link
     int spokeStart[2];    //link
-    string text;          //Nur nei StationNodes
-    string typ;           //Nur bei Nodes
+    string text;          //Nur bei StationNodes
+    string typ;
 
     friend ostream &operator<< (ostream &ostr, const RailwayNode node);     //für Liste::ausgabe Testausgabe RailwayNode
 };
@@ -27,6 +27,8 @@ public:
     int nummer;
     int SNodeNummer;
     string code;
+
+    friend ostream &operator<< (ostream &ostr, const RailwayStationCode code);   //für Liste::ausgabe Testausgabe RailwayStationCode
 };
 
 class RailwayLink{
@@ -62,9 +64,13 @@ public:
 
 void Load_DB(istream &is, bahn_netz &netz);
 
+void correctLinks(bahn_netz &netz);
+
 void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
 
-void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t entfernung);    //Bojagic und Horten
+void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t maxEntfernung);
+
+bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB);
 
 
 #endif // LOAD_DB_H

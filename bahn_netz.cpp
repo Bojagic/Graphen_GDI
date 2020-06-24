@@ -15,8 +15,8 @@ void Load_DB(istream &is, bahn_netz &netz)
     size_t wordEnd;
     size_t i;
 
-    size_t zaehler[4];
-    zaehler[0] = zaehler[1] = zaehler[2] = zaehler[3] = 0;
+    size_t zaehler[5];
+    zaehler[0] = zaehler[1] = zaehler[2] = zaehler[3] = zaehler[4] = 0;
 
     while(getline(is, tempstring))
     {
@@ -236,12 +236,178 @@ void Load_DB(istream &is, bahn_netz &netz)
             zaehler[3]++;
         }
 
+        if(datentyp == "RailwayStationCode")
+        {
+            RailwayStationCode code;
+
+            wordStart=tempstring.find("Spd-")+4;
+            code.nummer=stoi(tempstring.substr(wordStart,7));
+
+            wordStart=tempstring.find("SNode-")+6;
+            code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
+
+            wordStart=99;
+            wordEnd=tempstring.find("\"}")-1-wordStart;
+            code.code=tempstring.substr(wordStart-2,wordEnd+3);
+
+            zaehler[4]++;
+        }
     }
+    correctLinks(netz);
     cout << zaehler[0] <<" RailwayLine gelesen" << endl;
     cout << zaehler[1] <<" RailwayLink gelesen" << endl;
     cout << zaehler[2] <<" RailwayNode gelesen" << endl;
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
+    cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
 }
+
+void correctLinks(bahn_netz &netz)
+{
+    size_t anzNodes = netz.stationNode.number_Elements();
+    size_t anzLinks = netz.link.number_Elements();
+    int nodeNummer;
+    int ende, start;
+    RailwayLink tempLink;
+    for(size_t i=0; i<anzNodes; i++)
+    {
+        nodeNummer = netz.stationNode[i].nummer;
+
+        ende = netz.stationNode[i].spokeEnd[0];
+        start = netz.stationNode[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.stationNode[i].spokeEnd[0];
+        start = netz.stationNode[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.stationNode[i].spokeEnd[1];
+        start = netz.stationNode[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.stationNode[i].spokeEnd[1];
+        start = netz.stationNode[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+    }
+
+    anzNodes = netz.node.number_Elements();
+    for(size_t i=0; i<anzNodes; i++)
+    {
+        nodeNummer = netz.node[i].nummer;
+
+        ende = netz.node[i].spokeEnd[0];
+        start = netz.node[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.node[i].spokeEnd[0];
+        start = netz.node[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.node[i].spokeEnd[1];
+        start = netz.node[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.node[i].spokeEnd[1];
+        start = netz.node[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+    }
+}
+
 
 void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
 {
@@ -292,6 +458,79 @@ void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
 
 }
 
+void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t maxEntfernung)
+{
+    size_t knotenZahl = 0;
+    size_t durchlaeufe = 0;
+    size_t anzNodes = netz.node.number_Elements();
+    size_t anzSNodes = netz.stationNode.number_Elements();
+    RailwayStationCode tempCode;
+    RailwayNode *tempNode;
+
+    for(int i=0; i<anzSNodes; i++)
+    {
+        tempCode = netz.stationCode[i];
+        if(startCode == tempCode.code)
+        {
+            for(size_t j=0; j<anzSNodes; j++)
+            {
+                if(tempCode.SNodeNummer == netz.stationNode[i].nummer)
+                {
+                    tempNode[knotenZahl] = netz.stationNode[i];
+                    knotenZahl++;
+                }
+            }
+
+            for(size_t j=0; j<maxEntfernung; j++)
+            {
+                for(size_t k=0; k<anzNodes; k++)
+                {
+                    if(doNodesLink(tempNode[j], netz.node[k]))
+                    {
+                        tempNode[knotenZahl] = netz.node[k];
+                        knotenZahl++;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
+{
+    if(NodeA.nummer == NodeB.nummer)    //Gleiche Knoten
+        return false;
+
+    if(NodeA.spokeStart[0] == NodeB.spokeEnd[0] && NodeA.spokeStart[0] !=-1)
+        return true;
+    if(NodeA.spokeStart[0] == NodeB.spokeEnd[1] && NodeA.spokeStart[0] !=-1)
+        return true;
+    if(NodeA.spokeStart[1] == NodeB.spokeEnd[0] && NodeA.spokeStart[0] !=-1)
+        return true;
+    if(NodeA.spokeStart[1] == NodeB.spokeEnd[1] && NodeA.spokeStart[0] !=-1)
+        return true;
+
+    if(NodeA.spokeEnd[0] == NodeB.spokeStart[0] && NodeA.spokeEnd[0] !=-1)
+        return true;
+    if(NodeA.spokeEnd[0] == NodeB.spokeStart[1] && NodeA.spokeEnd[0] !=-1)
+        return true;
+    if(NodeA.spokeEnd[1] == NodeB.spokeStart[0] && NodeA.spokeEnd[0] !=-1)
+        return true;
+    if(NodeA.spokeEnd[1] == NodeB.spokeStart[1] && NodeA.spokeEnd[0] !=-1)
+        return true;
+
+    return false;
+}
+
+void rekursiv(ostream &os, bahn_netz &netz, size_t maxEntfernung, size_t durchlaeufe)
+{
+    static size_t knotenZahl = 0;
+    if(maxEntfernung == durchlaeufe)
+       return;
+
+
+}
 
 ostream &operator<<(ostream &ostr, const RailwayNode node)
 {
@@ -330,6 +569,15 @@ ostream &operator<<(ostream &ostr, const RailwayLine line)
     ostr << "X Koord   : " << line.text << endl;
     ostr << "Y Koord   : " << line.code << endl;
 
+    return ostr;
+}
+
+ostream &operator<< (ostream &ostr, const RailwayStationCode code)
+{
+    ostr << "Nummer        :" << code.nummer      << endl;
+    ostr << "StationNummer :" << code.SNodeNummer << endl;
+
+    ostr << "Code          :" << code.code        << endl;
 
     return ostr;
 }

@@ -12,9 +12,9 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include <iostream>
 
 // Eventuelle ausgelagerte Implementationen einbinden
-#include "queue.cpp"
-#include "graph.cpp"
-#include "bahn_netz.cpp"
+//#include "queue.cpp"
+//#include "graph.cpp"
+//#include "bahn_netz.cpp"
 
 void testGraphenbearbeitung();      //Für Lern/Lehreinheit
 
@@ -56,13 +56,13 @@ int main(int argc, char *argv[])
     string sFileName0="wichtige zeilen.json";
     string sFileName="db_streckennetz.json";
     string saveFile="Test.gdi";
+    string kurzdatei="Iserlohn-Holzwickede.json";
 	{
 		ifstream gdi_stream;
-		gdi_stream.open(sFileName,ifstream::in);
+		gdi_stream.open(kurzdatei,ifstream::in);
 		if (gdi_stream.is_open())
 		{
 			Load_DB(gdi_stream, bn);
-
 			//bn.link.ausgabe();
 		}
 		gdi_stream.close();
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			Save_DB(gdi_stream, bn, 1000);
+			Save_DB(gdi_stream, bn, "EIL", 5);
 		}
 		gdi_stream.close();
 	}

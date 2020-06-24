@@ -170,13 +170,28 @@ T Liste<T>::remove_first(){         // Ersten Wert entfernen und zurückgeben
 
 template <class T>
 T Liste<T>::get(size_t index){      // Element an der Stelle index zurückgeben
+  static element<T> *lastTemp = head;
+  static size_t lastIndex = 0;
+  struct element<T> *temp;
+  size_t i;
 
-  struct element<T> *temp = head;
-  size_t i = 0;
+  if(index >= lastIndex){
+    temp = lastTemp;
+	i = lastIndex;
+  }
+  else
+  {
+	temp = head;
+	i = 0;
+  }
+
   while(i<index && temp != nullptr){  //Solange nicht beim gesuchten Index und nicht vorbei am Ende der Liste
     temp = temp->next;                //Zum nächsten Element
     i++;
   }
+
+  lastTemp = temp;
+  lastIndex = index;
 
   if(temp != nullptr)       //temp nicht über tail gelaufen?
     return temp->wert;      //Wert des i-ten Elements zurück geben
@@ -192,13 +207,18 @@ T Liste<T>::operator[](size_t index){    //Alternative Weise get zu benutzen
 
 template <class T>
 size_t Liste<T>::number_Elements(){
-  struct element<T> *temp = head;
-  size_t i=0;
-  while(temp->next != nullptr){
-    temp = temp->next;
-    i++;
+  if(head == nullptr)
+    return 0;
+  else
+  {
+    struct element<T> *temp = head;
+    size_t i=1;                         //Erstes Element ist bereits head/temp
+    while(temp->next != nullptr){
+      temp = temp->next;
+      i++;
+    }
+    return i;
   }
-  return i;
 }
 
 

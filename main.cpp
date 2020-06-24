@@ -63,8 +63,7 @@ int main(int argc, char *argv[])
 		if (gdi_stream.is_open())
 		{
 			Load_DB(gdi_stream, bn);
-
-			//bn.stationCode.ausgabe();
+			//bn.link.ausgabe();
 		}
 		gdi_stream.close();
 	}
@@ -73,7 +72,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			//Save_DB(gdi_stream, bn, 1000);
+			Save_DB(gdi_stream, bn, "EIL", 5);
 		}
 		gdi_stream.close();
 	}

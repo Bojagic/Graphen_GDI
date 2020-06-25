@@ -207,14 +207,20 @@ T Liste<T>::operator[](size_t index){    //Alternative Weise get zu benutzen
 
 template <class T>
 size_t Liste<T>::number_Elements(){
-  struct element<T> *temp = head;
-  size_t i=0;
-  while(temp->next != nullptr){
-    temp = temp->next;
-    i++;
+  if(head == nullptr)
+    return 0;
+  else
+  {
+    struct element<T> *temp = head;
+    size_t i=1;                         //Erstes Element ist bereits head/temp
+    while(temp->next != nullptr){
+      temp = temp->next;
+      i++;
+    }
+    return i;
   }
-  return i;
 }
+
 
 
 #endif

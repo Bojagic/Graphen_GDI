@@ -249,7 +249,8 @@ void Load_DB(istream &is, bahn_netz &netz)
             wordStart=99;
             wordEnd=tempstring.find("\"}")-1-wordStart;
             code.code=tempstring.substr(wordStart-2,wordEnd+3);
-            cout<<code.code<<endl;
+
+            netz.stationCode.add_last(code);
             zaehler[4]++;
         }
     }
@@ -258,6 +259,49 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[2] <<" RailwayNode gelesen" << endl;
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
     cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
+}
+
+void Save_Data(ostream &os, bahn_netz &netz, string startcode)
+{
+    int anzNode = netz.node.number_Elements();
+    int anzSNode = netz.stationNode.number_Elements();
+    int anzNoPseudo = 0;
+    RailwayNode aktuell;
+
+    for(int i=0; i<anzNode; i++)
+    {
+        if(netz.node[i].typ != "pseudoNode")
+            anzNoPseudo++;
+    }
+    for(int i=0;i<anzSNode;i++) // Jede SNode wird durchlaufen
+    {
+        if(startcode == netz.stationCode[i].code)
+        {
+            for(int j=0;j<anzSNode;j++)
+            {
+                if(netz.stationCode[i].nummer == netz.stationNode[j].nummer)
+                {
+                    aktuell = netz.node[j];
+                }
+            }
+        }
+    }
+
+    do
+    {
+
+    }while();
+
+
+
+    cout << endl << "Hier iserlohn " << aktuell.nummer << endl;
+
+    cout << endl << endl << "Hier ist Save_Data!" << endl;
+    cout << "G " << anzNoPseudo << endl;
+    for(int i=0;i<netz.node.number_Elements();i++)
+    {
+        cout << netz.node[i] << endl;
+    }
 }
 
 void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)

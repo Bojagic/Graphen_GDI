@@ -64,6 +64,8 @@ public:
 
 void Load_DB(istream &is, bahn_netz &netz);
 
+void Save_Data(ostream &os, bahn_netz &netz, string startcode);
+
 void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
 
 void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t entfernung);    //Bojagic und Horten

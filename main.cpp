@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			//Save_DB(gdi_stream, bn, 1000);
+			Save_Data(gdi_stream, bn, "EIL");
 		}
 		gdi_stream.close();
 	}

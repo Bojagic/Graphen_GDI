@@ -33,8 +33,9 @@ class Liste{
     void add_first(T wert);   // Neues Element am Anfang einfügen
     T remove_last();          // Letzten Wert entfernen und zurückgeben
     T remove_first();         // Ersten Wert entfernen und zurückgeben
-    T get(size_t index);      // Element an der Stelle index zurückgeben
+    T remove(size_t index);   // Element an bestimmter Stelle löschen
 
+    T get(size_t index);      // Element an der Stelle index zurückgeben
     T operator[](size_t index);   //Alternative Weise get zu benutzen
 
     size_t number_Elements();     //Gibt die Anzahl der Elemente zurück
@@ -166,6 +167,34 @@ T Liste<T>::remove_first(){         // Ersten Wert entfernen und zurückgeben
   }
   else
     throw "Exception: Liste ist leer!\n";
+}
+
+template <class T>
+T Liste<T>::remove(size_t index){
+  struct element<T> *temp = head;
+  struct element<T> *tempPrev;
+  struct element<T> *tempNext;
+  size_t i;
+
+  while(i<index && temp != nullptr){
+    temp = temp->next;
+    i++;
+  }
+
+  if(temp != nullptr)       //temp nicht über tail gelaufen?
+  {
+    tempPrev = temp->prev;
+    tempNext = temp->next;
+
+    tempPrev->next = temp->next;
+    tempNext->prev = temp->prev;
+
+    delete temp;
+    return temp->wert;
+  }
+
+  else
+    throw "Exception: Index nicht vorhanden!\n";
 }
 
 template <class T>

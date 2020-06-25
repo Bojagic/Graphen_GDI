@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     bahn_netz bn;
     string sFileName0="wichtige zeilen.json";
     string sFileName="db_streckennetz.json";
-    string saveFile="Test.gdi";
+    char* saveFile="Test.gdi";
     string kurzdatei="Iserlohn-Holzwickede.json";
 	{
 		ifstream gdi_stream;
@@ -67,15 +67,14 @@ int main(int argc, char *argv[])
 		}
 		gdi_stream.close();
 	}
-	{
-		ofstream gdi_stream;
-		gdi_stream.open(saveFile,ofstream::out);
-		if (gdi_stream.is_open())
-		{
-			Save_DB(gdi_stream, bn, "EIL", 5);
-		}
-		gdi_stream.close();
-	}
+
+    FILE *fp;
+    fp = fopen(saveFile, "w+");
+
+    Save_DB(fp, bn, "EIL", 5);
+
+    fclose(fp);
+
 	return 0;
 }
 

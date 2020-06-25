@@ -66,9 +66,11 @@ void Load_DB(istream &is, bahn_netz &netz);
 
 void correctLinks(bahn_netz &netz);
 
-void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
+//void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
 
-void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t maxEntfernung);
+void Save_DB(FILE *fp, bahn_netz &netz, string startCode, size_t maxEntfernung);
+
+size_t verbindungen(FILE *fp, bahn_netz &netz, RailwayNode currentNode, size_t maxEntfernung, size_t durchlaeufe = 0, size_t altKnotenZahl = 1);
 
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB);
 

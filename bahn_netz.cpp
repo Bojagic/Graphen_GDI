@@ -4,7 +4,7 @@
 #include "bahn_netz.h"
 
 using namespace std;
-size_t verbindungen(ostream &os, bahn_netz &netz, RailwayNode currentNode, size_t maxEntfernung, size_t durchlaeufe = 0, size_t altKnotenZahl = 0);
+
 
 void Load_DB(istream &is, bahn_netz &netz)
 {
@@ -461,11 +461,11 @@ void correctLinks(bahn_netz &netz)
 
 }*/
 //------------------------------------------------------------------------------------------
-void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t maxEntfernung)
+void Save_DB(FILE *fp, bahn_netz &netz, string startCode, size_t maxEntfernung)
 {
 
     //todo: Save_DB fertig machen
-    verbindungen(os, netz, netz.node[0], maxEntfernung);
+    verbindungen(fp, netz, netz.node[0], maxEntfernung);
 }
 //------------------------------------------------------------------------------------------
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
@@ -496,20 +496,40 @@ bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
 //------------------------------------------------------------------------------------------
 //schreibt verbindungen in .gdi Datei in gegebenes Format und returnt am Ende die Gesamtzahl an Knoten
 //Knotenanzahl muss sepperat an den Anfang geschrieben werden
-size_t verbindungen(ostream &os, bahn_netz &netz, RailwayNode currentNode, size_t maxEntfernung, size_t durchlaeufe, size_t altKnotenZahl)
+size_t verbindungen(FILE *fp, bahn_netz &netz, RailwayNode currentNode, size_t maxEntfernung, size_t durchlaeufe, size_t altKnotenZahl)
 {
     static size_t knotenZahl = 0;
+    char zeichen = NULL;
+    size_t nummer;
     if(maxEntfernung == durchlaeufe)
        return knotenZahl;
 
+    /*while(getline(fp, tempStr))
+        if(tempStr.find("\"" + std::to_string(currentNode.nummer) + "\"") == string::npos)
+            return knotenZahl;*/
+
+    fseek(fp, 0, SEEK_SET);
+    while(zeichen != EOF)
+    {
+        zeichen = fgetc(fp);
+        if(zeichen == 'V')
+        {
+            while(fgetc(fp) != '"');
+            fscanf(fp, "%d", &nummer);
+            if(nummer == currentNode.nummer)
+                return knotenZahl;
+        }
+    }
+
+
     //funktioniert noch nicht ganz
-    for(int i=0; i<netz.node.number_Elements(); i++)
+    for(int i=knotenZahl+1; i<netz.node.number_Elements(); i++)
         if(doNodesLink(currentNode, netz.node[i]))
         {
             knotenZahl++;
-            os << "V " << knotenZahl << " \"" << netz.node[i].nummer <<"\"" << endl;
-            os << "E " << altKnotenZahl << " " << knotenZahl << endl;
-            verbindungen(os, netz, netz.node[i], maxEntfernung, ++durchlaeufe, knotenZahl);
+            fprintf(fp, "V %d \"%d\"\n", knotenZahl, netz.node[i].nummer);
+            fprintf(fp, "E %d %d\n", altKnotenZahl, knotenZahl);
+            verbindungen(fp, netz, netz.node[i], maxEntfernung, ++durchlaeufe, knotenZahl);
         }
 
     return knotenZahl;

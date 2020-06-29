@@ -241,16 +241,13 @@ void Load_DB(istream &is, bahn_netz &netz)
             wordStart=tempstring.find("Spd-")+4;
             code.nummer=stoi(tempstring.substr(wordStart,7));
 
-            cout<<code.nummer<<endl;
             wordStart=tempstring.find("SNode-")+6;
             code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
-            cout<<code.SNodeNummer<<endl;
 
             wordStart=99;
             wordEnd=tempstring.find("\"}")-1-wordStart;
             code.code=tempstring.substr(wordStart-2,wordEnd+3);
 
-            netz.stationCode.add_last(code);
             zaehler[4]++;
         }
     }
@@ -259,98 +256,256 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[2] <<" RailwayNode gelesen" << endl;
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
     cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
+
+    //correctLinks(netz);
+    //removePseudoNodes(netz);
+    //mergeStationNodes(netz);
 }
 
-void Save_Data(ostream &os, bahn_netz &netz, string startcode)
+void correctLinks(bahn_netz &netz)
 {
-    int anzNode = netz.node.number_Elements();
-    int anzSNode = netz.stationNode.number_Elements();
-    int anzNoPseudo = 0;
-    RailwayNode aktuell;
+    size_t anzNodes = netz.stationNode.number_Elements();
+    size_t anzLinks = netz.link.number_Elements();
+    int nodeNummer;
+    int ende, start;
+    RailwayLink tempLink;
+    for(size_t i=0; i<anzNodes; i++)
+    {
+        nodeNummer = netz.stationNode[i].nummer;
 
-    for(int i=0; i<anzNode; i++)
-    {
-        if(netz.node[i].typ != "pseudoNode")
-            anzNoPseudo++;
-    }
-    for(int i=0;i<anzSNode;i++) // Jede SNode wird durchlaufen
-    {
-        if(startcode == netz.stationCode[i].code)
+        ende = netz.stationNode[i].spokeEnd[0];
+        start = netz.stationNode[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
         {
-            for(int j=0;j<anzSNode;j++)
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
             {
-                if(netz.stationCode[i].nummer == netz.stationNode[j].nummer)
-                {
-                    aktuell = netz.node[j];
-                }
+                tempLink.endNodeNummer = nodeNummer;
             }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.stationNode[i].spokeEnd[0];
+        start = netz.stationNode[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.stationNode[i].spokeEnd[1];
+        start = netz.stationNode[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
+
+        ende = netz.stationNode[i].spokeEnd[1];
+        start = netz.stationNode[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
         }
     }
 
-    do
+    anzNodes = netz.node.number_Elements();
+    for(size_t i=0; i<anzNodes; i++)
     {
+        nodeNummer = netz.node[i].nummer;
 
-    }while();
+        ende = netz.node[i].spokeEnd[0];
+        start = netz.node[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
 
+        ende = netz.node[i].spokeEnd[0];
+        start = netz.node[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
 
+        ende = netz.node[i].spokeEnd[1];
+        start = netz.node[i].spokeStart[0];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
 
-    cout << endl << "Hier iserlohn " << aktuell.nummer << endl;
-
-    cout << endl << endl << "Hier ist Save_Data!" << endl;
-    cout << "G " << anzNoPseudo << endl;
-    for(int i=0;i<netz.node.number_Elements();i++)
-    {
-        cout << netz.node[i] << endl;
+        ende = netz.node[i].spokeEnd[1];
+        start = netz.node[i].spokeStart[1];
+        for(size_t j=0; j<anzLinks; j++)
+        {
+            tempLink = netz.link.remove_first();
+            if(ende == tempLink.nummer)
+            {
+                tempLink.endNodeNummer = nodeNummer;
+            }
+            if(start == tempLink.nummer)
+            {
+                tempLink.startNodeNummer = nodeNummer;
+            }
+            netz.link.add_last(tempLink);
+        }
     }
 }
 
-void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
+void removePseudoNodes(bahn_netz &netz)
 {
-    os << "G " << anzNode << endl;
-    int nodeNummern[anzNode];
-    int start[anzNode][2], ende[anzNode][2];
-
-    for(size_t i=0; i<anzNode; i++)                                     //anzNode viele Konten speichern
-    {
-        nodeNummern[i] = netz.node[i].nummer;
-        start[i][0] = netz.node[i].spokeStart[0];
-        start[i][1] = netz.node[i].spokeStart[1];
-        ende[i][0] = netz.node[i].spokeEnd[0];
-        ende[i][1] = netz.node[i].spokeEnd[1];
-
-        os << "V " << i+1 << " \"" << nodeNummern[i] << "\"" << endl;
-    }
-
-    for(size_t i=0; i<anzNode; i++)
-    {
-        for(size_t j=0; j<anzNode; j++)
+    size_t anzNodes = netz.node.number_Elements();
+    RailwayNode tempNodeA;
+    RailwayNode tempNodeB;
+    RailwayNode *startNode;
+    RailwayNode *endNode;
+    for(size_t i=0; i<anzNodes; i++)
+    {cout << "a";
+        tempNodeA = netz.node[i];
+        if(tempNodeA.typ == "pseudoNode")
         {
-            if(i!=j)
+            for(size_t j=0; j<anzNodes; j++)
             {
-                if( (start[i][0] != -1 && (start[i][0] == ende[j][0])) || (ende[i][0] != -1 && (ende[i][0] == start[j][0])) )
+                tempNodeB = netz.node[j];
+                if(doNodesLink(tempNodeA,tempNodeB))
                 {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-                else if( (start[i][0] != -1 && (start[i][0] == ende[j][1])) || (ende[i][1] != -1 && (ende[i][1] == start[j][0])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-                else if( (start[i][1] != -1 && (start[i][1] == ende[j][0])) || (ende[i][0] != -1 && (ende[i][0] == start[j][1])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
-                }
-                else if( (start[i][1] != -1 && (start[i][1] == ende[j][1])) || (ende[i][1] != -1 && (ende[i][1] == start[j][1])) )
-                {
-                    os << "E " << i+1 << " " << j+1 << " 1" << endl;
-                    os << "E " << j+1 << " " << i+1 << " 1" << endl;
+                    startNode = &tempNodeA;
+                    endNode = &tempNodeB;
+
+                    //for
                 }
             }
+
+            startNode->spokeEnd[0] = endNode->nummer;
+            endNode->spokeStart[0] = startNode->nummer;
+
+            netz.node.remove(i);
+            anzNodes--;
         }
     }
+}
 
+void mergeStationNodes(bahn_netz &netz)
+{
+
+}
+
+
+void Save_DB(ostream &os, bahn_netz &netz)
+{
+	size_t anzSNodes = netz.stationNode.number_Elements();
+	size_t anzNodes = netz.node.number_Elements();
+	size_t nodesGesamt = anzSNodes + anzNodes;
+
+	RailwayNode *knoten = new RailwayNode[nodesGesamt];
+
+	os << "G " << nodesGesamt << endl;
+
+	for(size_t i=0; i<anzSNodes; i++)
+	{
+		knoten[i] = netz.stationNode[i];
+	}
+
+	for(size_t i=0; i<anzNodes; i++)
+	{
+		knoten[i+anzSNodes] = netz.node[i];
+	}
+cout << "!";
+	for(size_t i=0; i<nodesGesamt; i++)
+	{if(i%100 == 0) cout << i << endl;
+		os << "V " << i+1 << " \"" << knoten[i].nummer << "\"" << endl;
+		for(size_t j=0; j<nodesGesamt; j++)
+		{
+            if(doNodesLink(knoten[i], knoten[j]))
+            {
+                os << "E " << i+1 << " " << j+1 << " " << 1 << endl;
+            }
+		}
+	}
+	delete[] knoten;
+}
+
+bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
+{
+    if(NodeA.nummer == NodeB.nummer)    //Gleiche Knoten
+        return false;
+
+    if(NodeA.spokeStart[0] == NodeB.spokeEnd[0] && NodeA.spokeStart[0] !=-1)
+        return true;
+    if(NodeA.spokeStart[0] == NodeB.spokeEnd[1] && NodeA.spokeStart[0] !=-1)
+        return true;
+    if(NodeA.spokeStart[1] == NodeB.spokeEnd[0] && NodeA.spokeStart[1] !=-1)
+        return true;
+    if(NodeA.spokeStart[1] == NodeB.spokeEnd[1] && NodeA.spokeStart[1] !=-1)
+        return true;
+
+    if(NodeA.spokeEnd[0] == NodeB.spokeStart[0] && NodeA.spokeEnd[0] !=-1)
+        return true;
+    if(NodeA.spokeEnd[0] == NodeB.spokeStart[1] && NodeA.spokeEnd[0] !=-1)
+        return true;
+    if(NodeA.spokeEnd[1] == NodeB.spokeStart[0] && NodeA.spokeEnd[1] !=-1)
+        return true;
+    if(NodeA.spokeEnd[1] == NodeB.spokeStart[1] && NodeA.spokeEnd[1] !=-1)
+        return true;
+
+    return false;
 }
 
 
@@ -400,4 +555,6 @@ ostream &operator<< (ostream &ostr, const RailwayStationCode code)
     ostr << "Nummer        :" << code.nummer      << endl;
     ostr << "StationNummer :" << code.SNodeNummer << endl;
     ostr << "Code          :" << code.code        << endl;
+
+    return ostr;
 }

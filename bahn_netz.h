@@ -22,6 +22,14 @@ public:
     friend ostream &operator<< (ostream &ostr, const RailwayNode node);     //für Liste::ausgabe Testausgabe RailwayNode
 };
 
+class Station
+{
+    string code;
+    Liste<int> spokeEnd;
+    Liste<int> spokeStart;
+
+};
+
 class RailwayStationCode{        //Benger;
 public:
     int nummer;
@@ -57,6 +65,7 @@ public:
     Liste<RailwayNode> node;
     Liste<RailwayNode> stationNode;
     Liste<RailwayStationCode> stationCode;
+    Liste<Station> station;
     Liste<RailwayLink> link;
     Liste<RailwayLine> line;
  };
@@ -64,11 +73,12 @@ public:
 
 void Load_DB(istream &is, bahn_netz &netz);
 
-void Save_Data(ostream &os, bahn_netz &netz, string startcode);
+void correctLinks(bahn_netz &netz);
+void removePseudoNodes(bahn_netz &netz);
+void mergeStationNodes(bahn_netz &netz);
 
-void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
-
-void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t entfernung);    //Bojagic und Horten
+void Save_DB(ostream &os, bahn_netz &netz);
+bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB);
 
 
 #endif // LOAD_DB_H

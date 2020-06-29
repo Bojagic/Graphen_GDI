@@ -59,12 +59,13 @@ int main(int argc, char *argv[])
     string kurzdatei="Iserlohn-Holzwickede.json";
 	{
 		ifstream gdi_stream;
-		gdi_stream.open(sFileName,ifstream::in);
+		gdi_stream.open(kurzdatei,ifstream::in);
 		if (gdi_stream.is_open())
 		{
 			Load_DB(gdi_stream, bn);
 
-			//bn.node.ausgabe();
+			bn.node.ausgabe();
+			bn.stationNode.ausgabe();
 		}
 		gdi_stream.close();
 	}
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			Save_DB(gdi_stream, bn);
+			//Save_DB(gdi_stream, bn);
 		}
 		gdi_stream.close();
 	}

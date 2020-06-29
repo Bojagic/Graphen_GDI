@@ -79,6 +79,7 @@ void mergeStationNodes(bahn_netz &netz);
 
 void Save_DB(ostream &os, bahn_netz &netz);
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB);
+int findLink(RailwayNode NodeA, RailwayNode NodeB);
 
 
 #endif // LOAD_DB_H

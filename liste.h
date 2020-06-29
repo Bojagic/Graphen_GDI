@@ -145,7 +145,7 @@ if(head != nullptr){    //Liste nicht leer?
     return wert;                //Letzten Wert zurück geben
   }
   else
-    throw "Exception: Liste ist leer!\n";
+    throw "remove_last Exception: Liste ist leer!\n";
 }
 
 template <class T>
@@ -166,35 +166,33 @@ T Liste<T>::remove_first(){         // Ersten Wert entfernen und zurückgeben
     return wert;                //Ersten Wert zurück geben
   }
   else
-    throw "Exception: Liste ist leer!\n";
+    throw "remove_first Exception: Liste ist leer!\n";
 }
 
 template <class T>
 T Liste<T>::remove(size_t index){
-  struct element<T> *temp = head;
-  struct element<T> *tempPrev;
-  struct element<T> *tempNext;
-  size_t i;
-
-  while(i<index && temp != nullptr){
-    temp = temp->next;
-    i++;
-  }
-
-  if(temp != nullptr)       //temp nicht über tail gelaufen?
+  if(index == 0)
+    return remove_first();
+  else if(index == number_Elements()-1)
+    return remove_last();
+  else if(index < number_Elements())
   {
-    tempPrev = temp->prev;
-    tempNext = temp->next;
+    Liste<T> tempListe;
+    T wert;
 
-    tempPrev->next = temp->next;
-    tempNext->prev = temp->prev;
+    for(size_t i=0; i<index; i++)           //Alle Element bis vor dem zu entfernenden in andere Liste verschieben
+      tempListe.add_last(remove_first());
 
-    delete temp;
-    return temp->wert;
+    wert = remove_first();                  //Gewünschtes Element entfernen und wert sichern
+    tempListe.add_last(remove_first());     //Nachfolgendes Element auch in andere Liste verscheiben
+                                            //Dadurch steht in dessen prev nicht mehr das gelöschte Element
+    for(size_t i=0; i<index+1; i++)         //Alle Elemente aus der kopierten Liste wieder zurück schieben
+      add_first(tempListe.remove_last());
+
+    return wert;
   }
-
   else
-    throw "Exception: Index nicht vorhanden!\n";
+    throw "remove Exception: Falscher Index!\n";
 }
 
 template <class T>
@@ -226,7 +224,7 @@ T Liste<T>::get(size_t index){      // Element an der Stelle index zurückgeben
     return temp->wert;      //Wert des i-ten Elements zurück geben
 
   else
-    throw "Exception: Index nicht vorhanden!\n";
+    throw "get Exception: Index nicht vorhanden!\n";
 }
 
 template <class T>

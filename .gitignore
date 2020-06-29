@@ -1,6 +1,10 @@
 
+<<<<<<< HEAD
 *.o
-*.cbp
+bin/Debug/test.exe
+=======
+Graphen_GdI.depend
+bin/Debug/Graphen_GdI.exe
 *.layout
-*.depend
-*.exe
+*.cbp
+>>>>>>> Branch_Bryan

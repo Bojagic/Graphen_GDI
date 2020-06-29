@@ -164,7 +164,7 @@
 	<fstream>
 	"load_db.h"
 
-1592559440 source:c:\users\bryan\documents\github\graphen_gdi\graph.cpp
+1592917153 source:c:\users\bryan\documents\github\graphen_gdi\graph.cpp
 	"graph.h"
 	"knoten.h"
 	"queue.h"
@@ -194,17 +194,17 @@
 	<iostream>
 	"liste.h"
 
-1592559440 c:\users\bryan\documents\github\graphen_gdi\liste.h
+1593003720 c:\users\bryan\documents\github\graphen_gdi\liste.h
 
 1591704272 source:c:\users\bryan\documents\github\graphen_gdi\queue.cpp
 	"queue.h"
 	<iostream>
 
-1592559440 source:c:\users\bryan\documents\github\graphen_gdi\main.cpp
+1593008082 source:c:\users\bryan\documents\github\graphen_gdi\main.cpp
 	"queue.h"
 	"knoten.h"
 	"graph.h"
-	"load_db.h"
+	"bahn_netz.h"
 	<fstream>
 	<string>
 	<iostream>
@@ -281,19 +281,19 @@
 	"queue.h"
 	<iostream>
 
-1592990759 source:e:\rufus\studium\graphen_gdi\bahn_netz.cpp
+1592916476 source:e:\rufus\studium\graphen_gdi\bahn_netz.cpp
 	<iostream>
 	<fstream>
 	"bahn_netz.h"
 
-1592990499 e:\rufus\studium\graphen_gdi\bahn_netz.h
+1592915987 e:\rufus\studium\graphen_gdi\bahn_netz.h
 	<ostream>
 	<iostream>
 	"liste.h"
 
-1592935643 e:\rufus\studium\graphen_gdi\liste.h
+1592914534 e:\rufus\studium\graphen_gdi\liste.h
 
-1592991127 source:e:\rufus\studium\graphen_gdi\main.cpp
+1592916205 source:e:\rufus\studium\graphen_gdi\main.cpp
 	"queue.h"
 	"knoten.h"
 	"graph.h"
@@ -302,47 +302,12 @@
 	<string>
 	<iostream>
 
-1592992770 source:c:\users\haris\documents\github\graphen_gdi\graph.cpp
-	"graph.h"
-	"knoten.h"
-	"queue.h"
-	<iostream>
-	<fstream>
-	<stdlib.h>
-	<time.h>
-	<iomanip>
-
-1590766699 c:\users\haris\documents\github\graphen_gdi\graph.h
-	"knoten.h"
-	<ostream>
-
-1589963293 c:\users\haris\documents\github\graphen_gdi\knoten.h
-	<climits>
-	<string>
-
-1589395293 c:\users\haris\documents\github\graphen_gdi\queue.h
-
-1592992770 source:c:\users\haris\documents\github\graphen_gdi\main.cpp
-	"queue.h"
-	"knoten.h"
-	"graph.h"
-	"bahn_netz.h"
-	<fstream>
-	<string>
-	<iostream>
-
-1592992770 c:\users\haris\documents\github\graphen_gdi\bahn_netz.h
+1593002606 c:\users\bryan\documents\github\graphen_gdi\bahn_netz.h
 	<ostream>
 	<iostream>
 	"liste.h"
 
-1592992770 c:\users\haris\documents\github\graphen_gdi\liste.h
-
-1589807011 source:c:\users\haris\documents\github\graphen_gdi\queue.cpp
-	"queue.h"
-	<iostream>
-
-1593009479 source:c:\users\haris\documents\github\graphen_gdi\bahn_netz.cpp
+1593008142 source:c:\users\bryan\documents\github\graphen_gdi\bahn_netz.cpp
 	<iostream>
 	<fstream>
 	"bahn_netz.h"

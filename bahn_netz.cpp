@@ -209,6 +209,11 @@ void Load_DB(istream &is, bahn_netz &netz)
                 else
                     spokeEnd[1] = -1;
             }
+            else
+            {
+                spokeEnd[0] = -1;
+                spokeEnd[1] = -1;
+            }
             if(tempstring.find("net:spokeStart") != string::npos)
             {
                 wordEnd = tempstring.find("net:spokeStart");
@@ -221,6 +226,11 @@ void Load_DB(istream &is, bahn_netz &netz)
                 }
                 else
                     spokeStart[1] = -1;
+            }
+            else
+            {
+                spokeStart[0] = -1;
+                spokeStart[1] = -1;
             }
 
             snode.spokeStart[0] = spokeStart[0];
@@ -261,6 +271,8 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[2] <<" RailwayNode gelesen" << endl;
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
     cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
+
+    mergeStationNodes(netz);
 }
 
 void correctLinks(bahn_netz &netz)
@@ -410,7 +422,56 @@ void correctLinks(bahn_netz &netz)
     }
 }
 
+void mergeStationNodes(bahn_netz &netz)
+{
+    try
+    {
+        int anzSNode = netz.stationNode.number_Elements();
+        int zaehler = -1;
+        Station temp;
 
+        bool gefunden;
+        for(int i=0;i<anzSNode;i++)
+        {
+            gefunden = false;
+            for(int j=0;j<netz.station.number_Elements();j++)
+            {
+                if(netz.stationCode[i].code == netz.station[j].code)
+                {
+                    gefunden = true;
+                    if(netz.stationNode[i].spokeEnd[0] != -1)
+                        netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
+                    if(netz.stationNode[i].spokeStart[0] != -1)
+                        netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
+                    if(netz.stationNode[i].spokeEnd[1] != -1)
+                        netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
+                    if(netz.stationNode[i].spokeStart[1] != -1)
+                        netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
+                    break;
+                }
+            }
+            if(!gefunden)
+            {
+                temp.spokeEnd.clear();
+                temp.spokeStart.clear();
+                temp.code = netz.stationCode[i].code;
+                //if(netz.stationNode[i].spokeEnd[0] != -1)
+                    temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
+                //if(netz.stationNode[i].spokeStart[0] != -1)
+                    temp.spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
+                if(netz.stationNode[i].spokeEnd[1] != -1)
+                    temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
+                if(netz.stationNode[i].spokeStart[1] != -1)
+                    temp.spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
+                netz.station.add_last(temp);
+            }
+        }
+    }
+    catch(const char* msg)
+    {
+        cerr << msg;
+    }
+}
 //funktioniert nicht
 /*void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode)
 {
@@ -539,6 +600,17 @@ ostream &operator<<(ostream &ostr, const RailwayLink link)
     ostr << "Nummer    : " << link.nummer          << endl;
     ostr << "Start Node: " << link.startNodeNummer << endl;
     ostr << "End   Node: " << link.endNodeNummer   << endl;
+
+    return ostr;
+}
+
+ostream &operator<<(ostream &ostr, Station station)
+{
+    ostr << "Nummer    : " << station.code         << endl;
+    ostr << "Start Node: ";
+    station.spokeStart.ausgabe();
+    ostr << "End Node: ";
+    station.spokeEnd.ausgabe();
 
     return ostr;
 }

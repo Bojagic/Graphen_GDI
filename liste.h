@@ -33,8 +33,9 @@ class Liste{
     void add_first(T wert);   // Neues Element am Anfang einfügen
     T remove_last();          // Letzten Wert entfernen und zurückgeben
     T remove_first();         // Ersten Wert entfernen und zurückgeben
-    T get(size_t index);      // Element an der Stelle index zurückgeben
+    T remove(size_t index);   // Element an bestimmter Stelle löschen
 
+    T get(size_t index);      // Element an der Stelle index zurückgeben
     T operator[](size_t index);   //Alternative Weise get zu benutzen
 
     size_t number_Elements();     //Gibt die Anzahl der Elemente zurück
@@ -144,7 +145,7 @@ if(head != nullptr){    //Liste nicht leer?
     return wert;                //Letzten Wert zurück geben
   }
   else
-    throw "Exception: Liste ist leer!\n";
+    throw "remove_last Exception: Liste ist leer!\n";
 }
 
 template <class T>
@@ -165,7 +166,33 @@ T Liste<T>::remove_first(){         // Ersten Wert entfernen und zurückgeben
     return wert;                //Ersten Wert zurück geben
   }
   else
-    throw "Exception: Liste ist leer!\n";
+    throw "remove_first Exception: Liste ist leer!\n";
+}
+
+template <class T>
+T Liste<T>::remove(size_t index){
+  if(index == 0)
+    return remove_first();
+  else if(index == number_Elements()-1)
+    return remove_last();
+  else if(index < number_Elements())
+  {
+    Liste<T> tempListe;
+    T wert;
+
+    for(size_t i=0; i<index; i++)           //Alle Element bis vor dem zu entfernenden in andere Liste verschieben
+      tempListe.add_last(remove_first());
+
+    wert = remove_first();                  //Gewünschtes Element entfernen und wert sichern
+    tempListe.add_last(remove_first());     //Nachfolgendes Element auch in andere Liste verscheiben
+                                            //Dadurch steht in dessen prev nicht mehr das gelöschte Element
+    for(size_t i=0; i<index+1; i++)         //Alle Elemente aus der kopierten Liste wieder zurück schieben
+      add_first(tempListe.remove_last());
+
+    return wert;
+  }
+  else
+    throw "remove Exception: Falscher Index!\n";
 }
 
 template <class T>
@@ -197,7 +224,7 @@ T Liste<T>::get(size_t index){      // Element an der Stelle index zurückgeben
     return temp->wert;      //Wert des i-ten Elements zurück geben
 
   else
-    throw "Exception: Index nicht vorhanden!\n";
+    throw "get Exception: Index nicht vorhanden!\n";
 }
 
 template <class T>

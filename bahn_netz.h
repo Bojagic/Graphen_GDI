@@ -17,9 +17,17 @@ public:
     int spokeEnd[2];      //link
     int spokeStart[2];    //link
     string text;          //Nur bei StationNodes
-    string typ;
+    string typ;           //Nur bei Nodes
 
     friend ostream &operator<< (ostream &ostr, const RailwayNode node);     //für Liste::ausgabe Testausgabe RailwayNode
+};
+
+class Station
+{
+    string code;
+    Liste<int> spokeEnd;
+    Liste<int> spokeStart;
+
 };
 
 class RailwayStationCode{        //Benger;
@@ -57,6 +65,7 @@ public:
     Liste<RailwayNode> node;
     Liste<RailwayNode> stationNode;
     Liste<RailwayStationCode> stationCode;
+    Liste<Station> station;
     Liste<RailwayLink> link;
     Liste<RailwayLine> line;
  };
@@ -65,11 +74,10 @@ public:
 void Load_DB(istream &is, bahn_netz &netz);
 
 void correctLinks(bahn_netz &netz);
+void removePseudoNodes(bahn_netz &netz);
+void mergeStationNodes(bahn_netz &netz);
 
-void Save_DB(ostream &os, bahn_netz &netz, size_t anzNode);
-
-void Save_DB(ostream &os, bahn_netz &netz, string startCode, size_t maxEntfernung);
-
+void Save_DB(ostream &os, bahn_netz &netz);
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB);
 
 

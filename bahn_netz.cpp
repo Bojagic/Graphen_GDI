@@ -257,9 +257,10 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
     cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
 
-    //correctLinks(netz);
-    //removePseudoNodes(netz);
+    removePseudoNodes(netz);
     //mergeStationNodes(netz);
+    //correctLinks(netz);
+
 }
 
 void correctLinks(bahn_netz &netz)
@@ -269,8 +270,11 @@ void correctLinks(bahn_netz &netz)
     int nodeNummer;
     int ende, start;
     RailwayLink tempLink;
+    int proz = 0;
     for(size_t i=0; i<anzNodes; i++)
     {
+        //if(i%(anzNodes/50) == 0) cout << proz++ << "%"<< endl;
+
         nodeNummer = netz.stationNode[i].nummer;
 
         ende = netz.stationNode[i].spokeEnd[0];
@@ -341,6 +345,8 @@ void correctLinks(bahn_netz &netz)
     anzNodes = netz.node.number_Elements();
     for(size_t i=0; i<anzNodes; i++)
     {
+        //if(i%(anzNodes/50) == 0) cout << proz++ << "%"<< endl;
+
         nodeNummer = netz.node[i].nummer;
 
         ende = netz.node[i].spokeEnd[0];
@@ -412,32 +418,173 @@ void correctLinks(bahn_netz &netz)
 void removePseudoNodes(bahn_netz &netz)
 {
     size_t anzNodes = netz.node.number_Elements();
+    size_t anzStationNodes = netz.stationNode.number_Elements();
     RailwayNode tempNodeA;
     RailwayNode tempNodeB;
-    RailwayNode *startNode;
-    RailwayNode *endNode;
+    RailwayNode tempNodeC;
+    int indexB, linkB;
+    int indexC, linkC;
     for(size_t i=0; i<anzNodes; i++)
-    {cout << "a";
+    {
+        indexB = indexC = -1;
         tempNodeA = netz.node[i];
         if(tempNodeA.typ == "pseudoNode")
         {
             for(size_t j=0; j<anzNodes; j++)
             {
                 tempNodeB = netz.node[j];
+
                 if(doNodesLink(tempNodeA,tempNodeB))
                 {
-                    startNode = &tempNodeA;
-                    endNode = &tempNodeB;
+                    indexB = j;
+                    linkB = findLink(tempNodeA,tempNodeB);
+                }
+            }
+            for(size_t k=indexB+1; k<anzNodes; k++)
+            {
+                tempNodeC = netz.node[k];
 
-                    //for
+                if(doNodesLink(tempNodeA,tempNodeC))
+                {
+                    indexC = k;
+                    linkC = findLink(tempNodeA,tempNodeC);
                 }
             }
 
-            startNode->spokeEnd[0] = endNode->nummer;
-            endNode->spokeStart[0] = startNode->nummer;
+            if(indexB == -1 && indexC == -1)
+            {
+                for(size_t j=0; j<anzStationNodes; j++)
+                {
+                    tempNodeB = netz.stationNode[j];
+
+                    if(doNodesLink(tempNodeA,tempNodeB))
+                    {
+                        indexB = j;
+                        linkB = findLink(tempNodeA,tempNodeB);
+                    }
+                }
+
+                for(size_t k=indexB+1; k<anzStationNodes; k++)
+                {
+                    tempNodeC = netz.stationNode[k];
+
+                    if(doNodesLink(tempNodeA,tempNodeC))
+                    {
+                        indexC = k;
+                        linkC = findLink(tempNodeA,tempNodeC);
+                    }
+                }
+            }
+            else if(indexC == -1)
+            {
+                for(size_t j=0; j<anzStationNodes; j++)
+                {
+                    tempNodeC = netz.stationNode[j];
+
+                    if(doNodesLink(tempNodeA,tempNodeC))
+                    {
+                        indexC = j;
+                        linkC = findLink(tempNodeA,tempNodeC);
+                    }
+                }
+            }
+
+            if(indexB != -1 && indexC != -1)
+            {
+                tempNodeB = netz.node.remove(indexB);
+                tempNodeC = netz.node.remove(indexC);
+
+                if(tempNodeB.spokeStart[0] == linkB && tempNodeC.spokeStart[0] == linkC)
+                {
+                    tempNodeB.spokeStart[0] = linkB;
+                    tempNodeC.spokeStart[0] = linkB;
+                }
+                else if(tempNodeB.spokeStart[0] == linkB && tempNodeC.spokeStart[1] == linkC)
+                {
+                    tempNodeB.spokeStart[0] = linkB;
+                    tempNodeC.spokeStart[1] = linkB;
+                }
+                else if(tempNodeB.spokeStart[0] == linkB && tempNodeC.spokeEnd[0] == linkC)
+                {
+                    tempNodeB.spokeStart[0] = linkB;
+                    tempNodeC.spokeEnd[0] = linkB;
+                }
+                else if(tempNodeB.spokeStart[0] == linkB && tempNodeC.spokeEnd[1] == linkC)
+                {
+                    tempNodeB.spokeStart[0] = linkB;
+                    tempNodeC.spokeEnd[1] = linkB;
+                }
+
+                else if(tempNodeB.spokeStart[1] == linkB && tempNodeC.spokeStart[0] == linkC)
+                {
+                    tempNodeB.spokeStart[1] = linkB;
+                    tempNodeC.spokeStart[0] = linkB;
+                }
+                else if(tempNodeB.spokeStart[1] == linkB && tempNodeC.spokeStart[1] == linkC)
+                {
+                    tempNodeB.spokeStart[1] = linkB;
+                    tempNodeC.spokeStart[1] = linkB;
+                }
+                else if(tempNodeB.spokeStart[1] == linkB && tempNodeC.spokeEnd[0] == linkC)
+                {
+                    tempNodeB.spokeStart[1] = linkB;
+                    tempNodeC.spokeEnd[0] = linkB;
+                }
+                else if(tempNodeB.spokeStart[1] == linkB && tempNodeC.spokeEnd[1] == linkC)
+                {
+                    tempNodeB.spokeStart[1] = linkB;
+                    tempNodeC.spokeEnd[1] = linkB;
+                }
+
+                else if(tempNodeB.spokeEnd[0] == linkB && tempNodeC.spokeStart[0] == linkC)
+                {
+                    tempNodeB.spokeEnd[0] = linkB;
+                    tempNodeC.spokeStart[0] = linkB;
+                }
+                else if(tempNodeB.spokeEnd[0] == linkB && tempNodeC.spokeStart[1] == linkC)
+                {
+                    tempNodeB.spokeEnd[0] = linkB;
+                    tempNodeC.spokeStart[1] = linkB;
+                }
+                else if(tempNodeB.spokeEnd[0] == linkB && tempNodeC.spokeEnd[0] == linkC)
+                {
+                    tempNodeB.spokeEnd[0] = linkB;
+                    tempNodeC.spokeEnd[0] = linkB;
+                }
+                else if(tempNodeB.spokeEnd[0] == linkB && tempNodeC.spokeEnd[1] == linkC)
+                {
+                    tempNodeB.spokeEnd[0] = linkB;
+                    tempNodeC.spokeEnd[1] = linkB;
+                }
+
+                else if(tempNodeB.spokeEnd[1] == linkB && tempNodeC.spokeStart[0] == linkC)
+                {
+                    tempNodeB.spokeEnd[1] = linkB;
+                    tempNodeC.spokeStart[0] = linkB;
+                }
+                else if(tempNodeB.spokeEnd[1] == linkB && tempNodeC.spokeStart[1] == linkC)
+                {
+                    tempNodeB.spokeEnd[1] = linkB;
+                    tempNodeC.spokeStart[1] = linkB;
+                }
+                else if(tempNodeB.spokeEnd[1] == linkB && tempNodeC.spokeEnd[0] == linkC)
+                {
+                    tempNodeB.spokeEnd[1] = linkB;
+                    tempNodeC.spokeEnd[0] = linkB;
+                }
+                else if(tempNodeB.spokeEnd[1] == linkB && tempNodeC.spokeEnd[1] == linkC)
+                {
+                    tempNodeB.spokeEnd[1] = linkB;
+                    tempNodeC.spokeEnd[1] = linkB;
+                }
+
+                netz.node.add_last(tempNodeB);
+                netz.node.add_last(tempNodeC);
+            }
 
             netz.node.remove(i);
             anzNodes--;
+            i=0;
         }
     }
 }
@@ -467,9 +614,11 @@ void Save_DB(ostream &os, bahn_netz &netz)
 	{
 		knoten[i+anzSNodes] = netz.node[i];
 	}
-cout << "!";
+    size_t proz = 0;
 	for(size_t i=0; i<nodesGesamt; i++)
-	{if(i%100 == 0) cout << i << endl;
+	{
+	    if(i%(nodesGesamt/100) == 0) cout << proz++ << "%"<< endl;
+
 		os << "V " << i+1 << " \"" << knoten[i].nummer << "\"" << endl;
 		for(size_t j=0; j<nodesGesamt; j++)
 		{
@@ -506,6 +655,32 @@ bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
         return true;
 
     return false;
+}
+
+int findLink(RailwayNode NodeA, RailwayNode NodeB)
+{
+    if(NodeA.nummer == NodeB.nummer)    //Gleiche Knoten
+        return -1;
+
+    if(NodeA.spokeStart[0] == NodeB.spokeEnd[0] && NodeA.spokeStart[0] !=-1)
+        return NodeA.spokeStart[0];
+    if(NodeA.spokeStart[0] == NodeB.spokeEnd[1] && NodeA.spokeStart[0] !=-1)
+        return NodeA.spokeStart[0];
+    if(NodeA.spokeStart[1] == NodeB.spokeEnd[0] && NodeA.spokeStart[1] !=-1)
+        return NodeA.spokeStart[1];
+    if(NodeA.spokeStart[1] == NodeB.spokeEnd[1] && NodeA.spokeStart[1] !=-1)
+        return NodeA.spokeStart[1];
+
+    if(NodeA.spokeEnd[0] == NodeB.spokeStart[0] && NodeA.spokeEnd[0] !=-1)
+        return NodeA.spokeEnd[0];
+    if(NodeA.spokeEnd[0] == NodeB.spokeStart[1] && NodeA.spokeEnd[0] !=-1)
+        return NodeA.spokeEnd[0];
+    if(NodeA.spokeEnd[1] == NodeB.spokeStart[0] && NodeA.spokeEnd[1] !=-1)
+        return NodeA.spokeEnd[1];
+    if(NodeA.spokeEnd[1] == NodeB.spokeStart[1] && NodeA.spokeEnd[1] !=-1)
+        return NodeA.spokeEnd[1];
+
+    return -1;
 }
 
 

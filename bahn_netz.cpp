@@ -206,6 +206,12 @@ void Load_DB(istream &is, bahn_netz &netz)
                 else
                     spokeEnd[1] = -1;
             }
+            else
+            {
+                spokeEnd[0] = -1;
+                spokeEnd[1] = -1;
+            }
+
             if(tempstring.find("net:spokeStart") != string::npos)
             {
                 wordEnd = tempstring.find("net:spokeStart");
@@ -218,6 +224,11 @@ void Load_DB(istream &is, bahn_netz &netz)
                 }
                 else
                     spokeStart[1] = -1;
+            }
+            else
+            {
+                spokeStart[0] = -1;
+                spokeStart[1] = -1;
             }
 
             snode.spokeStart[0] = spokeStart[0];

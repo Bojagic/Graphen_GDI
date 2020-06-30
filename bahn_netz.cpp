@@ -592,40 +592,47 @@ void removePseudoNodes(bahn_netz &netz)
 
 void mergeStationNodes(bahn_netz &netz)
 {
-    bool gefunden;
-    for(int i=0;i<anzSNode;i++)
+    try
     {
-        gefunden = false;
-        for(int j=0;j<netz.station.number_Elements();j++)
+        int anzSNode = netz.stationNode.number_Elements();
+        int zaehler = -1;
+        Station temp;
+
+        bool gefunden;
+        for(int i=0;i<anzSNode;i++)
         {
-            //cout << j << endl;
-            if(netz.stationCode[i].code == netz.station[j].code)
-             {
-                //cout << "?" << endl;
-                gefunden = true;
-                netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
-                netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
+            gefunden = false;
+            for(int j=0;j<netz.station.number_Elements();j++)
+            {
+                //cout << j << endl;
+                if(netz.stationCode[i].code == netz.station[j].code)
+                 {
+                    //cout << "?" << endl;
+                    gefunden = true;
+                    netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
+                    netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
+                    if(netz.stationNode[i].spokeEnd[1] != -1)
+                        netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
+                    if(netz.stationNode[i].spokeStart[1] != -1)
+                         netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
+                     break;
+                }
+            }
+            //cout << "!" << endl;
+            if(!gefunden)
+            {
+                temp.spokeEnd.clear();
+                temp.spokeStart.clear();
+                temp.code = netz.stationCode[i].code;
+                temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
+                temp.spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
                 if(netz.stationNode[i].spokeEnd[1] != -1)
-                    netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
+                    temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
                 if(netz.stationNode[i].spokeStart[1] != -1)
-                     netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
-                 break;
+                    temp.spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
+                netz.station.add_last(temp);
             }
         }
-		//cout << "!" << endl;
-		if(!gefunden)
-		{
-			temp.spokeEnd.clear();
-			temp.spokeStart.clear();
-			temp.code = netz.stationCode[i].code;
-			temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
-			temp.spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
-			if(netz.stationNode[i].spokeEnd[1] != -1)
-				temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
-			if(netz.stationNode[i].spokeStart[1] != -1)
-				temp.spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
-			netz.station.add_last(temp);
-		}
     }
     catch(const char* msg)
     {

@@ -24,12 +24,10 @@ public:
 
 class Station
 {
-public:
     string code;
     Liste<int> spokeEnd;
     Liste<int> spokeStart;
 
-    friend ostream &operator<< (ostream &ostr, Station station);
 };
 
 class RailwayStationCode{        //Benger;

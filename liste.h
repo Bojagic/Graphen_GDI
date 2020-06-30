@@ -198,7 +198,7 @@ T Liste<T>::remove(size_t index){
 template <class T>
 T Liste<T>::get(size_t index){      // Element an der Stelle index zurückgeben
   static element<T> *lastTemp = head;
-  static int lastIndex = 0;
+  static size_t lastIndex = 0;
   struct element<T> *temp;
   size_t i;
 
@@ -247,7 +247,6 @@ size_t Liste<T>::number_Elements(){
     return i;
   }
 }
-
 
 
 #endif

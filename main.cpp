@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
 		{
 			Load_DB(gdi_stream, bn);
 
-			bn.node.ausgabe();
-			bn.stationNode.ausgabe();
+            //bn.node.ausgabe();
+			bn.station.ausgabe();
 		}
 		gdi_stream.close();
 	}

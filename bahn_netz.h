@@ -4,7 +4,7 @@
 #include <ostream>
 #include <iostream>
 
-#include "liste.h"
+#include "listeNeu.h"
 
 using namespace std;
 
@@ -26,8 +26,8 @@ class Station
 {
 public:
     string code;
-    Liste<int> spokeEnd;
-    Liste<int> spokeStart;
+    ListeNeu<int> spokeEnd;
+    ListeNeu<int> spokeStart;
 
     friend ostream &operator<< (ostream &ostr, Station station);
 };
@@ -64,12 +64,12 @@ public:
 
 class bahn_netz{
 public:
-    Liste<RailwayNode> node;
-    Liste<RailwayNode> stationNode;
-    Liste<RailwayStationCode> stationCode;
-    Liste<Station> station;
-    Liste<RailwayLink> link;
-    Liste<RailwayLine> line;
+    ListeNeu<RailwayNode> node;
+    ListeNeu<RailwayNode> stationNode;
+    ListeNeu<RailwayStationCode> stationCode;
+    ListeNeu<Station> station;
+    ListeNeu<RailwayLink> link;
+    ListeNeu<RailwayLine> line;
  };
 
 
@@ -82,6 +82,8 @@ void mergeStationNodes(bahn_netz &netz);
 void Save_DB(ostream &os, bahn_netz &netz);
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB);
 int findLink(RailwayNode NodeA, RailwayNode NodeB);
+bool doStationsLink(Station stationA, Station stationB);
+bool doStationLinkNode(Station station, RailwayNode node);
 
 
 #endif // LOAD_DB_H

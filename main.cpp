@@ -10,12 +10,12 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include <fstream>
 #include <string>
 #include <iostream>
-
+#include "listeNeu.h"
+#include "listeNeu.cpp"
 // Eventuelle ausgelagerte Implementationen einbinden
 //#include "queue.cpp"
 //#include "graph.cpp"
 //#include "bahn_netz.cpp"
-
 void testGraphenbearbeitung();      //Für Lern/Lehreinheit
 
 int main(int argc, char *argv[])
@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
 		{
 			Load_DB(gdi_stream, bn);
 
-            //bn.node.ausgabe();
-			bn.station.ausgabe();
+            //List_Print(bn.node);
+            List_Print(bn.station);
 		}
 		gdi_stream.close();
 	}
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			//Save_DB(gdi_stream, bn);
+			//Save_DBneu(gdi_stream, bn);
 		}
 		gdi_stream.close();
 	}

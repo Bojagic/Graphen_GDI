@@ -2,6 +2,8 @@
 #include <fstream>
 
 #include "bahn_netz.h"
+#include "listeNeu.h"
+#include "listeNeu.cpp"
 
 using namespace std;
 
@@ -28,47 +30,47 @@ void Load_DB(istream &is, bahn_netz &netz)
 
             i=0;
             string daten;
-            RailwayLine tempLine;
+            struct Element<RailwayLine> *tempLine = new struct Element<RailwayLine>;
 
             //------Line-------------------------------------------------------------
             daten=tempstring.substr(tempstring.find("Line-")+5,6);
-            tempLine.nummer=stoi(daten);
+            tempLine->schluessel.nummer = stoi(daten);
 
             //------Text-------------------------------------------------------------------
 
             wordStart=tempstring.find(":\"")+2;
             wordEnd=tempstring.find("\",\"r")-wordStart;
-            tempLine.text=tempstring.substr(wordStart,wordEnd);
+            tempLine->schluessel.text=tempstring.substr(wordStart,wordEnd);
 
             //------Railwaycode------------------------------------------------------------
 
             wordStart=tempstring.find("Code\":\"")+7;
             wordEnd=tempstring.find("\"}");
             wordEnd=wordEnd-wordStart;
-            tempLine.code=stoi(tempstring.substr(wordStart,wordEnd));
+            tempLine->schluessel.code=stoi(tempstring.substr(wordStart,wordEnd));
             //------Link-code--------------------------------------------------------------
             wordEnd=tempstring.find("]");
             do
             {
                 //cout<<tempstring.substr(tempstring.find("Link-")+5,6)<<endl;
                 tempstring=tempstring.substr(tempstring.find("Link-")+5,wordEnd);
-                tempLine.linkNummer[i]=stoi(tempstring);
+                tempLine->schluessel.linkNummer[i]=stoi(tempstring);
                 i++;
             }while(tempstring.find("]")!=7);
-            tempLine.linkNummer[i] = -1;
+            tempLine->schluessel.linkNummer[i] = -1;
 
-            netz.line.add_last(tempLine);
+            List_Insert(netz.line, tempLine);
             zaehler[0]++;
         }
 
         if(datentyp == "RailwayLink")           //Bojagic
         {
-            RailwayLink tempLink;
+            struct Element<RailwayLink> *tempLink = new struct Element<RailwayLink>;
 
             wordStart = tempstring.find("-", 0);                        //Nummer Speichern
             wordEnd = tempstring.find("\t", wordStart);
             wort = tempstring.substr(wordStart+1,wordEnd-wordStart);
-            tempLink.nummer = stoi(wort);
+            tempLink->schluessel.nummer = stoi(wort);
 
             if(tempstring.find("endNode\":\"Node-", wordEnd) != string::npos)   //Links ohne Start und Ende werden nicht gespeichert
             {
@@ -79,7 +81,7 @@ void Load_DB(istream &is, bahn_netz &netz)
                 //cout << "wordEnd----->" << wordEnd << endl;
                 wort = tempstring.substr(wordStart, wordEnd-wordStart);
                 //cout << "Wort----->" << wort << endl;
-                tempLink.endNodeNummer = stoi(wort);
+                tempLink->schluessel.endNodeNummer = stoi(wort);
 
                 wordStart = tempstring.find("startNode\":\"Node-", wordEnd);    //startNodeNummer Speichern
                 //cout << "wordStart----->" << wordStart << endl;
@@ -88,45 +90,45 @@ void Load_DB(istream &is, bahn_netz &netz)
                 //cout << "wordEnd----->" << wordEnd << endl;
                 wort = tempstring.substr(wordStart, wordEnd-wordStart);
                 //cout << "Wort----->" << wort << endl;
-                tempLink.startNodeNummer = stoi(wort);
+                tempLink->schluessel.startNodeNummer = stoi(wort);
             }
-            netz.link.add_last(tempLink);
+            List_Insert(netz.link, tempLink);
             zaehler[1]++;
         }
 
         if(datentyp == "RailwayNode")           //Horten
         {
-            RailwayNode tempNode;
+            struct Element<RailwayNode> *tempNode = new struct Element<RailwayNode>;
 
             wordStart = tempstring.find("-", 0);                        //Nummer Speichern
             wordEnd = tempstring.find("\x9", wordStart);
             wort = tempstring.substr(wordStart+1,wordEnd-wordStart);
-            tempNode.nummer = stoi(wort);
+            tempNode->schluessel.nummer = stoi(wort);
 
             wordStart = tempstring.find(":\"", wordEnd);                //X-Koordinate speichern
             wordEnd = tempstring.find(" ", wordStart);
             wort = tempstring.substr(wordStart+2,wordEnd-wordStart-1);
-            tempNode.xKoordinate = stod(wort);
+            tempNode->schluessel.xKoordinate = stod(wort);
 
             wordStart = wordEnd+1;                                      //Y-Koordinate speichern
             wordEnd = tempstring.find("\"", wordStart);
             wort = tempstring.substr(wordStart,wordEnd-wordStart);
-            tempNode.yKoordinate = stod(wort);
+            tempNode->schluessel.yKoordinate = stod(wort);
 
             if( tempstring.substr(wordEnd+12, 1) == "E" )               //spokeEnd speichern, wenn vorhanden
             {
                 wordStart = tempstring.find("-", wordEnd);
                 wordEnd = tempstring.find("\"",wordStart);
                 wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
-                tempNode.spokeEnd[0] = stoi(wort);
+                tempNode->schluessel.spokeEnd[0] = stoi(wort);
 
                 if( tempstring.substr(wordEnd+1, 1) != "]" ){       //Zweites spokeEnd?
                     wordStart = tempstring.find("-", wordEnd);
                     wordEnd = tempstring.find("\"",wordStart);
                     wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
-                    tempNode.spokeEnd[1] = stoi(wort);
+                    tempNode->schluessel.spokeEnd[1] = stoi(wort);
                 }
-                else tempNode.spokeEnd[1] = -1;         //Kein zweites vorhanden
+                else tempNode->schluessel.spokeEnd[1] = -1;         //Kein zweites vorhanden
             }
 
             if( tempstring.substr(wordEnd+13, 1) == "S" )               //spokeStart speichern, wenn vorhanden
@@ -134,16 +136,16 @@ void Load_DB(istream &is, bahn_netz &netz)
                 wordStart = tempstring.find("-", wordEnd);
                 wordEnd = tempstring.find("\"",wordStart);
                 wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
-                tempNode.spokeStart[0] = stoi(wort);
+                tempNode->schluessel.spokeStart[0] = stoi(wort);
 
                 if( tempstring.substr(wordEnd+1, 1) != "]" )          //Zweites spokeStart?
                 {
                     wordStart = tempstring.find("-", wordEnd);
                     wordEnd = tempstring.find("\"",wordStart);
                     wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
-                    tempNode.spokeStart[1] = stoi(wort);
+                    tempNode->schluessel.spokeStart[1] = stoi(wort);
                 }
-                else tempNode.spokeStart[1] = -1;       //Kein zweites vorhanden
+                else tempNode->schluessel.spokeStart[1] = -1;       //Kein zweites vorhanden
             }
 
             if( tempstring.substr(wordEnd+4, 7) == "gn:text" )          //text speichern, wenn vorhanden
@@ -151,21 +153,21 @@ void Load_DB(istream &is, bahn_netz &netz)
                 wordStart = tempstring.find(":\"", wordEnd);
                 wordEnd = tempstring.find("\"", wordStart+2);
                 wort = tempstring.substr(wordStart+2, wordEnd-wordStart-2);
-                tempNode.text = wort;
+                tempNode->schluessel.text = wort;
             }
 
             wordStart = tempstring.find(":\"", wordEnd);                //formOfNode speichern
             wordEnd = tempstring.find("\"", wordStart+2);
             wort = tempstring.substr(wordStart+2, wordEnd-wordStart-2);
-            tempNode.typ = wort;
+            tempNode->schluessel.typ = wort;
 
-            netz.node.add_last(tempNode);
+            List_Insert(netz.node, tempNode);
             zaehler[2]++;
         }
 
         if(datentyp == "RailwayStationNode")    //Lewicki
         {
-            RailwayNode snode;
+            struct Element<RailwayNode> *snode = new struct Element<RailwayNode>;
             double gmlpos1, gmlpos2;
             string stadt, typ;
             int snodeID;
@@ -231,35 +233,36 @@ void Load_DB(istream &is, bahn_netz &netz)
                 spokeStart[1] = -1;
             }
 
-            snode.spokeStart[0] = spokeStart[0];
-            snode.spokeStart[1] = spokeStart[1];    //Wenn spokeStart[0] == spokeStart[1] dann spokeStart[1] = -1
-            snode.spokeEnd[0] = spokeEnd[0];        //selbes hier mit spokeEnd
-            snode.spokeEnd[1] = spokeEnd[1];
-            snode.nummer = snodeID;
-            snode.xKoordinate = gmlpos1;
-            snode.yKoordinate = gmlpos2;
-            snode.typ = typ;
-            snode.text = stadt;
-            netz.stationNode.add_last(snode);
+            snode->schluessel.spokeStart[0] = spokeStart[0];
+            snode->schluessel.spokeStart[1] = spokeStart[1];    //Wenn spokeStart[0] == spokeStart[1] dann spokeStart[1] = -1
+            snode->schluessel.spokeEnd[0] = spokeEnd[0];        //selbes hier mit spokeEnd
+            snode->schluessel.spokeEnd[1] = spokeEnd[1];
+            snode->schluessel.nummer = snodeID;
+            snode->schluessel.xKoordinate = gmlpos1;
+            snode->schluessel.yKoordinate = gmlpos2;
+            snode->schluessel.typ = typ;
+            snode->schluessel.text = stadt;
+
+            List_Insert(netz.stationNode, snode);
 
             zaehler[3]++;
         }
 
         if(datentyp == "RailwayStationCode")
         {
-            RailwayStationCode code;
+            struct Element<RailwayStationCode> *code = new struct Element<RailwayStationCode>;
 
             wordStart=tempstring.find("Spd-")+4;
-            code.nummer=stoi(tempstring.substr(wordStart,7));
+            code->schluessel.nummer=stoi(tempstring.substr(wordStart,7));
 
             wordStart=tempstring.find("SNode-")+6;
-            code.SNodeNummer=stoi(tempstring.substr(wordStart,6));
+            code->schluessel.SNodeNummer=stoi(tempstring.substr(wordStart,6));
 
             wordStart=99;
             wordEnd=tempstring.find("\"}")-1-wordStart;
-            code.code=tempstring.substr(wordStart-2,wordEnd+3);
+            code->schluessel.code=tempstring.substr(wordStart-2,wordEnd+3);
 
-            netz.stationCode.add_last(code);
+            List_Insert(netz.stationCode, code);
             zaehler[4]++;
         }
     }
@@ -274,7 +277,7 @@ void Load_DB(istream &is, bahn_netz &netz)
     //correctLinks(netz);
 
 }
-
+/*
 void correctLinks(bahn_netz &netz)
 {
     size_t anzNodes = netz.stationNode.number_Elements();
@@ -282,7 +285,7 @@ void correctLinks(bahn_netz &netz)
     int nodeNummer;
     int ende, start;
     RailwayLink tempLink;
-    int proz = 0;
+    //int proz = 0;
     for(size_t i=0; i<anzNodes; i++)
     {
         //if(i%(anzNodes/50) == 0) cout << proz++ << "%"<< endl;
@@ -426,8 +429,9 @@ void correctLinks(bahn_netz &netz)
         }
     }
 }
-
-void removePseudoNodes(bahn_netz &netz)
+*/
+/*
+void removePseudoNodes(bahn_netz &netz)                                                     //Bojagic
 {
     size_t anzNodes = netz.node.number_Elements();
     size_t anzStationNodes = netz.stationNode.number_Elements();
@@ -600,49 +604,96 @@ void removePseudoNodes(bahn_netz &netz)
         }
     }
 }
-
-void mergeStationNodes(bahn_netz &netz)
+*/
+void mergeStationNodes(bahn_netz &netz)                                                     //Horten
 {
     try
     {
-        int anzSNode = netz.stationNode.number_Elements();
-        int zaehler = -1;
-        Station temp;
+        struct Element<Station> *tempStation;
+        struct Element<RailwayNode> *currSNode = netz.stationNode.kopf;
+        struct Element<RailwayStationCode> *currCode = netz.stationCode.kopf;
+        struct Element<Station> *currStation;
 
         bool gefunden;
-        for(int i=0;i<anzSNode;i++)
+        while(currSNode != nullptr)     //laufe durch StationNodes
         {
             gefunden = false;
-            for(int j=0;j<netz.station.number_Elements();j++)
+            currStation =netz.station.kopf;
+            while(currStation != nullptr)       //laufe durch alle Stations
             {
-                //cout << j << endl;
-                if(netz.stationCode[i].code == netz.station[j].code)
-                 {
-                    //cout << "?" << endl;
+                if(currCode->schluessel.code == currStation->schluessel.code)
+                {
                     gefunden = true;
-                    netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
-                    netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
-                    if(netz.stationNode[i].spokeEnd[1] != -1)
-                        netz.station[j].spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
-                    if(netz.stationNode[i].spokeStart[1] != -1)
-                         netz.station[j].spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
-                     break;
+                    if(currSNode->schluessel.spokeEnd[0] != -1)
+                    {
+                        struct Element<int> *spokeEnd0 = new Element<int>;              //Neues Element anlegen
+                        spokeEnd0->schluessel = currSNode->schluessel.spokeEnd[0];      //Element den Wert von spokeEnd[0] geben
+                        List_Insert(currStation->schluessel.spokeEnd, spokeEnd0);       //Element an Liste anhängen
+                    }
+
+                    if(currSNode->schluessel.spokeStart[0] != -1)
+                    {
+                        struct Element<int> *spokeStart0 = new Element<int>;
+                        spokeStart0->schluessel = currSNode->schluessel.spokeStart[0];
+                        List_Insert(currStation->schluessel.spokeStart, spokeStart0);
+                    }
+
+                    if(currSNode->schluessel.spokeEnd[1] != -1)
+                    {
+                        struct Element<int> *spokeEnd1 = new Element<int>;
+                        spokeEnd1->schluessel = currSNode->schluessel.spokeEnd[1];
+                        List_Insert(currStation->schluessel.spokeEnd, spokeEnd1);
+                    }
+
+                    if(currSNode->schluessel.spokeStart[1] != -1)
+                    {
+                        struct Element<int> *spokeStart1 = new Element<int>;
+                        spokeStart1->schluessel = currSNode->schluessel.spokeStart[1];
+                        List_Insert(currStation->schluessel.spokeStart, spokeStart1);
+                    }
+                    break;
                 }
+                currStation = currStation->nachf;
             }
-            //cout << "!" << endl;
             if(!gefunden)
             {
-                temp.spokeEnd.clear();
-                temp.spokeStart.clear();
-                temp.code = netz.stationCode[i].code;
-                temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[0]);
-                temp.spokeStart.add_last(netz.stationNode[i].spokeStart[0]);
-                if(netz.stationNode[i].spokeEnd[1] != -1)
-                    temp.spokeEnd.add_last(netz.stationNode[i].spokeEnd[1]);
-                if(netz.stationNode[i].spokeStart[1] != -1)
-                    temp.spokeStart.add_last(netz.stationNode[i].spokeStart[1]);
-                netz.station.add_last(temp);
+                tempStation = new struct Element<Station>;
+
+                tempStation->schluessel.code = currCode->schluessel.code;
+
+                if(currSNode->schluessel.spokeEnd[0] != -1)
+                {
+                    struct Element<int> *spokeEnd0 = new Element<int>;              //Neues Element anlegen
+                    spokeEnd0->schluessel = currSNode->schluessel.spokeEnd[0];      //Element den Wert von spokeEnd[0] geben
+                    List_Insert(tempStation->schluessel.spokeEnd, spokeEnd0);       //Element an Liste anhängen
+                }
+
+                if(currSNode->schluessel.spokeStart[0] != -1)
+                {
+                    struct Element<int> *spokeStart0 = new Element<int>;
+                    spokeStart0->schluessel = currSNode->schluessel.spokeStart[0];
+                    List_Insert(tempStation->schluessel.spokeStart, spokeStart0);
+                }
+
+                if(currSNode->schluessel.spokeEnd[1] != -1)
+                {
+                    struct Element<int> *spokeEnd1 = new Element<int>;
+                    spokeEnd1->schluessel = currSNode->schluessel.spokeEnd[1];
+                    List_Insert(tempStation->schluessel.spokeEnd, spokeEnd1);
+                }
+
+                if(currSNode->schluessel.spokeStart[1] != -1)
+                {
+                    struct Element<int> *spokeStart1 = new Element<int>;
+                    spokeStart1->schluessel = currSNode->schluessel.spokeStart[1];
+                    List_Insert(tempStation->schluessel.spokeStart, spokeStart1);
+                }
+
+                List_Insert(netz.station, tempStation);
             }
+
+            currSNode = currSNode->nachf;
+            currCode = currCode->nachf;
         }
     }
     catch(const char* msg)
@@ -651,43 +702,69 @@ void mergeStationNodes(bahn_netz &netz)
     }
 }
 
-
-void Save_DB(ostream &os, bahn_netz &netz)
+/*
+void Save_DB(ostream &os, bahn_netz &netz)                                                  //Lewicki
 {
-	size_t anzSNodes = netz.stationNode.number_Elements();
+	size_t anzStations = netz.station.number_Elements();
 	size_t anzNodes = netz.node.number_Elements();
-	size_t nodesGesamt = anzSNodes + anzNodes;
 
-	RailwayNode *knoten = new RailwayNode[nodesGesamt];
+	Station bahnhofI, bahnhofJ;
+    RailwayNode knotenI, knotenJ;
 
-	os << "G " << nodesGesamt << endl;
+	os << "G " << anzStations+anzNodes << endl;
 
-	for(size_t i=0; i<anzSNodes; i++)
-	{
-		knoten[i] = netz.stationNode[i];
-	}
-
+    //size_t proz = 0;
 	for(size_t i=0; i<anzNodes; i++)
 	{
-		knoten[i+anzSNodes] = netz.node[i];
-	}
-    size_t proz = 0;
-	for(size_t i=0; i<nodesGesamt; i++)
-	{
-	    if(i%(nodesGesamt/100) == 0) cout << proz++ << "%"<< endl;
+	    //if(i%(nodesGesamt/100) == 0) cout << proz++ << "%"<< endl;
 
-		os << "V " << i+1 << " \"" << knoten[i].nummer << "\"" << endl;
-		for(size_t j=0; j<nodesGesamt; j++)
+        knotenI = netz.node[i];
+		os << "V " << i+1 << " \"" << knotenI.nummer << "\"" << endl;
+		for(size_t j=0; j<anzNodes; j++)
 		{
-            if(doNodesLink(knoten[i], knoten[j]))
+		    knotenJ = netz.node[j];
+            if(doNodesLink(knotenI, knotenJ))
             {
                 os << "E " << i+1 << " " << j+1 << " " << 1 << endl;
             }
 		}
+		for(size_t j=0; j<anzStations; j++)
+        {
+            bahnhofJ = netz.station[j];
+            if(doStationLinkNode(bahnhofJ, knotenI))     //neue Funktion bool doStationLinkNode(Station station, RailwayNode node)
+            {
+                os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;
+            }
+        }
 	}
-	delete[] knoten;
-}
 
+	for(size_t i=0; i<anzStations; i++)
+    {
+
+        bahnhofI = netz.station[i];
+        os << "V " << i+1+anzNodes << " \"" << bahnhofI.code << "\"" << endl;
+        for(size_t j=0; j<anzNodes; j++)
+		{
+		    knotenJ = netz.node[j];
+            if(doStationLinkNode(bahnhofI, knotenJ))
+            {
+                os << "E " << i+1+anzNodes << " " << j+1 << " " << 1 << endl;
+            }
+		}
+		for(size_t j=0; j<anzStations; j++)
+		{
+		   bahnhofJ = netz.station[j];
+            if(doStationsLink(bahnhofI, bahnhofJ))          //neue Funktion doStationsLink(Station stationA, Station stationB)
+            {
+                os << "E " << i+1+anzNodes << " " << j+1+anzNodes << " " << 1 << endl;
+            }
+		}
+
+    }
+}
+*/
+
+/*
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
 {
     if(NodeA.nummer == NodeB.nummer)    //Gleiche Knoten
@@ -714,7 +791,7 @@ bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
     return false;
 }
 
-int findLink(RailwayNode NodeA, RailwayNode NodeB)
+int findLink(RailwayNode NodeA, RailwayNode NodeB)      //für removePseudoNodes
 {
     if(NodeA.nummer == NodeB.nummer)    //Gleiche Knoten
         return -1;
@@ -740,7 +817,84 @@ int findLink(RailwayNode NodeA, RailwayNode NodeB)
     return -1;
 }
 
+bool doStationsLink(Station stationA, Station stationB)
+{
+    if(stationA.code == stationB.code)
+        return false;
 
+    size_t anzStationASpokeEnd = stationA.spokeEnd.number_Elements();
+    size_t anzStationASpokeStart = stationA.spokeStart.number_Elements();
+    size_t anzStationBSpokeEnd = stationB.spokeEnd.number_Elements();
+    size_t anzStationBSpokeStart = stationB.spokeStart.number_Elements();
+
+    for(size_t i=0; i<anzStationASpokeEnd; i++)
+    {
+        for(size_t j=0; i<anzStationBSpokeEnd; j++)
+            if(stationA.spokeEnd[i] == stationB.spokeEnd[j] && stationA.spokeEnd[i]  != -1)
+                return true;
+    }
+    for(size_t i=0; i<anzStationASpokeEnd; i++)
+    {
+        for(size_t j=0; i<anzStationBSpokeStart; j++)
+            if(stationA.spokeEnd[i] == stationB.spokeStart[j] && stationA.spokeEnd[i] != -1)
+                return true;
+    }
+    for(size_t i=0; i<anzStationASpokeStart; i++)
+    {
+        for(size_t j=0; i<anzStationBSpokeEnd; j++)
+            if(stationA.spokeStart[i] == stationB.spokeEnd[j] && stationA.spokeStart[i]  != -1)
+                return true;
+    }
+    for(size_t i=0; i<anzStationASpokeStart; i++)
+    {
+        for(size_t j=0; i<anzStationBSpokeStart; j++)
+            if(stationA.spokeStart[i] == stationB.spokeStart[j] && stationA.spokeStart[i]  != -1)
+                return true;
+    }
+
+    return false;
+}
+
+bool doStationLinkNode(Station station, RailwayNode node)                                   //Benger
+{
+    size_t anzStationSpokeEnd = station.spokeEnd.number_Elements();
+    size_t anzStationSpokeStart = station.spokeStart.number_Elements();
+
+    int tempStationSpoke;
+
+    for(size_t i=0; i<anzStationSpokeEnd; i++)
+    {
+        tempStationSpoke = station.spokeEnd[i];
+        if(tempStationSpoke != -1)
+        {
+            if(tempStationSpoke == node.spokeEnd[0])
+                return true;
+            if(tempStationSpoke == node.spokeEnd[1])
+                return true;
+            if(tempStationSpoke == node.spokeStart[0])
+                return true;
+            if(tempStationSpoke == node.spokeStart[1])
+                return true;
+        }
+    }
+    for(size_t i=0; i<anzStationSpokeStart; i++)
+    {
+        tempStationSpoke = station.spokeStart[i];
+        if(tempStationSpoke != -1)
+        {
+            if(tempStationSpoke == node.spokeEnd[0])
+                return true;
+            if(tempStationSpoke == node.spokeEnd[1])
+                return true;
+            if(tempStationSpoke == node.spokeStart[0])
+                return true;
+            if(tempStationSpoke == node.spokeStart[1])
+                return true;
+        }
+    }
+    return false;
+}
+*/
 ostream &operator<<(ostream &ostr, const RailwayNode node)
 {
     ostr << "Nummer    : " << node.nummer      << endl;
@@ -773,9 +927,9 @@ ostream &operator<<(ostream &ostr,Station station)
 {
     ostr << "Nummer    : " << station.code         << endl;
     ostr << "Start Node: ";
-    station.spokeStart.ausgabe();
+    List_Print(station.spokeStart);
     ostr << "End   Node: ";
-    station.spokeEnd.ausgabe();
+    List_Print(station.spokeEnd);
 
     return ostr;
 }

@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 			Load_DB(gdi_stream, bn);
 
             //List_Print(bn.node);
-            List_Print(bn.station);
+            //List_Print(bn.station);
 		}
 		gdi_stream.close();
 	}
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		gdi_stream.open(saveFile,ofstream::out);
 		if (gdi_stream.is_open())
 		{
-			//Save_DBneu(gdi_stream, bn);
+			Save_DB(gdi_stream, bn);
 		}
 		gdi_stream.close();
 	}

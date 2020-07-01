@@ -702,67 +702,101 @@ void mergeStationNodes(bahn_netz &netz)                                         
     }
 }
 
-/*
+
 void Save_DB(ostream &os, bahn_netz &netz)                                                  //Lewicki
 {
-	size_t anzStations = netz.station.number_Elements();
-	size_t anzNodes = netz.node.number_Elements();
+	struct Element<Station> *currStation = netz.station.kopf;
+	struct Element<RailwayNode> *currNode = netz.node.kopf;
+	struct Element<Station> *currStation2 = netz.station.kopf;
+	struct Element<RailwayNode> *currNode2 = netz.node.kopf;
+	int anzStations;
+	int anzNodes;
+	int i,j;
 
-	Station bahnhofI, bahnhofJ;
-    RailwayNode knotenI, knotenJ;
+	struct Element<Station> *bahnhofI;
+	struct Element<Station> *bahnhofJ;
+    struct Element<RailwayNode> *knotenI;
+    struct Element<RailwayNode> *knotenJ;
+
+    for(anzStations=0;currStation != nullptr;anzStations++)    // Zählt die Stationen
+        currStation = currStation->nachf;
+
+    for(anzNodes=0;currNode != nullptr;anzNodes++)          // Zählt die Nodes
+        currNode = currNode->nachf;
 
 	os << "G " << anzStations+anzNodes << endl;
 
-    //size_t proz = 0;
-	for(size_t i=0; i<anzNodes; i++)
+	i = 0;
+	currNode = netz.node.kopf;
+	while(currNode != nullptr)
 	{
-	    //if(i%(nodesGesamt/100) == 0) cout << proz++ << "%"<< endl;
+		os << "V " << i+1 << " \"" << currNode->schluessel.nummer << "\"" << endl;
 
-        knotenI = netz.node[i];
-		os << "V " << i+1 << " \"" << knotenI.nummer << "\"" << endl;
-		for(size_t j=0; j<anzNodes; j++)
+		j=0;
+		currNode2 = netz.node.kopf;
+		while(currNode2 != nullptr)
 		{
-		    knotenJ = netz.node[j];
-            if(doNodesLink(knotenI, knotenJ))
+            //if(doNodesLink(currNode2, currNode)
+            if(true)
             {
                 os << "E " << i+1 << " " << j+1 << " " << 1 << endl;
             }
+            j++;
+            currNode2 = currNode2->nachf;
 		}
-		for(size_t j=0; j<anzStations; j++)
+
+		j=0;
+		currStation2 = netz.station.kopf;
+		while(currStation2 != nullptr)
         {
-            bahnhofJ = netz.station[j];
-            if(doStationLinkNode(bahnhofJ, knotenI))     //neue Funktion bool doStationLinkNode(Station station, RailwayNode node)
+            //if(doStationLinkNode(currStation2, currNode))
+            if(true)
             {
                 os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;
             }
+            j++;
+            currStation2 = currStation2->nachf;
         }
+        i++;
+        currNode = currNode->nachf;
 	}
 
-	for(size_t i=0; i<anzStations; i++)
-    {
+    i = 0;
+	currStation = netz.station.kopf;
+	while(currStation != nullptr)
+	{
+		os << "V " << i+1+anzNodes << " \"" << currStation->schluessel.code << "\"" << endl;
 
-        bahnhofI = netz.station[i];
-        os << "V " << i+1+anzNodes << " \"" << bahnhofI.code << "\"" << endl;
-        for(size_t j=0; j<anzNodes; j++)
+		j=0;
+		currNode2 = netz.node.kopf;
+		while(currNode2 != nullptr)
 		{
-		    knotenJ = netz.node[j];
-            if(doStationLinkNode(bahnhofI, knotenJ))
+            //if(doStationLinkNode(currNode2, currStation))
+            if(true)
             {
                 os << "E " << i+1+anzNodes << " " << j+1 << " " << 1 << endl;
             }
+            j++;
+            currNode2 = currNode2->nachf;
 		}
-		for(size_t j=0; j<anzStations; j++)
-		{
-		   bahnhofJ = netz.station[j];
-            if(doStationsLink(bahnhofI, bahnhofJ))          //neue Funktion doStationsLink(Station stationA, Station stationB)
+
+		j=0;
+		currStation2 = netz.station.kopf;
+		while(currStation2 != nullptr)
+        {
+            //if(doStationLinkNode(currStation2, currStation))
+            if(true)
             {
                 os << "E " << i+1+anzNodes << " " << j+1+anzNodes << " " << 1 << endl;
             }
-		}
-
-    }
+            j++;
+            currStation2 = currStation2->nachf;
+        }
+        i++;
+        currStation = currStation->nachf;
+	}
 }
-*/
+
 
 /*
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)

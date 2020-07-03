@@ -275,7 +275,6 @@ void Load_DB(istream &is, bahn_netz &netz)
     //removePseudoNodes(netz);
     mergeStationNodes(netz);
     //correctLinks(netz);
-
 }
 /*
 void correctLinks(bahn_netz &netz)
@@ -697,8 +696,7 @@ void mergeStationNodes(bahn_netz &netz)                                         
     }
 }
 
-
-void Save_DB(ostream &os, bahn_netz &netz)                                                  //Lewicki
+void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 {
 	struct Element<Station> *currStation = netz.station.kopf;
 	struct Element<RailwayNode> *currNode = netz.node.kopf;
@@ -708,33 +706,36 @@ void Save_DB(ostream &os, bahn_netz &netz)                                      
 	int anzNodes;
 	int i,j;
 
-	struct Element<Station> *bahnhofI;
-	struct Element<Station> *bahnhofJ;
-    struct Element<RailwayNode> *knotenI;
-    struct Element<RailwayNode> *knotenJ;
-
-    for(anzStations=0;currStation != nullptr;anzStations++)    // Zählt die Stationen
+    anzStations=0;
+    while(currStation != nullptr)       // Zählt die Stationen
+    {
         currStation = currStation->nachf;
+        anzStations++;
+    }
 
-    for(anzNodes=0;currNode != nullptr;anzNodes++)          // Zählt die Nodes
+    anzNodes=0;
+    while(currNode != nullptr)          // Zählt die Nodes
+    {
         currNode = currNode->nachf;
+        anzNodes++;
+    }
 
-	os << "G " << anzStations+anzNodes << endl;
+	os << "G " << anzStations+anzNodes << endl;  // Schreiben des Kopfes mit Anzahl aller Knoten
 
 	i = 0;
 	currNode = netz.node.kopf;
-	while(currNode != nullptr)
+	while(currNode != nullptr)                                                      // Geht die ganze Liste der Railwaynodes durch mit currNode
 	{
-		os << "V " << i+1 << " \"" << currNode->schluessel.nummer << "\"" << endl;
+		os << "V " << i+1 << " \"" << currNode->schluessel.nummer << "\"" << endl;  // Und schreibt den aktuellen Node jeweils direkt als Knoten in die Datei
 
 		j=0;
 		currNode2 = netz.node.kopf;
-		while(currNode2 != nullptr)
+		while(currNode2 != nullptr)                                     // Geht die Liste der Railwaynodes durch mit currNode2
 		{
-            //if(doNodesLink(currNode2, currNode)
+            //if(doNodesLink(currNode2, currNode)                         // Und prüft ob mit currNode eine verbindung besteht (Selbe Node Nummern ausgeschlossen)
             if(true)
             {
-                os << "E " << i+1 << " " << j+1 << " " << 1 << endl;
+                os << "E " << i+1 << " " << j+1 << " " << 1 << endl;    // Falls eine verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currNode2 = currNode2->nachf;
@@ -742,12 +743,12 @@ void Save_DB(ostream &os, bahn_netz &netz)                                      
 
 		j=0;
 		currStation2 = netz.station.kopf;
-		while(currStation2 != nullptr)
+		while(currStation2 != nullptr)                                          // Geht die Liste der Stations durch mit currStation2
         {
-            //if(doStationLinkNode(currStation2, currNode))
+            //if(doStationLinkNode(currStation2, currNode))                       // Und prüft ob mit currNode eine Verbindung besteht
             if(true)
             {
-                os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;
+                os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currStation2 = currStation2->nachf;
@@ -758,18 +759,18 @@ void Save_DB(ostream &os, bahn_netz &netz)                                      
 
     i = 0;
 	currStation = netz.station.kopf;
-	while(currStation != nullptr)
+	while(currStation != nullptr)                                                               // Geht die ganze Liste der Stationen durch mit currStation
 	{
-		os << "V " << i+1+anzNodes << " \"" << currStation->schluessel.code << "\"" << endl;
+		os << "V " << i+1+anzNodes << " \"" << currStation->schluessel.code << "\"" << endl;    // Und schreibt die aktuelle Station jeweils direkt als Knoten in die Datei
 
 		j=0;
 		currNode2 = netz.node.kopf;
-		while(currNode2 != nullptr)
+		while(currNode2 != nullptr)                                             // Geht die Liste der Railwaynodes durch mit currNode2
 		{
-            //if(doStationLinkNode(currNode2, currStation))
+            //if(doStationLinkNode(currNode2, currStation))                     // Und prüft ob mit currStation eine Verbindung besteht
             if(true)
             {
-                os << "E " << i+1+anzNodes << " " << j+1 << " " << 1 << endl;
+                os << "E " << i+1+anzNodes << " " << j+1 << " " << 1 << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currNode2 = currNode2->nachf;
@@ -777,12 +778,12 @@ void Save_DB(ostream &os, bahn_netz &netz)                                      
 
 		j=0;
 		currStation2 = netz.station.kopf;
-		while(currStation2 != nullptr)
+		while(currStation2 != nullptr)                                                  // Geht die Liste der Stations durch mit currStation2
         {
-            //if(doStationLinkNode(currStation2, currStation))
+            //if(doStationLinkNode(currStation2, currStation))                          // Und prüft ob mit currStation eine Verbindung besteht (Selbe Station Nummern ausgeschlossen)
             if(true)
             {
-                os << "E " << i+1+anzNodes << " " << j+1+anzNodes << " " << 1 << endl;
+                os << "E " << i+1+anzNodes << " " << j+1+anzNodes << " " << 1 << endl;  // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currStation2 = currStation2->nachf;
@@ -791,7 +792,6 @@ void Save_DB(ostream &os, bahn_netz &netz)                                      
         currStation = currStation->nachf;
 	}
 }
-
 
 
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
@@ -848,7 +848,6 @@ int findLink(RailwayNode NodeA, RailwayNode NodeB)      //für removePseudoNodes
 
 bool doStationLinkNode(Station station, RailwayNode node)                                   //Benger
 {
-
     struct Element<int> *currSpoke;
 
     currSpoke=station.spokeEnd.kopf;
@@ -880,48 +879,6 @@ bool doStationLinkNode(Station station, RailwayNode node)                       
     }
     return false;
 }
-
-/*
-bool doStationLinkNode(Station station, RailwayNode node)                                   //Benger
-{
-    size_t anzStationSpokeEnd = station.spokeEnd.number_Elements();
-    size_t anzStationSpokeStart = station.spokeStart.number_Elements();
-
-    int tempStationSpoke;
-
-    for(size_t i=0; i<anzStationSpokeEnd; i++)
-    {
-        tempStationSpoke = station.spokeEnd[i];
-        if(tempStationSpoke != -1)
-        {
-            if(tempStationSpoke == node.spokeEnd[0])
-                return true;
-            if(tempStationSpoke == node.spokeEnd[1])
-                return true;
-            if(tempStationSpoke == node.spokeStart[0])
-                return true;
-            if(tempStationSpoke == node.spokeStart[1])
-                return true;
-        }
-    }
-    for(size_t i=0; i<anzStationSpokeStart; i++)
-    {
-        tempStationSpoke = station.spokeStart[i];
-        if(tempStationSpoke != -1)
-        {
-            if(tempStationSpoke == node.spokeEnd[0])
-                return true;
-            if(tempStationSpoke == node.spokeEnd[1])
-                return true;
-            if(tempStationSpoke == node.spokeStart[0])
-                return true;
-            if(tempStationSpoke == node.spokeStart[1])
-                return true;
-        }
-    }
-    return false;
-}
-*/
 
 //Ausgabe Operatoren zum Testen
 

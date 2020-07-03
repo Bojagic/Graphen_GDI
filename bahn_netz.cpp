@@ -275,7 +275,6 @@ void Load_DB(istream &is, bahn_netz &netz)
     //removePseudoNodes(netz);
     mergeStationNodes(netz);
     //correctLinks(netz);
-
 }
 /*
 void correctLinks(bahn_netz &netz)

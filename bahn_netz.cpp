@@ -702,7 +702,6 @@ void mergeStationNodes(bahn_netz &netz)                                         
     }
 }
 
-
 void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 {
 	struct Element<Station> *currStation = netz.station.kopf;
@@ -713,16 +712,19 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 	int anzNodes;
 	int i,j;
 
-	struct Element<Station> *bahnhofI;
-	struct Element<Station> *bahnhofJ;
-    struct Element<RailwayNode> *knotenI;
-    struct Element<RailwayNode> *knotenJ;
-
-    for(anzStations=0;currStation != nullptr;anzStations++)    // Zählt die Stationen
+    anzStations=0;
+    while(currStation != nullptr)       // Zählt die Stationen
+    {
         currStation = currStation->nachf;
+        anzStations++;
+    }
 
-    for(anzNodes=0;currNode != nullptr;anzNodes++)          // Zählt die Nodes
+    anzNodes=0;
+    while(currNode != nullptr)          // Zählt die Nodes
+    {
         currNode = currNode->nachf;
+        anzNodes++;
+    }
 
 	os << "G " << anzStations+anzNodes << endl;  // Schreiben des Kopfes mit Anzahl aller Knoten
 
@@ -737,7 +739,6 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 		while(currNode2 != nullptr)                                     // Geht die Liste der Railwaynodes durch mit currNode2
 		{
             if(doNodesLink(currNode2, currNode)                         // Und prüft ob mit currNode eine verbindung besteht (Selbe Node Nummern ausgeschlossen)
-            if(true)
             {
                 os << "E " << i+1 << " " << j+1 << " " << 1 << endl;    // Falls eine verbindung besteht, wird die Kante aufgeschrieben
             }
@@ -750,7 +751,6 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 		while(currStation2 != nullptr)                                          // Geht die Liste der Stations durch mit currStation2
         {
             if(doStationLinkNode(currStation2, currNode))                       // Und prüft ob mit currNode eine Verbindung besteht
-            if(true)
             {
                 os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }

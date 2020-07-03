@@ -696,67 +696,102 @@ void mergeStationNodes(bahn_netz &netz)                                         
     }
 }
 
-/*
-void Save_DB(ostream &os, bahn_netz &netz)                                                  //Lewicki
+void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 {
-	size_t anzStations = netz.station.number_Elements();
-	size_t anzNodes = netz.node.number_Elements();
+	struct Element<Station> *currStation = netz.station.kopf;
+	struct Element<RailwayNode> *currNode = netz.node.kopf;
+	struct Element<Station> *currStation2 = netz.station.kopf;
+	struct Element<RailwayNode> *currNode2 = netz.node.kopf;
+	int anzStations;
+	int anzNodes;
+	int i,j;
 
-	Station bahnhofI, bahnhofJ;
-    RailwayNode knotenI, knotenJ;
+    anzStations=0;
+    while(currStation != nullptr)       // Zählt die Stationen
+    {
+        currStation = currStation->nachf;
+        anzStations++;
+    }
 
-	os << "G " << anzStations+anzNodes << endl;
+    anzNodes=0;
+    while(currNode != nullptr)          // Zählt die Nodes
+    {
+        currNode = currNode->nachf;
+        anzNodes++;
+    }
 
-    //size_t proz = 0;
-	for(size_t i=0; i<anzNodes; i++)
+	os << "G " << anzStations+anzNodes << endl;  // Schreiben des Kopfes mit Anzahl aller Knoten
+
+	i = 0;
+	currNode = netz.node.kopf;
+	while(currNode != nullptr)                                                      // Geht die ganze Liste der Railwaynodes durch mit currNode
 	{
-	    //if(i%(nodesGesamt/100) == 0) cout << proz++ << "%"<< endl;
+		os << "V " << i+1 << " \"" << currNode->schluessel.nummer << "\"" << endl;  // Und schreibt den aktuellen Node jeweils direkt als Knoten in die Datei
 
-        knotenI = netz.node[i];
-		os << "V " << i+1 << " \"" << knotenI.nummer << "\"" << endl;
-		for(size_t j=0; j<anzNodes; j++)
+		j=0;
+		currNode2 = netz.node.kopf;
+		while(currNode2 != nullptr)                                     // Geht die Liste der Railwaynodes durch mit currNode2
 		{
-		    knotenJ = netz.node[j];
-            if(doNodesLink(knotenI, knotenJ))
+            //if(doNodesLink(currNode2, currNode)                         // Und prüft ob mit currNode eine verbindung besteht (Selbe Node Nummern ausgeschlossen)
+            if(true)
             {
-                os << "E " << i+1 << " " << j+1 << " " << 1 << endl;
+                os << "E " << i+1 << " " << j+1 << " " << 1 << endl;    // Falls eine verbindung besteht, wird die Kante aufgeschrieben
             }
+            j++;
+            currNode2 = currNode2->nachf;
 		}
-		for(size_t j=0; j<anzStations; j++)
+
+		j=0;
+		currStation2 = netz.station.kopf;
+		while(currStation2 != nullptr)                                          // Geht die Liste der Stations durch mit currStation2
         {
-            bahnhofJ = netz.station[j];
-            if(doStationLinkNode(bahnhofJ, knotenI))     //neue Funktion bool doStationLinkNode(Station station, RailwayNode node)
+            //if(doStationLinkNode(currStation2, currNode))                       // Und prüft ob mit currNode eine Verbindung besteht
+            if(true)
             {
-                os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;
+                os << "E " << i+1 << " " << j+1+anzNodes << " " << 1 << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
+            j++;
+            currStation2 = currStation2->nachf;
         }
+        i++;
+        currNode = currNode->nachf;
 	}
 
-	for(size_t i=0; i<anzStations; i++)
-    {
+    i = 0;
+	currStation = netz.station.kopf;
+	while(currStation != nullptr)                                                               // Geht die ganze Liste der Stationen durch mit currStation
+	{
+		os << "V " << i+1+anzNodes << " \"" << currStation->schluessel.code << "\"" << endl;    // Und schreibt die aktuelle Station jeweils direkt als Knoten in die Datei
 
-        bahnhofI = netz.station[i];
-        os << "V " << i+1+anzNodes << " \"" << bahnhofI.code << "\"" << endl;
-        for(size_t j=0; j<anzNodes; j++)
+		j=0;
+		currNode2 = netz.node.kopf;
+		while(currNode2 != nullptr)                                             // Geht die Liste der Railwaynodes durch mit currNode2
 		{
-		    knotenJ = netz.node[j];
-            if(doStationLinkNode(bahnhofI, knotenJ))
+            //if(doStationLinkNode(currNode2, currStation))                     // Und prüft ob mit currStation eine Verbindung besteht
+            if(true)
             {
-                os << "E " << i+1+anzNodes << " " << j+1 << " " << 1 << endl;
+                os << "E " << i+1+anzNodes << " " << j+1 << " " << 1 << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
-		}
-		for(size_t j=0; j<anzStations; j++)
-		{
-		   bahnhofJ = netz.station[j];
-            if(doStationsLink(bahnhofI, bahnhofJ))          //neue Funktion doStationsLink(Station stationA, Station stationB)
-            {
-                os << "E " << i+1+anzNodes << " " << j+1+anzNodes << " " << 1 << endl;
-            }
+            j++;
+            currNode2 = currNode2->nachf;
 		}
 
-    }
+		j=0;
+		currStation2 = netz.station.kopf;
+		while(currStation2 != nullptr)                                                  // Geht die Liste der Stations durch mit currStation2
+        {
+            //if(doStationLinkNode(currStation2, currStation))                          // Und prüft ob mit currStation eine Verbindung besteht (Selbe Station Nummern ausgeschlossen)
+            if(true)
+            {
+                os << "E " << i+1+anzNodes << " " << j+1+anzNodes << " " << 1 << endl;  // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
+            }
+            j++;
+            currStation2 = currStation2->nachf;
+        }
+        i++;
+        currStation = currStation->nachf;
+	}
 }
-*/
 
 
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)

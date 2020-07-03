@@ -11,7 +11,7 @@ struct Element{
 template <class T>
 class ListeNeu{
 public:
-    struct Element<T> *kopf;        //Zeiger auf den Anfang
+    struct Element<T> *kopf;        //Zeiger auf den Anfang der Liste
     ListeNeu(){kopf = nullptr;}     //Konstruktor
 };
 

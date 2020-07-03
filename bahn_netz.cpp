@@ -22,8 +22,8 @@ void Load_DB(istream &is, bahn_netz &netz)
 
     while(getline(is, tempstring))
     {
-        wordEnd = tempstring.find("\t", 0);     //Erstes Wort bis Tabulator einlesen
-        datentyp = tempstring.substr(0,wordEnd);
+        wordEnd = tempstring.find("\t", 0);         //Erstes Wort bis Tabulator einlesen
+        datentyp = tempstring.substr(0,wordEnd);    //Art der Daten steht am Anfang der Zeile
 
         if(datentyp == "RailwayLine")           //Benger
         {
@@ -59,7 +59,7 @@ void Load_DB(istream &is, bahn_netz &netz)
             }while(tempstring.find("]")!=7);
             tempLine->schluessel.linkNummer[i] = -1;
 
-            List_Insert(netz.line, tempLine);
+            List_Insert(netz.line, tempLine);                  //Beschriebenes line-Objekt zur Liste hinzufügen
             zaehler[0]++;
         }
 
@@ -67,7 +67,7 @@ void Load_DB(istream &is, bahn_netz &netz)
         {
             struct Element<RailwayLink> *tempLink = new struct Element<RailwayLink>;
 
-            wordStart = tempstring.find("-", 0);                        //Nummer Speichern
+            wordStart = tempstring.find("-", 0);                                //Nummer Speichern
             wordEnd = tempstring.find("\t", wordStart);
             wort = tempstring.substr(wordStart+1,wordEnd-wordStart);
             tempLink->schluessel.nummer = stoi(wort);
@@ -92,7 +92,7 @@ void Load_DB(istream &is, bahn_netz &netz)
                 //cout << "Wort----->" << wort << endl;
                 tempLink->schluessel.startNodeNummer = stoi(wort);
             }
-            List_Insert(netz.link, tempLink);
+            List_Insert(netz.link, tempLink);                   //Beschriebenes link-Objekt zur Liste hinzufügen
             zaehler[1]++;
         }
 
@@ -161,7 +161,7 @@ void Load_DB(istream &is, bahn_netz &netz)
             wort = tempstring.substr(wordStart+2, wordEnd-wordStart-2);
             tempNode->schluessel.typ = wort;
 
-            List_Insert(netz.node, tempNode);
+            List_Insert(netz.node, tempNode);                   //Beschriebenes node-Objekt zur Liste hinzufügen
             zaehler[2]++;
         }
 
@@ -243,7 +243,7 @@ void Load_DB(istream &is, bahn_netz &netz)
             snode->schluessel.typ = typ;
             snode->schluessel.text = stadt;
 
-            List_Insert(netz.stationNode, snode);
+            List_Insert(netz.stationNode, snode);               //Beschriebenes node-Objekt zur Liste hinzufügen
 
             zaehler[3]++;
         }
@@ -252,17 +252,17 @@ void Load_DB(istream &is, bahn_netz &netz)
         {
             struct Element<RailwayStationCode> *code = new struct Element<RailwayStationCode>;
 
-            wordStart=tempstring.find("Spd-")+4;
+            wordStart=tempstring.find("Spd-")+4;                                //Nummer einlesen
             code->schluessel.nummer=stoi(tempstring.substr(wordStart,7));
 
-            wordStart=tempstring.find("SNode-")+6;
+            wordStart=tempstring.find("SNode-")+6;                              //SNodeNummer einlesen
             code->schluessel.SNodeNummer=stoi(tempstring.substr(wordStart,6));
 
             wordStart=99;
-            wordEnd=tempstring.find("\"}")-1-wordStart;
+            wordEnd=tempstring.find("\"}")-1-wordStart;                         //Code einlesen
             code->schluessel.code=tempstring.substr(wordStart-2,wordEnd+3);
 
-            List_Insert(netz.stationCode, code);
+            List_Insert(netz.stationCode, code);                //Beschriebenes code-Objekt zur Liste hinzufügen
             zaehler[4]++;
         }
     }
@@ -615,16 +615,16 @@ void mergeStationNodes(bahn_netz &netz)                                         
         struct Element<Station> *currStation;
 
         bool gefunden;
-        while(currSNode != nullptr)     //laufe durch StationNodes
+        while(currSNode != nullptr)             //laufe durch alle StationNodes
         {
             gefunden = false;
             currStation =netz.station.kopf;
-            while(currStation != nullptr)       //laufe durch alle Stations
+            while(currStation != nullptr)           //laufe durch alle Stations (Am Anfang gibt es noch keine Stations)
             {
-                if(currCode->schluessel.code == currStation->schluessel.code)
+                if(currCode->schluessel.code == currStation->schluessel.code)           //Passende Station mit gleichem Code gefunden?
                 {
                     gefunden = true;
-                    if(currSNode->schluessel.spokeEnd[0] != -1)
+                    if(currSNode->schluessel.spokeEnd[0] != -1)                         //Wenn spokeEnd vorhanden
                     {
                         struct Element<int> *spokeEnd0 = new Element<int>;              //Neues Element anlegen
                         spokeEnd0->schluessel = currSNode->schluessel.spokeEnd[0];      //Element den Wert von spokeEnd[0] geben
@@ -651,17 +651,18 @@ void mergeStationNodes(bahn_netz &netz)                                         
                         spokeStart1->schluessel = currSNode->schluessel.spokeStart[1];
                         List_Insert(currStation->schluessel.spokeStart, spokeStart1);
                     }
-                    break;
+                    break;                              //Einmaliges finden einer passenden Station reicht
+                                                        //Die Schleife muss dann nicht weiter durch alle Stations gehen
                 }
-                currStation = currStation->nachf;
+                currStation = currStation->nachf;       //Zur nächsten Station
             }
-            if(!gefunden)
+            if(!gefunden)                               //Benötiigte Station nicht in der Liste gefunden?
             {
-                tempStation = new struct Element<Station>;
+                tempStation = new struct Element<Station>;                          //Neue Station anlegen
 
-                tempStation->schluessel.code = currCode->schluessel.code;
+                tempStation->schluessel.code = currCode->schluessel.code;           //Code vom SNode in neue Station schreiben
 
-                if(currSNode->schluessel.spokeEnd[0] != -1)
+                if(currSNode->schluessel.spokeEnd[0] != -1)                         //Wenn spokeEnd vorhanden
                 {
                     struct Element<int> *spokeEnd0 = new Element<int>;              //Neues Element anlegen
                     spokeEnd0->schluessel = currSNode->schluessel.spokeEnd[0];      //Element den Wert von spokeEnd[0] geben
@@ -689,10 +690,10 @@ void mergeStationNodes(bahn_netz &netz)                                         
                     List_Insert(tempStation->schluessel.spokeStart, spokeStart1);
                 }
 
-                List_Insert(netz.station, tempStation);
+                List_Insert(netz.station, tempStation);             //Erstelle Station an die Liste anhängen
             }
 
-            currSNode = currSNode->nachf;
+            currSNode = currSNode->nachf;   //Nächste StationNode und nächster StationCode
             currCode = currCode->nachf;
         }
     }
@@ -895,6 +896,9 @@ bool doStationLinkNode(Station station, RailwayNode node)                       
     return false;
 }
 */
+
+//Ausgabe Operatoren zum Testen
+
 ostream &operator<<(ostream &ostr, const RailwayNode node)
 {
     ostr << "Nummer    : " << node.nummer      << endl;

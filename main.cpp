@@ -11,12 +11,12 @@ b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
 #include <string>
 #include <iostream>
 #include "listeNeu.h"
-
+#include "listeNeu.cpp"
 // Eventuelle ausgelagerte Implementationen einbinden
 //#include "queue.cpp"
 //#include "graph.cpp"
 //#include "bahn_netz.cpp"
-#include "listeNeu.cpp"
+void testGraphenbearbeitung();      //Für Lern/Lehreinheit
 
 int main(int argc, char *argv[])
 {
@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 		gdi_stream.close();
 	}
 */
+    //testGraphenbearbeitung();
 
     bahn_netz bn;
     string sFileName0="wichtige zeilen.json";
@@ -78,4 +79,35 @@ int main(int argc, char *argv[])
 		gdi_stream.close();
 	}
 	return 0;
+}
+
+void testGraphenbearbeitung()
+{
+    Graph G;
+	string sFileName="ring12.gdi";
+	{
+		ifstream gdi_stream;
+		gdi_stream.open(sFileName,ifstream::in);
+		if (gdi_stream.is_open())
+		{
+			if (LoadGraph(gdi_stream,G)==0)
+			{
+				Graph_Debug(G);                 //Gelesener Graph wird ausgegeben
+				cout << "\n\n";
+
+				Insert_Edge(G, 6, 2);            //Kante zwischen Knoten 6 und 2
+				Graph_Debug(G);
+				cout << "\n\n";
+
+				Delete_Edge(G, 2, 1);
+				Graph_Debug(G);
+				cout << "\n\n";
+
+                //Insert_Random_Edges(G,33);      //3 zufällige Kanten einfügen
+                //Graph_Debug(G);
+				//cout << "\n\n";
+			}
+		}
+		gdi_stream.close();
+	}
 }

@@ -848,7 +848,6 @@ int findLink(RailwayNode NodeA, RailwayNode NodeB)      //für removePseudoNodes
 
 bool doStationLinkNode(Station station, RailwayNode node)                                   //Benger
 {
-
     struct Element<int> *currSpoke;
 
     currSpoke=station.spokeEnd.kopf;
@@ -880,48 +879,6 @@ bool doStationLinkNode(Station station, RailwayNode node)                       
     }
     return false;
 }
-
-/*
-bool doStationLinkNode(Station station, RailwayNode node)                                   //Benger
-{
-    size_t anzStationSpokeEnd = station.spokeEnd.number_Elements();
-    size_t anzStationSpokeStart = station.spokeStart.number_Elements();
-
-    int tempStationSpoke;
-
-    for(size_t i=0; i<anzStationSpokeEnd; i++)
-    {
-        tempStationSpoke = station.spokeEnd[i];
-        if(tempStationSpoke != -1)
-        {
-            if(tempStationSpoke == node.spokeEnd[0])
-                return true;
-            if(tempStationSpoke == node.spokeEnd[1])
-                return true;
-            if(tempStationSpoke == node.spokeStart[0])
-                return true;
-            if(tempStationSpoke == node.spokeStart[1])
-                return true;
-        }
-    }
-    for(size_t i=0; i<anzStationSpokeStart; i++)
-    {
-        tempStationSpoke = station.spokeStart[i];
-        if(tempStationSpoke != -1)
-        {
-            if(tempStationSpoke == node.spokeEnd[0])
-                return true;
-            if(tempStationSpoke == node.spokeEnd[1])
-                return true;
-            if(tempStationSpoke == node.spokeStart[0])
-                return true;
-            if(tempStationSpoke == node.spokeStart[1])
-                return true;
-        }
-    }
-    return false;
-}
-*/
 
 //Ausgabe Operatoren zum Testen
 

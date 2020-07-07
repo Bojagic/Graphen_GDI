@@ -38,7 +38,7 @@ int main()
 		cout << "+-------------------------------------------------------+" << endl;
 		cout << "|<1> Bahndaten aus Datei laden                          |" << endl;
 		cout << "|<2> Graph erzeugen                                     |" << endl;
-		cout << "|<3> Entfernung zweier Bahnhoefe berechnen (TODO)       |" << endl;
+		cout << "|<3> Entfernung zweier Bahnhoefe berechnen              |" << endl;
 		cout << "|<0> Programm beenden                                   |" << endl;
 		cout << "+-------------------------------------------------------+" << endl;
         menuWahl = getch();
@@ -131,6 +131,12 @@ void graph_erzeugen(bahn_netz &bn)
 
 void station_entfernung(bahn_netz &bn)		//Auswahl von zwei Stations, Stations werden dynamisch aus bn geholt
 {
+    if(bn.station.kopf == nullptr)
+	{
+		cout << "Fehler! Es wurden keine Daten eingelesen" << endl;
+		return;
+	}
+
 	struct Element<Station> *currStation = bn.station.kopf;
 	struct Element<Station> *stationA, *stationB;
 	string eingA, eingB;
@@ -143,7 +149,7 @@ void station_entfernung(bahn_netz &bn)		//Auswahl von zwei Stations, Stations we
 	currStation = bn.station.kopf;
 	while(currStation != nullptr)														//Alle Bahnhöfe mit code und text ausgeben
 	{
-		cout << "|" << left << setw(4) <<currStation->schluessel.code << " | "<< left << setw(48) << currStation->schluessel.text << "|" <<endl;
+		cout << "|" << left << setw(5) <<currStation->schluessel.code << " | "<< left << setw(47) << currStation->schluessel.text << "|" <<endl;
 		currStation = currStation->nachf;
 	}
 	cout << "+-------------------------------------------------------+" << endl;

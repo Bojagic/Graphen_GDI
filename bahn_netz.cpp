@@ -1,9 +1,23 @@
+/*
+ * Autoren: Michel Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
+ * Gruppe : 3 Mittwochvormittag
+ * Thema  : Miniprojekt 1 - Graphen aus Open Source Data der Deutschen Bahn erstellen
+ *			Miniprojekt 2 - Abstand von zwei Bahnhöfen
+ */
+
 #include <iostream>
 #include <fstream>
 
 #include "bahn_netz.h"
 #include "listeNeu.h"
 #include "listeNeu.cpp"
+
+//Für abstandStationen
+#include <math.h>
+#ifndef M_PI      //definiert M_PI wenn nicht definiert ist
+    #define M_PI 3.14159265358979323846
+#endif
+#define E_RAD 6371  // Erdradius
 
 using namespace std;
 
@@ -105,32 +119,31 @@ void Load_DB(istream &is, bahn_netz &netz)
             wort = tempstring.substr(wordStart+1,wordEnd-wordStart);
             tempNode->schluessel.nummer = stoi(wort);
 
-            wordStart = tempstring.find(":\"", wordEnd);                //X-Koordinate speichern
+            wordStart = tempstring.find(":\"", wordEnd);                //Breitengrad speichern
             wordEnd = tempstring.find(" ", wordStart);
             wort = tempstring.substr(wordStart+2,wordEnd-wordStart-1);
-            tempNode->schluessel.xKoordinate = stod(wort);
+            tempNode->schluessel.breitengrad = stod(wort);
 
-            wordStart = wordEnd+1;                                      //Y-Koordinate speichern
+            wordStart = wordEnd+1;                                      //Höhengrad speichern
             wordEnd = tempstring.find("\"", wordStart);
             wort = tempstring.substr(wordStart,wordEnd-wordStart);
-            tempNode->schluessel.yKoordinate = stod(wort);
+            tempNode->schluessel.hoehengrad = stod(wort);
 
-            if(tempstring.find("spokeEnd", wordEnd) != 0)
-                if( tempstring.substr(wordEnd+12, 1) == "E" )               //spokeEnd speichern, wenn vorhanden
-                {
+            if( tempstring.substr(wordEnd+12, 1) == "E" )               //spokeEnd speichern, wenn vorhanden
+            {
+                wordStart = tempstring.find("-", wordEnd);
+                wordEnd = tempstring.find("\"",wordStart);
+                wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
+                tempNode->schluessel.spokeEnd[0] = stoi(wort);
+
+                if( tempstring.substr(wordEnd+1, 1) != "]" ){       //Zweites spokeEnd?
                     wordStart = tempstring.find("-", wordEnd);
                     wordEnd = tempstring.find("\"",wordStart);
                     wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
-                    tempNode->schluessel.spokeEnd[0] = stoi(wort);
-
-                    if( tempstring.substr(wordEnd+1, 1) != "]" ){       //Zweites spokeEnd?
-                        wordStart = tempstring.find("-", wordEnd);
-                        wordEnd = tempstring.find("\"",wordStart);
-                        wort = tempstring.substr(wordStart+1, wordEnd-wordStart);
-                        tempNode->schluessel.spokeEnd[1] = stoi(wort);
-                    }
-                    else tempNode->schluessel.spokeEnd[1] = -1;         //Kein zweites vorhanden
+                    tempNode->schluessel.spokeEnd[1] = stoi(wort);
                 }
+                else tempNode->schluessel.spokeEnd[1] = -1;         //Kein zweites vorhanden
+            }
             else
             {
                 tempNode->schluessel.spokeEnd[0] = -1;
@@ -245,8 +258,8 @@ void Load_DB(istream &is, bahn_netz &netz)
             snode->schluessel.spokeEnd[0] = spokeEnd[0];        //selbes hier mit spokeEnd
             snode->schluessel.spokeEnd[1] = spokeEnd[1];
             snode->schluessel.nummer = snodeID;
-            snode->schluessel.xKoordinate = gmlpos1;
-            snode->schluessel.yKoordinate = gmlpos2;
+            snode->schluessel.breitengrad = gmlpos1;
+            snode->schluessel.hoehengrad = gmlpos2;
             snode->schluessel.typ = typ;
             snode->schluessel.text = stadt;
 
@@ -279,163 +292,14 @@ void Load_DB(istream &is, bahn_netz &netz)
     cout << zaehler[3] <<" RailwayStationNode gelesen" << endl;
     cout << zaehler[4] <<" RailwayStationCode gelesen" << endl;
 
+    cout << "entferne pseudoNodes ... ";
     removePseudoNodes(netz);
+    cout << "fertig" << endl;
+
+    cout << "berechne Stations ... ";
     mergeStationNodes(netz);
-    //correctLinks(netz);
+    cout << "fertig" << endl;
 }
-/*
-void correctLinks(bahn_netz &netz)
-{
-    size_t anzNodes = netz.stationNode.number_Elements();
-    size_t anzLinks = netz.link.number_Elements();
-    int nodeNummer;
-    int ende, start;
-    RailwayLink tempLink;
-    //int proz = 0;
-    for(size_t i=0; i<anzNodes; i++)
-    {
-        //if(i%(anzNodes/50) == 0) cout << proz++ << "%"<< endl;
-
-        nodeNummer = netz.stationNode[i].nummer;
-
-        ende = netz.stationNode[i].spokeEnd[0];
-        start = netz.stationNode[i].spokeStart[0];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-
-        ende = netz.stationNode[i].spokeEnd[0];
-        start = netz.stationNode[i].spokeStart[1];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-
-        ende = netz.stationNode[i].spokeEnd[1];
-        start = netz.stationNode[i].spokeStart[0];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-
-        ende = netz.stationNode[i].spokeEnd[1];
-        start = netz.stationNode[i].spokeStart[1];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-    }
-
-    anzNodes = netz.node.number_Elements();
-    for(size_t i=0; i<anzNodes; i++)
-    {
-        //if(i%(anzNodes/50) == 0) cout << proz++ << "%"<< endl;
-
-        nodeNummer = netz.node[i].nummer;
-
-        ende = netz.node[i].spokeEnd[0];
-        start = netz.node[i].spokeStart[0];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-
-        ende = netz.node[i].spokeEnd[0];
-        start = netz.node[i].spokeStart[1];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-
-        ende = netz.node[i].spokeEnd[1];
-        start = netz.node[i].spokeStart[0];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-
-        ende = netz.node[i].spokeEnd[1];
-        start = netz.node[i].spokeStart[1];
-        for(size_t j=0; j<anzLinks; j++)
-        {
-            tempLink = netz.link.remove_first();
-            if(ende == tempLink.nummer)
-            {
-                tempLink.endNodeNummer = nodeNummer;
-            }
-            if(start == tempLink.nummer)
-            {
-                tempLink.startNodeNummer = nodeNummer;
-            }
-            netz.link.add_last(tempLink);
-        }
-    }
-}
-*/
 
 void removePseudoNodes(bahn_netz &netz)                                                     //Bojagic
 {
@@ -443,8 +307,8 @@ void removePseudoNodes(bahn_netz &netz)                                         
     struct Element<RailwayNode> *deleteNode;
     struct Element<RailwayNode> *linkedNodeA;
     struct Element<RailwayNode> *linkedNodeB;
-    int linkA;
-    int linkB;
+    int *linkA;
+    int *linkB;
     while(currNode != nullptr)          //laufe durch alle Nodes
     {
         if(currNode->schluessel.typ == "pseudoNode")        //pseudoNode gefunden?
@@ -452,11 +316,10 @@ void removePseudoNodes(bahn_netz &netz)                                         
             linkedNodeA = netz.node.kopf;
             while(linkedNodeA != nullptr)                   //In allen Nodes nach Verbindungen suchen
             {
-                if(doNodesLink(currNode->schluessel, linkedNodeA->schluessel))          //Nodes verbunden?
-                {
-                    linkA = findLink(currNode->schluessel, linkedNodeA->schluessel);    //Nummer des gefundenen Links
+                linkA = findLink(currNode, linkedNodeA);
+                if(linkA != nullptr)
                     break;
-                }
+
                 linkedNodeA = linkedNodeA->nachf;           //nächster Node
             }
 
@@ -465,11 +328,10 @@ void removePseudoNodes(bahn_netz &netz)                                         
                 linkedNodeA = netz.stationNode.kopf;
                 while(linkedNodeA != nullptr)                 //Nach Verbindung mit StationNodes suchen
                 {
-                    if(doNodesLink(currNode->schluessel, linkedNodeA->schluessel))          //Nodes mit StationNode verbunden?
-                    {
-                        linkA = findLink(currNode->schluessel, linkedNodeA->schluessel);    //Nummer des gefundenen Links
-                        break;
-                    }
+                    linkA = findLink(currNode, linkedNodeA);
+                    if(linkA != nullptr)
+                    break;
+
                     linkedNodeA = linkedNodeA->nachf;           //nächster StationNode
                 }
             }
@@ -481,123 +343,32 @@ void removePseudoNodes(bahn_netz &netz)                                         
                 else
                     linkedNodeB = linkedNodeA->nachf;                   //sonst nach linkedNodeA ind selber Liste weiter machen
 
-                while(linkedNodeB != nullptr)
+                while(linkedNodeB != nullptr)                   //In allen Nodes nach Verbindungen suchen
                 {
-                    if(doNodesLink(currNode->schluessel, linkedNodeB->schluessel))          //Nodes verbunden?
-                    {
-                        linkB = findLink(currNode->schluessel, linkedNodeB->schluessel);    //Nummer des gefundenen Links
+                    linkB = findLink(currNode, linkedNodeB);
+                    if(linkB != nullptr)
                         break;
-                    }
+
                     linkedNodeB = linkedNodeB->nachf;           //nächster Node
                 }
 
                 if(linkedNodeB == nullptr && linkedNodeA->schluessel.typ != "railwayStop")      //Mit linkedNodeB erfolglos die Nodes durchsucht?
                 {                                                                               //wenn er schon die SNodes durchlaufen ist dann nicht nochmal
                     linkedNodeB = netz.stationNode.kopf;
-                    while(linkedNodeB != nullptr)                 //Nach Verbindung mit StationNodes suchen
+                    while(linkedNodeB != nullptr)                   //In allen Nodes nach Verbindungen suchen
                     {
-                        if(doNodesLink(currNode->schluessel, linkedNodeB->schluessel))          //Nodes mit StationNode verbunden?
-                        {
-                            linkB = findLink(currNode->schluessel, linkedNodeB->schluessel);    //Nummer des gefundenen Links
+                        linkB = findLink(currNode, linkedNodeB);
+                        if(linkB != nullptr)
                             break;
-                        }
-                        linkedNodeB = linkedNodeB->nachf;           //nächster StationNode
+
+                        linkedNodeB = linkedNodeB->nachf;           //nächster Node
                     }
                 }
             }
 
-
             if(linkedNodeA != nullptr && linkedNodeB != nullptr)    //Zwei Links gefunden?
-            {
-                //Verbindungen über pseudoNode hinweg setzen
-                //Wir hab hie zwei betroffende Nodes/StationNodes, welche beide jeweils bis zu vier
-                //Verbindungen haben. Über welche Attribute die Verbindung sitzt muss herrausgefunden werden
-                //Es werden deshalb 4x4 = 16 Vergleiche benötigt
+                *linkB = *linkA;
 
-                if(linkedNodeA->schluessel.spokeStart[0] == linkA && linkedNodeB->schluessel.spokeStart[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[0] = linkA;
-                    linkedNodeB->schluessel.spokeStart[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeStart[0] == linkA && linkedNodeB->schluessel.spokeStart[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[0] = linkA;
-                    linkedNodeB->schluessel.spokeStart[1] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeStart[0] == linkA && linkedNodeB->schluessel.spokeEnd[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[0] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeStart[0] == linkA && linkedNodeB->schluessel.spokeEnd[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[0] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[1] = linkA;
-                }
-
-                else if(linkedNodeA->schluessel.spokeStart[1] == linkA && linkedNodeB->schluessel.spokeStart[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[1] = linkA;
-                    linkedNodeB->schluessel.spokeStart[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeStart[1] == linkA && linkedNodeB->schluessel.spokeStart[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[1] = linkA;
-                    linkedNodeB->schluessel.spokeStart[1] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeStart[1] == linkA && linkedNodeB->schluessel.spokeEnd[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[1] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeStart[1] == linkA && linkedNodeB->schluessel.spokeEnd[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeStart[1] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[1] = linkA;
-                }
-
-                else if(linkedNodeA->schluessel.spokeEnd[0] == linkA && linkedNodeB->schluessel.spokeStart[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[0] = linkA;
-                    linkedNodeB->schluessel.spokeStart[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeEnd[0] == linkA && linkedNodeB->schluessel.spokeStart[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[0] = linkA;
-                    linkedNodeB->schluessel.spokeStart[1] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeEnd[0] == linkA && linkedNodeB->schluessel.spokeEnd[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[0] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeEnd[0] == linkA && linkedNodeB->schluessel.spokeEnd[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[0] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[1] = linkA;
-                }
-
-                else if(linkedNodeA->schluessel.spokeEnd[1] == linkA && linkedNodeB->schluessel.spokeStart[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[1] = linkA;
-                    linkedNodeB->schluessel.spokeStart[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeEnd[1] == linkA && linkedNodeB->schluessel.spokeStart[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[1] = linkA;
-                    linkedNodeB->schluessel.spokeStart[1] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeEnd[1] == linkA && linkedNodeB->schluessel.spokeEnd[0] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[1] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[0] = linkA;
-                }
-                else if(linkedNodeA->schluessel.spokeEnd[1] == linkA && linkedNodeB->schluessel.spokeEnd[1] == linkB)
-                {
-                    linkedNodeA->schluessel.spokeEnd[1] = linkA;
-                    linkedNodeB->schluessel.spokeEnd[1] = linkA;
-                }
-            }
             deleteNode = currNode;
             currNode = currNode->nachf;         //nächster Node
             List_Delete(netz.node, deleteNode);        //gefundener pseudoNode löschen
@@ -662,7 +433,10 @@ void mergeStationNodes(bahn_netz &netz)                                         
             {
                 tempStation = new struct Element<Station>;                          //Neue Station anlegen
 
-                tempStation->schluessel.code = currCode->schluessel.code;           //Code vom SNode in neue Station schreiben
+                tempStation->schluessel.code = currCode->schluessel.code;               //Daten neue Station schreiben
+                tempStation->schluessel.text = currSNode->schluessel.text;
+                tempStation->schluessel.breitengrad = currSNode->schluessel.breitengrad;
+                tempStation->schluessel.hoehengrad = currSNode->schluessel.hoehengrad;
 
                 if(currSNode->schluessel.spokeEnd[0] != -1)                         //Wenn spokeEnd vorhanden
                 {
@@ -798,6 +572,31 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 	}
 }
 
+int* findLink(struct Element<RailwayNode> *NodeA, struct Element<RailwayNode> *NodeB)
+{
+    if(NodeA->schluessel.nummer == NodeB->schluessel.nummer)    //Gleiche Knoten
+        return nullptr;
+
+    if(NodeA->schluessel.spokeStart[0] == NodeB->schluessel.spokeEnd[0] && NodeA->schluessel.spokeStart[0] !=-1)
+        return &(NodeB->schluessel.spokeEnd[0]);
+    if(NodeA->schluessel.spokeStart[0] == NodeB->schluessel.spokeEnd[1] && NodeA->schluessel.spokeStart[0] !=-1)
+        return &(NodeB->schluessel.spokeEnd[1]);
+    if(NodeA->schluessel.spokeStart[1] == NodeB->schluessel.spokeEnd[0] && NodeA->schluessel.spokeStart[1] !=-1)
+        return &(NodeB->schluessel.spokeEnd[0]);
+    if(NodeA->schluessel.spokeStart[1] == NodeB->schluessel.spokeEnd[1] && NodeA->schluessel.spokeStart[1] !=-1)
+        return &(NodeB->schluessel.spokeEnd[1]);
+
+    if(NodeA->schluessel.spokeEnd[0] == NodeB->schluessel.spokeStart[0] && NodeA->schluessel.spokeEnd[0] !=-1)
+        return &(NodeB->schluessel.spokeStart[0]);
+    if(NodeA->schluessel.spokeEnd[0] == NodeB->schluessel.spokeStart[1] && NodeA->schluessel.spokeEnd[0] !=-1)
+        return &(NodeB->schluessel.spokeStart[1]);
+    if(NodeA->schluessel.spokeEnd[1] == NodeB->schluessel.spokeStart[0] && NodeA->schluessel.spokeEnd[1] !=-1)
+        return &(NodeB->schluessel.spokeStart[0]);
+    if(NodeA->schluessel.spokeEnd[1] == NodeB->schluessel.spokeStart[1] && NodeA->schluessel.spokeEnd[1] !=-1)
+        return &(NodeB->schluessel.spokeStart[1]);
+
+    return nullptr;
+}
 
 bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
 {
@@ -823,32 +622,6 @@ bool doNodesLink(RailwayNode NodeA, RailwayNode NodeB)
         return true;
 
     return false;
-}
-
-int findLink(RailwayNode NodeA, RailwayNode NodeB)      //für removePseudoNodes
-{
-    if(NodeA.nummer == NodeB.nummer)    //Gleiche Knoten
-        return -1;
-
-    if(NodeA.spokeStart[0] == NodeB.spokeEnd[0] && NodeA.spokeStart[0] !=-1)
-        return NodeA.spokeStart[0];
-    if(NodeA.spokeStart[0] == NodeB.spokeEnd[1] && NodeA.spokeStart[0] !=-1)
-        return NodeA.spokeStart[0];
-    if(NodeA.spokeStart[1] == NodeB.spokeEnd[0] && NodeA.spokeStart[1] !=-1)
-        return NodeA.spokeStart[1];
-    if(NodeA.spokeStart[1] == NodeB.spokeEnd[1] && NodeA.spokeStart[1] !=-1)
-        return NodeA.spokeStart[1];
-
-    if(NodeA.spokeEnd[0] == NodeB.spokeStart[0] && NodeA.spokeEnd[0] !=-1)
-        return NodeA.spokeEnd[0];
-    if(NodeA.spokeEnd[0] == NodeB.spokeStart[1] && NodeA.spokeEnd[0] !=-1)
-        return NodeA.spokeEnd[0];
-    if(NodeA.spokeEnd[1] == NodeB.spokeStart[0] && NodeA.spokeEnd[1] !=-1)
-        return NodeA.spokeEnd[1];
-    if(NodeA.spokeEnd[1] == NodeB.spokeStart[1] && NodeA.spokeEnd[1] !=-1)
-        return NodeA.spokeEnd[1];
-
-    return -1;
 }
 
 bool doStationsLink(Station stationA, Station stationB)
@@ -920,14 +693,27 @@ bool doStationLinkNode(Station station, RailwayNode node)                       
     return false;
 }
 
+int abstandStationen(Station bahnhofA, Station bahnhofB)
+{
+    double phiA = (bahnhofA.breitengrad - 90) / 180 * M_PI;         //Breitengrad/Latidude -> phi
+    double lamA = bahnhofA.hoehengrad / 180 * M_PI;                 //Höhengrad/Longitude -> lambda
+
+    double phiB = (bahnhofB.breitengrad - 90) / 180 * M_PI;
+    double lamB = bahnhofB.hoehengrad / 180 * M_PI;
+
+    double delta = acos( sin(phiA)*sin(phiB) + cos(phiA)*cos(phiB)*cos(lamA-lamB) );    //Winkel in Bogenmaß
+
+    return(round(E_RAD * delta));          //E_RAD = Erdradius
+}
+
 //Ausgabe Operatoren zum Testen
 
 ostream &operator<<(ostream &ostr, const RailwayNode node)
 {
-    ostr << "Nummer    : " << node.nummer      << endl;
-    ostr << "X Koord   : " << node.xKoordinate << endl;
-    ostr << "Y Koord   : " << node.yKoordinate << endl;
-    ostr << "spokeEnd  : " << node.spokeEnd[0];
+    ostr << "Nummer        : " << node.nummer      << endl;
+    ostr << "Breitengrad   : " << node.breitengrad << endl;
+    ostr << "Hoehengrad    : " << node.hoehengrad  << endl;
+    ostr << "spokeEnd      : " << node.spokeEnd[0];
     if(node.spokeEnd[1] != -1)
         ostr << ", " << node.spokeEnd[1];
     ostr << endl;
@@ -935,8 +721,8 @@ ostream &operator<<(ostream &ostr, const RailwayNode node)
     if(node.spokeStart[1] != -1)
         ostr << ", " << node.spokeStart[1];
     ostr << endl;
-    ostr << "text      : " << node.text         << endl;
-    ostr << "formOfNode: " << node.typ          << endl;
+    ostr << "text          : " << node.text         << endl;
+    ostr << "formOfNode    : " << node.typ          << endl;
 
     return ostr;
 }
@@ -952,11 +738,14 @@ ostream &operator<<(ostream &ostr, const RailwayLink link)
 
 ostream &operator<<(ostream &ostr,Station station)
 {
-    ostr << "Nummer    : " << station.code         << endl;
-    ostr << "Start Node: ";
+    ostr << "Nummer     : " << station.code        << endl;
+    ostr << "Start Node : ";
     List_Print(station.spokeStart);
-    ostr << "End   Node: ";
+    ostr << "End   Node : ";
     List_Print(station.spokeEnd);
+    ostr << "Breitengrad: " << station.breitengrad << endl;
+    ostr << "Hoehengrad : " << station.hoehengrad  << endl;
+    ostr << "Text       : " << station.text        << endl;
 
     return ostr;
 }

@@ -1,114 +1,186 @@
-/**
-a) Nutzen der Header-Dateien ohne Nutzung einer Entwicklungsumgebung mit Projektverwaltung
-b) Beispiel zum Aufruf der Funktionen LoadGraph und SaveGraph
-*/
+/*
+ * Autoren: Michel Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
+ * Gruppe : 3 Mittwochvormittag
+ * Thema  : Miniprojekt 1 - Graphen aus Open Source Data der Deutschen Bahn erstellen
+ *			Miniprojekt 2 - Abstand von zwei Bahnhöfen
+ */
+
 // Header-Dateien einbinden
-#include "queue.h"
-#include "knoten.h"
-#include "graph.h"
-#include "bahn_netz.h"
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <iomanip>
+#include <conio.h>
+#include "bahn_netz.h"
 #include "listeNeu.h"
-#include "listeNeu.cpp"
+
 // Eventuelle ausgelagerte Implementationen einbinden
-//#include "queue.cpp"
-//#include "graph.cpp"
 //#include "bahn_netz.cpp"
-void testGraphenbearbeitung();      //Für Lern/Lehreinheit
+#include "listeNeu.cpp"
 
-int main(int argc, char *argv[])
+//Miniprojekt 1
+void bahndaten_laden(bahn_netz &bn);
+void graph_erzeugen(bahn_netz &bn);
+
+//Miniprojekt 2
+void station_entfernung(bahn_netz &bn);
+
+int main()
 {
-/*
-	//....
-	Graph G;
-	string sFileName="ring12.gdi";
-	{
-		ifstream gdi_stream;
-		gdi_stream.open(sFileName,ifstream::in);
-		if (gdi_stream.is_open())
-		{
-			if (LoadGraph(gdi_stream,G)==0)
-			{
-				Graph_Debug(G);
-				BFS(G, 12);
-                PRINT_PATH(G, 12, 11);
-                //Insert_Random_Edges(G, 55);
-                //Graph_Debug(G);
-			}
-		}
-		gdi_stream.close();
-	}
-	{
-		ofstream gdi_stream;
-		gdi_stream.open(sFileName,ofstream::out);
-		if (gdi_stream.is_open())
-		{
-			SaveGraph(gdi_stream,G);
-		}
-		gdi_stream.close();
-	}
-*/
-    //testGraphenbearbeitung();
-
     bahn_netz bn;
-    string sFileName0="wichtige zeilen.json";
-    string sFileName="db_streckennetz.json";
-    string saveFile="Test.gdi";
-    string kurzdatei="Iserlohn-Holzwickede.json";
-    string neudatei="Kleines Bahnnetz.json";
-	{
-		ifstream gdi_stream;
-		gdi_stream.open(neudatei,ifstream::in);
-		if (gdi_stream.is_open())
-		{
-			Load_DB(gdi_stream, bn);
 
-            //List_Print(bn.node);
-            //List_Print(bn.station);
-		}
-		gdi_stream.close();
-	}
-	{
-		ofstream gdi_stream;
-		gdi_stream.open(saveFile,ofstream::out);
-		if (gdi_stream.is_open())
+	char menuWahl;
+
+	do{
+		system("cls");
+		cout << "+-------------------------------------------------------+" << endl;
+		cout << "|Graph erzeugen aus Open Source Daten der Deutschen Bahn|" << endl;
+		cout << "+-------------------------------------------------------+" << endl;
+		cout << "|<1> Bahndaten aus Datei laden                          |" << endl;
+		cout << "|<2> Graph erzeugen                                     |" << endl;
+		cout << "|<3> Entfernung zweier Bahnhoefe berechnen (TODO)       |" << endl;
+		cout << "|<0> Programm beenden                                   |" << endl;
+		cout << "+-------------------------------------------------------+" << endl;
+        menuWahl = getch();
+		switch(menuWahl)
 		{
-			Save_DB(gdi_stream, bn);
+			case '1': bahndaten_laden(bn); 		            break;
+			case '2': graph_erzeugen(bn); 		            break;
+			case '3': station_entfernung(bn); 				break;
+			case '0': 										break;
+			default : cout << "Falsche Eingabe" << endl; 	break;
 		}
-		gdi_stream.close();
-	}
+		cout << ".....";
+		getch();
+	}while(menuWahl != '0');
+
+	cout << "Programm beendet" << endl;
+
 	return 0;
 }
 
-void testGraphenbearbeitung()
+void bahndaten_laden(bahn_netz &bn)
 {
-    Graph G;
-	string sFileName="ring12.gdi";
+	char menuWahl;
+	string datei;
+
+	system("cls");
+	cout << "+-------------------------------------------------------+" << endl;
+	cout << "|Bahndaten aus Datei laden | Welche Daten laden?        |" << endl;
+	cout << "+-------------------------------------------------------+" << endl;
+	cout << "|<1> Gesamte Daten                                      |" << endl;
+	cout << "|<2> Iserlohn-Holzwickede                               |" << endl;
+	cout << "|<3> Iserlohn Umgebung                                  |" << endl;
+	cout << "|<0> Zurueck                                            |" << endl;
+	cout << "+-------------------------------------------------------+" << endl;
+    menuWahl = getch();
+
+	switch(menuWahl)
 	{
-		ifstream gdi_stream;
-		gdi_stream.open(sFileName,ifstream::in);
-		if (gdi_stream.is_open())
-		{
-			if (LoadGraph(gdi_stream,G)==0)
-			{
-				Graph_Debug(G);                 //Gelesener Graph wird ausgegeben
-				cout << "\n\n";
-
-				Insert_Edge(G, 6, 2);            //Kante zwischen Knoten 6 und 2
-				Graph_Debug(G);
-				cout << "\n\n";
-
-				Delete_Edge(G, 2, 1);
-				Graph_Debug(G);
-				cout << "\n\n";
-
-                //Insert_Random_Edges(G,33);      //3 zufällige Kanten einfügen
-                //Graph_Debug(G);
-				//cout << "\n\n";
-			}
-		}
-		gdi_stream.close();
+		case '1': datei = "db_streckennetz.json"; 				break;
+		case '2': datei = "Iserlohn-Holzwickede.json"; 			break;
+		case '3': datei = "Kleines Bahnnetz.json";              break;
+		case '0': return;										break;
+		default : cout << "Falsche Eingabe" << endl; return;	break;
 	}
+
+	ifstream gdi_stream;
+	gdi_stream.open(datei,ifstream::in);
+	if (gdi_stream.is_open())
+	{
+		Load_DB(gdi_stream, bn);
+
+		//List_Print(bn.node);
+		//List_Print(bn.station);
+	}
+	else
+		cout << "Fehler! Datei fehlt" << endl;
+
+	gdi_stream.close();
 }
+
+void graph_erzeugen(bahn_netz &bn)
+{
+	if(bn.node.kopf == nullptr)
+	{
+		cout << "Fehler! Es wurden keine Daten eingelesen" << endl;
+		return;
+	}
+
+	string datei;
+
+	system("cls");
+	cout << "+-------------------------------------------------------+" << endl;
+	cout << "|Graph erzeugen | Dateipfad angeben                     |" << endl;
+	cout << "+-------------------------------------------------------+" << endl;
+	cout << ">> ";
+	cin >> datei;
+
+	ofstream gdi_stream;
+	gdi_stream.open(datei,ofstream::out);
+	if (gdi_stream.is_open())
+	{
+	    cout << "Speichere Graph ...";
+		Save_DB(gdi_stream, bn);
+		cout << "fertig;" << endl;
+	}
+	else
+		cout << "Fehler! Datei konnte nicht erstellt werden" << endl;
+	gdi_stream.close();
+}
+
+void station_entfernung(bahn_netz &bn)		//Auswahl von zwei Stations, Stations werden dynamisch aus bn geholt
+{
+	struct Element<Station> *currStation = bn.station.kopf;
+	struct Element<Station> *stationA, *stationB;
+	string eingA, eingB;
+
+    system("cls");
+	cout << "+-------------------------------------------------------+" << endl;
+	cout << "|Abstand von zwei Bahnhoefen | Waehlen Sie aus der Liste|" << endl;
+	cout << "+-------------------------------------------------------+" << endl;
+
+	currStation = bn.station.kopf;
+	while(currStation != nullptr)														//Alle Bahnhöfe mit code und text ausgeben
+	{
+		cout << "|" << left << setw(4) <<currStation->schluessel.code << " | "<< left << setw(48) << currStation->schluessel.text << "|" <<endl;
+		currStation = currStation->nachf;
+	}
+	cout << "+-------------------------------------------------------+" << endl;
+
+	cout << ">> ";																//Erster Bahnhof eingeben
+	cin >> eingA;
+	stationA = bn.station.kopf;
+	while(stationA != nullptr)
+    {
+        if(stationA->schluessel.code == eingA || stationA->schluessel.text == eingA)		//Stimmt code oder text mit Eingabe überein?
+			break;
+        stationA = stationA->nachf;
+    }
+
+	if(stationA == nullptr)
+	{
+		cout << "Fehler! Falsche Eingabe" << endl;;
+		return;
+	}
+
+	cout << ">> ";																//Zweiter Bahnhof eingeben
+	cin >> eingB;
+	stationB = bn.station.kopf;
+	while(stationB != nullptr)
+    {
+        if(stationB->schluessel.code == eingB || stationB->schluessel.text == eingB)
+			break;
+        stationB = stationB->nachf;
+    }
+
+	if(stationB == nullptr)
+	{
+		cout << "Fehler! Falsche Eingabe" << endl;
+		return;
+	}
+
+	cout << "Der Anstand der Bahnhöfe " << stationA->schluessel.text << " und " <<  stationB->schluessel.text << " ist "
+         << abstandStationen(stationA->schluessel, stationB->schluessel) << " Kilometer." << endl;
+}
+

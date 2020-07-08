@@ -517,7 +517,7 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 		{
             if(doNodesLink(currNode2->schluessel, currNode->schluessel))   // Und prüft ob mit currNode eine verbindung besteht (Selbe Node Nummern ausgeschlossen)
             {
-                os << "E " << i << " " << j << " " << 1 << endl;        // Falls eine verbindung besteht, wird die Kante aufgeschrieben
+                os << "E " << i << " " << j << " " << abstandNodes(currNode2->schluessel, currNode->schluessel) << endl;        // Falls eine verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currNode2 = currNode2->nachf;
@@ -529,7 +529,7 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
         {
             if(doStationLinkNode(currStation2->schluessel, currNode->schluessel))    // Und prüft ob mit currNode eine Verbindung besteht
             {
-                os << "E " << i << " " << j+anzNodes << " " << 1 << endl;     // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
+                os << "E " << i << " " << j+anzNodes << " " << abstandStationNode(currStation2->schluessel, currNode->schluessel) << endl;     // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currStation2 = currStation2->nachf;
@@ -550,7 +550,7 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
 		{
                 if(doStationLinkNode(currStation->schluessel, currNode2->schluessel))        // Und prüft ob mit currStation eine Verbindung besteht
                 {
-                    os << "E " << i+anzNodes << " " << j << " " << 1 << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
+                    os << "E " << i+anzNodes << " " << j << " " << abstandStationNode(currStation->schluessel, currNode2->schluessel) << endl;   // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
                 }
             j++;
             currNode2 = currNode2->nachf;
@@ -562,7 +562,7 @@ void Save_DB(ostream &os, bahn_netz &netz)  //Lewicki
         {
             if(doStationsLink(currStation2->schluessel, currStation->schluessel))       // Und prüft ob mit currStation eine Verbindung besteht (Selbe Station Nummern ausgeschlossen)
             {
-                os << "E " << i+anzNodes << " " << j+anzNodes << " " << 1 << endl;  // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
+                os << "E " << i+anzNodes << " " << j+anzNodes << " " << abstandStationen(currStation2->schluessel, currStation->schluessel) << endl;  // Falls eine Verbindung besteht, wird die Kante aufgeschrieben
             }
             j++;
             currStation2 = currStation2->nachf;
@@ -703,7 +703,33 @@ int abstandStationen(Station bahnhofA, Station bahnhofB)
 
     double delta = acos( sin(phiA)*sin(phiB) + cos(phiA)*cos(phiB)*cos(lamA-lamB) );    //Winkel in Bogenmaß
 
-    return(round(E_RAD * delta));          //E_RAD = Erdradius
+    return(ceil(E_RAD * delta));          //E_RAD = Erdradius
+}
+
+int abstandNodes(RailwayNode bahnhofA, RailwayNode bahnhofB)
+{
+    double phiA = (bahnhofA.breitengrad - 90) / 180 * M_PI;         //Breitengrad/Latidude -> phi
+    double lamA = bahnhofA.hoehengrad / 180 * M_PI;                 //Höhengrad/Longitude -> lambda
+
+    double phiB = (bahnhofB.breitengrad - 90) / 180 * M_PI;
+    double lamB = bahnhofB.hoehengrad / 180 * M_PI;
+
+    double delta = acos( sin(phiA)*sin(phiB) + cos(phiA)*cos(phiB)*cos(lamA-lamB) );    //Winkel in Bogenmaß
+
+    return(ceil(E_RAD * delta));          //E_RAD = Erdradius
+}
+
+int abstandStationNode(Station bahnhofA, RailwayNode bahnhofB)
+{
+    double phiA = (bahnhofA.breitengrad - 90) / 180 * M_PI;         //Breitengrad/Latidude -> phi
+    double lamA = bahnhofA.hoehengrad / 180 * M_PI;                 //Höhengrad/Longitude -> lambda
+
+    double phiB = (bahnhofB.breitengrad - 90) / 180 * M_PI;
+    double lamB = bahnhofB.hoehengrad / 180 * M_PI;
+
+    double delta = acos( sin(phiA)*sin(phiB) + cos(phiA)*cos(phiB)*cos(lamA-lamB) );    //Winkel in Bogenmaß
+
+    return(ceil(E_RAD * delta));          //E_RAD = Erdradius
 }
 
 //Ausgabe Operatoren zum Testen

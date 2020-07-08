@@ -98,6 +98,8 @@ bool doStationsLink(Station stationA, Station stationB);
 bool doStationLinkNode(Station station, RailwayNode node);
 
 int abstandStationen(Station bahnhofA, Station bahnhofB);
+int abstandNodes(RailwayNode bahnhofA, RailwayNode bahnhofB);
+int abstandStationNode(Station bahnhofA, RailwayNode bahnhofB);
 
 
 #endif // LOAD_DB_H

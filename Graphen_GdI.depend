@@ -267,7 +267,7 @@
 	<time.h>
 	<iomanip>
 
-1590766699 e:\rufus\studium\graphen_gdi\graph.h
+1593772926 e:\rufus\studium\graphen_gdi\graph.h
 	"knoten.h"
 	<ostream>
 
@@ -281,26 +281,30 @@
 	"queue.h"
 	<iostream>
 
-1592990759 source:e:\rufus\studium\graphen_gdi\bahn_netz.cpp
+1594119644 source:e:\rufus\studium\graphen_gdi\bahn_netz.cpp
 	<iostream>
 	<fstream>
 	"bahn_netz.h"
+	"listeNeu.h"
+	"listeNeu.cpp"
+	<math.h>
 
-1592990499 e:\rufus\studium\graphen_gdi\bahn_netz.h
+1594119602 e:\rufus\studium\graphen_gdi\bahn_netz.h
 	<ostream>
 	<iostream>
-	"liste.h"
+	"listeNeu.h"
 
 1592935643 e:\rufus\studium\graphen_gdi\liste.h
 
-1592991127 source:e:\rufus\studium\graphen_gdi\main.cpp
-	"queue.h"
-	"knoten.h"
-	"graph.h"
-	"bahn_netz.h"
+1594119853 source:e:\rufus\studium\graphen_gdi\main.cpp
 	<fstream>
 	<string>
 	<iostream>
+	<iomanip>
+	<conio.h>
+	"bahn_netz.h"
+	"listeNeu.h"
+	"listeNeu.cpp"
 
 1592992770 source:c:\users\haris\documents\github\graphen_gdi\graph.cpp
 	"graph.h"
@@ -346,4 +350,14 @@
 	<iostream>
 	<fstream>
 	"bahn_netz.h"
+
+1594031110 e:\rufus\studium\graphen_gdi\listeneu.h
+
+1594031108 e:\rufus\studium\graphen_gdi\listeneu.cpp
+	"listeNeu.h"
+	<iostream>
+
+1594031108 source:e:\rufus\studium\graphen_gdi\listeneu.cpp
+	"listeNeu.h"
+	<iostream>
 

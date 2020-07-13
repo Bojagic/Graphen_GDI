@@ -1,3 +1,10 @@
+/*
+ * Autoren: Michel Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
+ * Gruppe : 3 Mittwochvormittag
+ * Thema  : Miniprojekt 1 - Graphen aus Open Source Data der Deutschen Bahn erstellen
+ *			Miniprojekt 2 - Abstand von zwei Bahnhöfen
+ */
+
 #ifndef LISTE_NEU_H
 #define LISTE_NEU_H
 
@@ -50,4 +57,4 @@ void List_Delete(ListeNeu<T> &L,struct Element<T> *x);
 template <class T>
 void List_Print(ListeNeu<T> &L);
 
-#endif
+#endif  //LISTE_NEU_H

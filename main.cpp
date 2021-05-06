@@ -122,6 +122,7 @@ void graph_erzeugen(bahn_netz &bn)
 	{
 	    cout << "Speichere Graph ...";
 		Save_DB(gdi_stream, bn);
+		//Save_DBWithNNodes(gdi_stream, bn, 30);                                    //<----- Hier für IT-Projektmanagment
 		cout << "fertig;" << endl;
 	}
 	else

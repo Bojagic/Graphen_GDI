@@ -101,5 +101,11 @@ int abstandStationen(Station bahnhofA, Station bahnhofB);
 int abstandNodes(RailwayNode bahnhofA, RailwayNode bahnhofB);
 int abstandStationNode(Station bahnhofA, RailwayNode bahnhofB);
 
+//Für das erstellen von gdi Dateien mit beliebiger Konten Anzahl
+//Erstellt für IT-Projektmangament
+void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes);
+//Hilfsfunktionen für Save_DBWithNNodes
+struct Element<RailwayNode> * kopiereNode(struct Element<RailwayNode> *sourceNode);
+struct Element<Station> * kopiereStation(struct Element<Station> *sourceStation);
 
 #endif // LOAD_DB_H

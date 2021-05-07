@@ -1,5 +1,5 @@
 /*
- * Autoren: Michel Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
+ * Autoren: Michél Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
  * Gruppe : 3 Mittwochvormittag
  * Thema  : Miniprojekt 1 - Graphen aus Open Source Data der Deutschen Bahn erstellen
  *			Miniprojekt 2 - Abstand von zwei Bahnhöfen

@@ -797,3 +797,72 @@ ostream &operator<< (ostream &ostr, const RailwayStationCode code)
 
     return ostr;
 }
+
+
+
+void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes)
+{
+    struct Element<RailwayNode> *currNode = netz.node.kopf;
+    struct Element<Station> *currStation = netz.station.kopf;
+
+	struct Element<RailwayNode> *tempNode;
+    struct Element<Station> *tempStation;
+
+    bahn_netz netzMitNNodes;
+
+    int i = 0;
+    while(i < anzNodes && currNode != nullptr)
+    {
+        tempNode = kopiereNode(currNode);
+        List_Insert(netzMitNNodes.node, tempNode);
+        currNode = currNode->nachf;
+        i++;
+    }
+
+    while(i < anzNodes && currStation != nullptr)
+    {
+        tempStation = kopiereStation(currStation);
+        List_Insert(netzMitNNodes.station, tempStation);
+        currStation = currStation->nachf;
+        i++;
+    }
+
+    Save_DB(os, netzMitNNodes);
+}
+
+struct Element<RailwayNode> * kopiereNode(struct Element<RailwayNode> *sourceNode)
+{
+    if(sourceNode == nullptr)
+        return nullptr;
+
+    struct Element<RailwayNode> *newNode = new struct Element<RailwayNode>;
+
+    newNode->schluessel.nummer = sourceNode->schluessel.nummer;
+    newNode->schluessel.breitengrad = sourceNode->schluessel.breitengrad;
+    newNode->schluessel.hoehengrad = sourceNode->schluessel.hoehengrad;
+    newNode->schluessel.spokeEnd[0] = sourceNode->schluessel.spokeEnd[0];
+    newNode->schluessel.spokeEnd[1] = sourceNode->schluessel.spokeEnd[1];
+    newNode->schluessel.spokeStart[0] = sourceNode->schluessel.spokeStart[0];
+    newNode->schluessel.spokeStart[1] = sourceNode->schluessel.spokeStart[1];
+    newNode->schluessel.text = sourceNode->schluessel.text;
+    newNode->schluessel.typ = sourceNode->schluessel.typ;
+
+    return newNode;
+}
+
+struct Element<Station> * kopiereStation(struct Element<Station> *sourceStation)
+{
+    if(sourceStation == nullptr)
+        return nullptr;
+
+    struct Element<Station> *newStation = new struct Element<Station>;
+
+    newStation->schluessel.code = sourceStation->schluessel.code;
+    newStation->schluessel.spokeEnd = sourceStation->schluessel.spokeEnd;
+    newStation->schluessel.spokeStart = sourceStation->schluessel.spokeStart;
+    newStation->schluessel.breitengrad = sourceStation->schluessel.breitengrad;
+    newStation->schluessel.hoehengrad = sourceStation->schluessel.hoehengrad;
+    newStation->schluessel.text = sourceStation->schluessel.text;
+
+    return newStation;
+}

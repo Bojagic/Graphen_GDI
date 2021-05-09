@@ -830,6 +830,50 @@ void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes)
     Save_DB(os, netzMitNNodes);
 }
 
+void Save_DBWithNNodesOffset(ostream &os, bahn_netz &netz, int anzNodes, int offset)
+{
+    int i;
+    struct Element<RailwayNode> *currNode = netz.node.kopf;
+    struct Element<Station> *currStation = netz.station.kopf;
+
+	struct Element<RailwayNode> *tempNode;
+    struct Element<Station> *tempStation;
+
+    bahn_netz netzMitNNodes;
+
+    i = 0;
+    while(i < offset && currNode != nullptr)
+    {
+        currNode = currNode->nachf;
+        i++;
+    }
+
+    while(i < offset && currStation != nullptr)
+    {
+        currStation = currStation->nachf;
+        i++;
+    }
+
+    i = 0;
+    while(i < anzNodes && currNode != nullptr)
+    {
+        tempNode = kopiereNode(currNode);
+        List_Insert(netzMitNNodes.node, tempNode);
+        currNode = currNode->nachf;
+        i++;
+    }
+
+    while(i < anzNodes && currStation != nullptr)
+    {
+        tempStation = kopiereStation(currStation);
+        List_Insert(netzMitNNodes.station, tempStation);
+        currStation = currStation->nachf;
+        i++;
+    }
+
+    Save_DB(os, netzMitNNodes);
+}
+
 struct Element<RailwayNode> * kopiereNode(struct Element<RailwayNode> *sourceNode)
 {
     if(sourceNode == nullptr)

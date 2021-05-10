@@ -1,5 +1,5 @@
 /*
- * Autoren: Michél Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
+ * Autoren: Michel Benger, Haris Bojagic, Tim Horten, Bryan Lewicki
  * Gruppe : 3 Mittwochvormittag
  * Thema  : Miniprojekt 1 - Graphen aus Open Source Data der Deutschen Bahn erstellen
  *			Miniprojekt 2 - Abstand von zwei Bahnhöfen
@@ -24,8 +24,7 @@ void graph_erzeugen(bahn_netz &bn);
 
 //Miniprojekt 2
 void station_entfernung(bahn_netz &bn);
-//ITP
-void test_graphen (bahn_netz &bn);
+
 int main()
 {
     bahn_netz bn;
@@ -46,7 +45,7 @@ int main()
 		switch(menuWahl)
 		{
 			case '1': bahndaten_laden(bn); 		            break;
-			case '2': test_graphen(bn); 		            break;
+			case '2': graph_erzeugen(bn); 		            break;
 			case '3': station_entfernung(bn); 				break;
 			case '0': 										break;
 			default : cout << "Falsche Eingabe" << endl; 	break;
@@ -122,8 +121,8 @@ void graph_erzeugen(bahn_netz &bn)
 	if (gdi_stream.is_open())
 	{
 	    cout << "Speichere Graph ...";
-		//Save_DB(gdi_stream, bn);
-		Save_DBWithNNodes(gdi_stream, bn, 100);                                    //<----- Hier für IT-Projektmanagment
+		Save_DB(gdi_stream, bn);
+		//Save_DBWithNNodes(gdi_stream, bn, 30);                                    //<----- Hier für IT-Projektmanagment
 		cout << "fertig;" << endl;
 	}
 	else
@@ -191,56 +190,4 @@ void station_entfernung(bahn_netz &bn)		//Auswahl von zwei Stations, Stations we
 	cout << "Der Anstand der Bahnhöfe " << stationA->schluessel.text << " und " <<  stationB->schluessel.text << " ist "
          << abstandStationen(stationA->schluessel, stationB->schluessel) << " Kilometer." << endl;
 }
-void test_graphen (bahn_netz &bn)
-{
-   int k=0;
-   string dateien[6]= {"testgraphen/graph-30.gdi",
-                        "testgraphen/graph-100.gdi",
-                        "testgraphen/graph-300.gdi",
-                        "testgraphen/graph-1000.gdi",
-                        "testgraphen/graph-3000.gdi",
-                        "testgraphen/graph-10000.gdi"
-                        };
-	system("cls");
-	cout << "+-------------------------------------------------------+" << endl;
-	cout << "|Testgraphen werden erzeugt                            |" << endl;
-	cout << "+-------------------------------------------------------+" << endl;
 
-
-	for(int i=0;i<6;i++)
-    {
-        switch(i)
-        {
-            case 0:
-                k=30;
-                break;
-            case 1:
-                k=100;
-                break;
-            case 2:
-                k=300;
-                break;
-            case 3:
-                k=1000;
-                break;
-            case 4:
-                k=3000;
-                break;
-            case 5:
-                k=10000;
-                break;
-        }
-        ofstream gdi_stream;
-        gdi_stream.open(dateien[i],ofstream::out);
-        if (gdi_stream.is_open())
-        {
-            cout << "Speichere Graph...";                                  //<----- Hier für IT-Projektmanagment
-            Save_DBWithNNodes(gdi_stream, bn, k);
-
-            cout << "Graph "<<dateien[i]<<"ist fertig;" << endl;
-        }
-        else
-            cout << "Fehler! Datei konnte nicht erstellt werden" << endl;
-        gdi_stream.close();
-	}
-}

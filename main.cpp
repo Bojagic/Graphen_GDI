@@ -194,7 +194,7 @@ void station_entfernung(bahn_netz &bn)		//Auswahl von zwei Stations, Stations we
 }
 void test_graphen (bahn_netz &bn)
 {
-   int k=0;
+   int k = 0;
    string dateien[6]= {"testgraphen/graph-30.gdi",
                         "testgraphen/graph-100.gdi",
                         "testgraphen/graph-300.gdi",
@@ -204,9 +204,12 @@ void test_graphen (bahn_netz &bn)
                         };
 	system("cls");
 	cout << "+-------------------------------------------------------+" << endl;
-	cout << "|Testgraphen werden erzeugt                            |" << endl;
+	cout << "|Testgraphen erzeugen                                   |" << endl;
 	cout << "+-------------------------------------------------------+" << endl;
 
+    int offset;
+    cout << "Offset>> ";
+    cin >> offset;
 
 	for(int i=0;i<6;i++)
     {
@@ -237,7 +240,7 @@ void test_graphen (bahn_netz &bn)
         if (gdi_stream.is_open())
         {
             cout << "Erzeuge Graph... ";                                  //<----- Hier für IT-Projektmanagment
-            Save_DBWithNNodes(gdi_stream, bn, k);
+            Save_DBWithNNodes(gdi_stream, bn, k, offset);
 
             cout << "Graph "<<dateien[i]<<" ist fertig." << endl;
         }

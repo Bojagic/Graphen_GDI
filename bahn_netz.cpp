@@ -798,9 +798,7 @@ ostream &operator<< (ostream &ostr, const RailwayStationCode code)
     return ostr;
 }
 
-
-
-void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes)
+void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes, int offset)
 {
     struct Element<RailwayNode> *currNode = netz.node.kopf;
     struct Element<Station> *currStation = netz.station.kopf;
@@ -811,6 +809,18 @@ void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes)
     bahn_netz netzMitNNodes;
 
     int i = 0;
+    while(i < offset && currNode != nullptr)
+    {
+        currNode = currNode->nachf;
+        i++;
+    }
+    while(i < offset && currStation != nullptr)
+    {
+        currStation = currStation->nachf;
+        i++;
+    }
+
+    i = 0;
     while(i < anzNodes && currNode != nullptr)
     {
         tempNode = kopiereNode(currNode);
@@ -818,7 +828,6 @@ void Save_DBWithNNodes(ostream &os, bahn_netz &netz, int anzNodes)
         currNode = currNode->nachf;
         i++;
     }
-
     while(i < anzNodes && currStation != nullptr)
     {
         tempStation = kopiereStation(currStation);
